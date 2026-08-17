@@ -4,6 +4,10 @@ import { BackendHealth } from "@/components/backend-health";
 import { RouteHeader } from "@/components/route-header";
 import { Callout, KeyValue, Panel, TryIt } from "@/components/ui";
 import { DOCS_ROOT, NAV } from "@/lib/nav-config";
+import { DocDriftPanel } from "@/components/doc-drift-panel";
+
+/** Dynamic: the doc-sync readouts below read the snapshot off disk. */
+export const dynamic = "force-dynamic";
 
 const AGENTS: [string, string, string][] = [
   [
@@ -42,6 +46,9 @@ export default function Page() {
   return (
     <>
       <RouteHeader path="/" />
+
+
+      <DocDriftPanel />
 
       <Panel title="What this is">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
