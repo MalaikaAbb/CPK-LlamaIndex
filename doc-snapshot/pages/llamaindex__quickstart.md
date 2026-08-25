@@ -2,6 +2,7 @@
 
 > Turn your LlamaIndex Agents into an agent-native application in 10 minutes.
 
+
 <OpsPlatformCTA
   variant="card"
   title="Ship LlamaIndex to production"
@@ -130,6 +131,20 @@ Before you begin, you'll need the following:
                 </Accordions>
 
             </Step>
+
+    <Step>
+        ### Open Inspector and confirm setup
+
+On localhost, click the Inspector button in the corner of the app.
+
+1. Open **Agents**, then **Agent**. Your agent is listed.
+2. Send a chat message. Open **Agents**, then **AG-UI Events**. Events are moving.
+3. Open **Threads**. The list is unlocked (Intelligence is on), or locked with Enable Intelligence (Intelligence is off).
+
+More detail: [Inspector](/llamaindex/inspector).
+
+    </Step>
+
         </TailoredContentOption>
         <TailoredContentOption
             id="bring-your-own"
@@ -376,6 +391,20 @@ Before you begin, you'll need the following:
                 </Accordions>
 
             </Step>
+
+    <Step>
+        ### Open Inspector and confirm setup
+
+On localhost, click the Inspector button in the corner of the app.
+
+1. Open **Agents**, then **Agent**. Your agent is listed.
+2. Send a chat message. Open **Agents**, then **AG-UI Events**. Events are moving.
+3. Open **Threads**. The list is unlocked (Intelligence is on), or locked with Enable Intelligence (Intelligence is off).
+
+More detail: [Inspector](/llamaindex/inspector).
+
+    </Step>
+
         </TailoredContentOption>
     </TailoredContent>
     </Step>
