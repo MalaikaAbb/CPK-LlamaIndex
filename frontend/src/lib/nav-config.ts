@@ -99,6 +99,54 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
+    title: "Rich Threads",
+    routes: [
+      {
+        path: "/prebuilt-components/copilot-threads-drawer",
+        hasDemo: true,
+        title: "Threads Drawer",
+        docPath: "/llamaindex/prebuilt-components/copilot-threads-drawer",
+        summary:
+          "The drop-in conversation sidebar, wired with no active-thread state of its own.",
+        status: "working",
+        statusNote:
+          "Needs the runtime in Intelligence mode. Without a key the drawer renders a locked view instead of the list.",
+      },
+      {
+        path: "/headless-threads",
+        hasDemo: true,
+        title: "Headless Threads",
+        docPath: "/llamaindex/headless-threads",
+        summary:
+          "The same thread data through useThreads, with a hand-built list — including rename, which the drawer omits.",
+        status: "working",
+        statusNote:
+          "Needs Intelligence mode. In SSE mode /info reports mutations: false, so rename/archive/delete have no endpoint.",
+      },
+      {
+        path: "/threads-lifecycle",
+        hasDemo: true,
+        title: "Thread & History Lifecycle",
+        docPath: "/llamaindex/threads-lifecycle",
+        summary:
+          "Where a threadId comes from, how history replays, and how switching differs from starting fresh.",
+        status: "working",
+        statusNote:
+          "Switch/start are live regardless; history replay needs a server-side store to replay from.",
+      },
+      {
+        path: "/threads-import",
+        title: "Synchronize Thread History",
+        docPath: "/llamaindex/threads-import",
+        summary:
+          "The CLI import path for existing conversations — and why no LlamaIndex importer exists.",
+        status: "reference",
+        statusNote:
+          "Not implementable here: the importer supports Google ADK and LangGraph only.",
+      },
+    ],
+  },
+  {
     title: "Custom Look and Feel",
     routes: [
       {

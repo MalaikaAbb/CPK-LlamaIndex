@@ -15,10 +15,10 @@ import { DemoFrame } from "@/components/demo-frame";
  * it: you cannot nest providers, but different areas of one app may use
  * different agents.
  *
- * Router Mode is the other half of the doc and is not demonstrated. It needs the
- * runtime to hold an LLM service adapter so CopilotKit can pick an agent per
- * message; this repo uses `ExperimentalEmptyAdapter` because every LlamaIndex
- * workflow calls the model itself. See the notes page.
+ * Router Mode is the other half of the doc and is not demonstrated. It needs a
+ * model on the runtime so CopilotKit can pick an agent per message, and the v2
+ * runtime surface has no service adapter at all — every LlamaIndex workflow
+ * here calls the model itself. See the notes page.
  */
 
 const AGENTS = [
