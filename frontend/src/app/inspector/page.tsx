@@ -1,6 +1,6 @@
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
-import { CodeBlock, Panel, TryIt } from "@/components/ui";
+import { Callout, CodeBlock, Panel, TryIt } from "@/components/ui";
 
 const CONTROL_SNIPPET = `// <CopilotKit> — takes enableInspector, defaults to on for localhost.
 <CopilotKit runtimeUrl="/api/copilotkit" enableInspector={false}>
@@ -10,6 +10,10 @@ const CONTROL_SNIPPET = `// <CopilotKit> — takes enableInspector, defaults to 
 <CopilotKitProvider runtimeUrl="/api/copilotkit" showDevConsole="auto">`;
 
 const ROWS: [string, string][] = [
+  [
+    "Threads",
+    "Real threads and their messages — unlocked only when the runtime runs in Intelligence mode.",
+  ],
   ["AG-UI Events", "The raw event stream between this page and the agent."],
   ["Available Agents", "Which agent ids the runtime reported."],
   ["Agent State", "The current shared state object, updating live."],
@@ -60,6 +64,16 @@ export default function Page() {
           />
         </div>
       </Panel>
+      <Callout tone="info" title="The Threads tab is the one part that needs a key">
+        Everything else here works against a bare runtime. Threads is gated on
+        CopilotKit Intelligence: with no <code>INTELLIGENCE_API_KEY</code> the
+        runtime reports <code>mode: &quot;sse&quot;</code> and the tab shows
+        three local example threads plus an{" "}
+        <strong>Enable Intelligence</strong> action rather than real rows. The
+        home page&apos;s connection panel tells you which mode you are in before
+        you go looking.
+      </Callout>
+
       <Panel title="How this repo enables it">
         <SourceCode file="frontend/src/components/providers.tsx" />
       </Panel>

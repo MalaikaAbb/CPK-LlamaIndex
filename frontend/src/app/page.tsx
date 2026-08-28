@@ -143,7 +143,8 @@ export default function Page() {
             in this Next app.
           </li>
           <li>
-            <strong>2.</strong> The Copilot Runtime resolves the agent id and
+            <strong>2.</strong> The Copilot Runtime — mounted at the catch-all{" "}
+            <code>/api/copilotkit/[[...slug]]</code> — resolves the agent id and
             forwards the run to the matching AG-UI endpoint via a{" "}
             <code>LlamaIndexAgent</code>.
           </li>
@@ -159,8 +160,10 @@ export default function Page() {
         </ol>
         <div className="mt-4">
           <Callout tone="info">
-            The OpenAI key lives only in the agent process. The browser never
-            holds it, because it never talks to the agent directly.
+            Both secrets stay server-side. The OpenAI key lives only in the agent
+            process, and <code>INTELLIGENCE_API_KEY</code> only in the Next
+            process — the browser holds neither, because it talks to neither
+            directly.
           </Callout>
         </div>
       </Panel>

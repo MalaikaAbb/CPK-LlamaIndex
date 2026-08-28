@@ -18,6 +18,7 @@ const THIS_REPO_SNIPPET = `// This repo: no agent on the provider, an agentId pe
 <CopilotKitProvider runtimeUrl="/api/copilotkit" showDevConsole="auto">
   {children}
 </CopilotKitProvider>
+// No \`useSingleEndpoint\`: omitting it on the *Provider* means auto-detect.
 
 // …then, on each route:
 <CopilotChat agentId="search_agent" />
@@ -29,7 +30,11 @@ const MODES: [string, string, string][] = [
     "The runtime's LLM, per message",
     "You, once — at the provider or the surface",
   ],
-  ["Needs a service adapter", "Yes", "No"],
+  [
+    "Needs a model on the runtime",
+    "Yes — to choose per message",
+    "No — the workflow owns the model",
+  ],
   [
     "Conversation shape",
     "One thread that can change hands",
@@ -97,13 +102,14 @@ export default function Page() {
 
       <Callout tone="warn" title="Router Mode is not wired up here">
         The doc&apos;s own callout says Router Mode requires an LLM adapter on
-        the runtime. This repo registers{" "}
-        <code>ExperimentalEmptyAdapter</code>, because each LlamaIndex workflow
-        calls OpenAI itself and the runtime has no reason to hold a second key.
-        Enabling routing would mean giving the Next process its own model
-        credentials purely to pick between agents — a real change to the
-        architecture every other route in this harness tests, so it is left out
-        and this route is marked Partial rather than Working.
+        the runtime, and links to the v1 self-hosting guide to set one up. On the
+        v2 runtime surface this repo now uses there is no service adapter at
+        all — <code>ExperimentalEmptyAdapter</code> belonged to the v1 GraphQL
+        runtime and has no counterpart in{" "}
+        <code>@copilotkit/runtime/v2</code>. Routing would instead mean giving
+        the Next process its own model credentials purely to pick between
+        agents, which every LlamaIndex workflow here already does for itself. So
+        it is left out, and this route stays Partial rather than Working.
       </Callout>
 
       <Panel title="The two modes, as the doc writes them">

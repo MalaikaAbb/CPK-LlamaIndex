@@ -8,7 +8,8 @@ A navigable, working test harness for the CopilotKit ↔ LlamaIndex integration 
 | **Docs tracked** | <https://docs.copilotkit.ai/llamaindex> |
 | **CopilotKit** | `@copilotkit/react-core` ^1.66.2 (v2 surface) · `@copilotkit/runtime` ^1.66.2 |
 | **AG-UI** | `@ag-ui/llamaindex` ^0.1.5 · `@ag-ui/client` ^0.0.57 · `llama-index-protocols-ag-ui` ≥0.3.4 |
-| **Build** | `next build` ✅ · `tsc --noEmit` ✅ · `eslint` ✅ · backend imports and mounts all five routers ✅ |
+| **Runtime** | v2 multi-route — `createCopilotRuntimeHandler` at `app/api/copilotkit/[[...slug]]/route.ts`, 4 verbs. Verified: `/info` 200 with 5 agents, `mode` flips `sse` → `intelligence` with a key. |
+| **Build** | `next build` ✅ · `eslint` ✅ · backend imports and mounts all five routers ✅ · `tsc --noEmit` ❌ one file, deliberately — see Known issues |
 | **CI** | none |
 
 ---
@@ -27,9 +28,13 @@ This repo turns every page under <https://docs.copilotkit.ai/llamaindex> into a 
 Browser
   │  CopilotChat / CopilotSidebar / useAgent      (@copilotkit/react-core/v2)
   ▼
-Next.js app  ──  /api/copilotkit                   (@copilotkit/runtime)
+Next.js app  ──  /api/copilotkit/[[...slug]]        (@copilotkit/runtime/v2)
+  │              createCopilotRuntimeHandler serves /info, runs, threads
   │              CopilotRuntime resolves an agent id → LlamaIndexAgent
-  ▼              (@ag-ui/llamaindex — an HttpAgent subclass)
+  │              (@ag-ui/llamaindex — an HttpAgent subclass)
+  │                        │
+  │                        └── optional: CopilotKitIntelligence
+  ▼                             (threads + the Inspector's Threads tab)
 FastAPI  ──  POST /run, /sample_agent/run, …       (llama-index-protocols-ag-ui)
   │          AGUIChatWorkflow: folds state into the last user message,
   │          streams the model, runs backend tools, emits AG-UI events as SSE
@@ -40,6 +45,7 @@ OpenAI
 - **Backend language:** Python 3.10+ / FastAPI. (This varies per framework — LlamaIndex is Python.)
 - **The OpenAI key lives only in the Python process.** The browser never talks to the agent directly; the runtime proxies every run server-side.
 - **Frontend tools need no backend registration.** `AGUIChatWorkflow` reads `RunAgentInput.tools` on every run and converts anything unknown into a pass-through tool, so `sayHello`, `showWeather`, and `humanApprovedCommand` never appear in `agents.py`.
+- **The runtime route is a catch-all, not a URL.** `createCopilotRuntimeHandler` serves a subtree — `/info`, agent runs, thread list/rename/delete — so the file lives at `[[...slug]]/route.ts` and exports GET, POST, PATCH, and DELETE. Mounted at a plain `route.ts` it answers `GET /info` with a 200 while 404-ing every run, which looks like a connected app that never replies.
 
 ---
 
@@ -53,7 +59,7 @@ OpenAI
 | npm | bundled with Node | Any package manager works; commands below use npm. |
 | OpenAI API key | — | The only credential this repo needs. |
 
-Not required: a CopilotKit Enterprise Intelligence license key. No route here depends on one — the Inspector runs without it.
+Optional: a **CopilotKit Intelligence** project API key (`cpk-…`). Provision one with `npx copilotkit login && npx copilotkit project select`, or copy it from the [cloud dashboard](https://docs.copilotkit.ai/llamaindex/premium/managed-intelligence-platform). Without it the runtime falls back to SSE mode with an in-memory runner: every route in this harness still works, and only persistent Threads and the Inspector's Threads tab stay locked.
 
 ---
 
@@ -88,7 +94,10 @@ Frontend variables go in `frontend/.env.local` (Next.js does not read `backend/.
 | Variable | Required | What it does |
 | --- | --- | --- |
 | `LLAMAINDEX_AGENT_URL` | no | Where the runtime reaches the agent. Defaults to `http://localhost:8000`. Use `http://127.0.0.1:8000` if `localhost` resolves to IPv6 while uvicorn binds IPv4. |
-| `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` | no | Enterprise Intelligence public key. Unused by every route here. |
+| `COPILOTKIT_LICENSE_TOKEN` | no | **Separate from the key below, and the one the Threads Drawer gates on.** The runtime builds a `licenseChecker` from it; `/info` reports `licenseStatus` off that checker and returns `"none"` without it. The drawer renders its locked Upgrade view unless the status is `valid` or `expiring` — even when threads work. Server-side secret. |
+| `INTELLIGENCE_API_KEY` | no | CopilotKit Intelligence project key. **Server-side secret — never give it a `NEXT_PUBLIC_` prefix.** Set it and the runtime switches from SSE mode to Intelligence mode, unlocking Threads. |
+| `NEXT_PUBLIC_DEMO_USER_ID` / `NEXT_PUBLIC_DEMO_USER_NAME` | no | Identity the provider sends as `x-user-id` / `x-user-name`, which the runtime's `identifyUser` turns into a per-user thread history. Defaults to `harness-local` / `Harness User`. Change them to watch two "users" get separate thread lists. |
+| `NEXT_PUBLIC_SITE_ORIGIN` | no | Origin the home page uses for its server-side `GET /api/copilotkit/info` probe. Defaults to `http://127.0.0.1:$PORT`; set it only behind a proxy. |
 
 **Ports:** frontend `3000`, backend `8000`.
 
@@ -128,6 +137,21 @@ curl http://localhost:8000/health
 # {"status":"healthy","agent":"llamaindex"}
 ```
 
+And sanity-check the runtime the same way. `/info` is how the frontend negotiates
+its transport, so a 200 here is what proves the multi-route handler is mounted at
+the catch-all path:
+
+```bash
+curl -s http://localhost:3000/api/copilotkit/info | head -c 120
+# {"version":"1.66.4","agents":{"my_agent":{...},"mode":"sse",...
+```
+
+`mode` is the honest answer to "is Intelligence on": `"sse"` without a key,
+`"intelligence"` with one. Note that the bare `POST /api/copilotkit` **404s by
+design** — it is not the transport. That 404 alongside a 200 on `/info` is the
+signature of a correctly mounted multi-route handler, and also of a mis-mounted
+one, which is why the connection panel reads `mode` rather than guessing.
+
 ### How the app is laid out
 
 Every doc page gets **two** routes:
@@ -143,12 +167,27 @@ Every doc page gets **two** routes:
 
 ### Getting Started
 
-**`/` — Introduction.** Orientation, a live connection check, and the table of five agents. Press **Re-check** with the backend stopped: the "LlamaIndex AG-UI server" row turns red with the connection error. Restart it and re-check: green.
+**`/` — Introduction.** Orientation, a live connection check, and the table of five agents. The panel probes two things per render: the agent's `/health`, and the runtime's own `GET /api/copilotkit/info`.
+*Try:* press **Re-check** with the backend stopped.
+*Pass:* the "LlamaIndex AG-UI server" row turns red with the connection error while "Copilot Runtime (multi-route)" stays green — they are independent processes. Restart the agent and re-check: both green.
+*Fail:* the runtime row is red too, or reports a non-200 from `/info` — the handler is not mounted at the catch-all path.
 
 **`/quickstart` → `/quickstart/demo-chat` — Quickstart.** The bring-your-own-agent path: a `CopilotSidebar` beside your app content, bound to `my_agent`.
 *Try:* `Can you tell me a joke?`
 *Pass:* tokens stream in a word at a time and render as markdown.
 *Fail:* nothing streams, or an error banner appears — the agent process is down, or `OPENAI_CHAT_MODEL_ID` names a model your key cannot reach.
+
+### CopilotKit Intelligence
+
+Not a route — a mode the whole harness runs in, reported on the home page.
+
+*Try:* with no `INTELLIGENCE_API_KEY`, open `/` and read the "CopilotKit Intelligence" row, then open any demo and click the Inspector's **Threads** tab.
+*Pass:* the row reads `mode "sse"` and explains the in-memory fallback; Threads shows three local example threads and an **Enable Intelligence** action. Every chat route still works.
+*Then:* put a `cpk-…` key in `frontend/.env.local` as `INTELLIGENCE_API_KEY` and restart.
+*Pass:* the row flips to `mode "intelligence"` with all four `threadEndpoints` on, and the Inspector's Threads tab lists real threads. Send a message and the thread appears in your project dashboard.
+*Fail:* the row still says `mode "sse"` — the key is in the wrong file, or was given a `NEXT_PUBLIC_` prefix, which the runtime does not read.
+
+A caveat the panel states and the docs are explicit about: `mode "intelligence"` proves the key was *read*, not that the platform *accepted* it. A rejected key reports the same thing. The dashboard is the only real confirmation.
 
 ### Basics
 
@@ -156,6 +195,29 @@ Every doc page gets **two** routes:
 *Try:* `What is CopilotKit?` on one tab, then switch tabs.
 *Pass:* the conversation carries across tabs; only the chrome changes.
 *Fail:* a tab renders blank, or the popup launcher never appears in the corner.
+
+### Rich Threads
+
+All three interactive routes below need the runtime in **Intelligence mode** — see the CopilotKit Intelligence section above. Verified against a live Intelligence-mode runtime: `/api/copilotkit/threads?agentId=my_agent` returns real rows with LLM-generated names, scoped to the `endUserId` the provider sends.
+
+**`/prebuilt-components/copilot-threads-drawer` → demo — Threads Drawer.** `<CopilotThreadsDrawer>` beside `<CopilotChat>`, both inside one shared `<CopilotChatConfigurationProvider>` — which is the whole integration. No active-thread state, no selection handler, no props between them.
+*Try:* say `Hello`, press **New Conversation** in the drawer, say `Hello` again, then click the first row.
+*Pass:* two rows, each with a generated name. Clicking a row replays that conversation into the chat; New Conversation clears to the welcome screen.
+*Fail:* the drawer shows a locked view instead of a list — that is the no-key state, not a bug.
+
+**`/headless-threads` → demo — Headless Threads.** The same data through `useThreads`, drawn by hand, with the `threadId` passed to the chat as ordinary React state.
+*Try:* send a message, then press **Rename** on its row.
+*Pass:* the row relabels to "Renamed" with no refresh, and selecting rows swaps the chat's history.
+*Fail:* Rename throws — the runtime is in SSE mode, where `/info` reports `mutations: false`.
+*Why it exists alongside the drawer:* rename is a `useThreads` action the prebuilt drawer's row menu does not surface. That is the doc's own stated reason to go headless.
+
+**`/threads-lifecycle` → demo — Thread & History Lifecycle.** Where a `threadId` comes from, and the difference between switching and starting fresh.
+*Try:* note the `threadId`, press **New chat**, then pick the earlier conversation and press **Open conversation**.
+*Pass:* New chat mints a different id and clears the view. Open conversation restores the earlier id, flips `explicit` to `true`, and replays that conversation.
+*Also try:* **Set id, no replay** — same id, but the welcome screen instead of history. That is `explicit: false`.
+*Fail:* Open conversation changes the id but the chat stays empty — there is no server-side store to replay from.
+
+**`/threads-import` — Synchronize Thread History.** 📄 Notes only, and not because of a gap in this repo: the importer supports Google ADK and LangGraph, and there is no LlamaIndex source. The page records the CLI flow as published.
 
 ### Custom Look and Feel
 
@@ -262,6 +324,10 @@ Every doc page gets **two** routes:
 | [Introduction](https://docs.copilotkit.ai/llamaindex) | `/` | ✅ Working | Reference/landing page with a live health probe. |
 | [Quickstart](https://docs.copilotkit.ai/llamaindex/quickstart?agent=bring-your-own) | `/quickstart` | ✅ Working | Model id in the sample does not exist — see Known issues. |
 | [Prebuilt Components](https://docs.copilotkit.ai/llamaindex/prebuilt-components) | `/prebuilt-components` | ✅ Working | Doc page renders from a component, so there is no markdown sample to diff. |
+| [Threads Drawer](https://docs.copilotkit.ai/llamaindex/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ✅ Working | Needs Intelligence mode; renders a locked view without a key. |
+| [Headless Threads](https://docs.copilotkit.ai/llamaindex/headless-threads) | `/headless-threads` | ✅ Working | Needs Intelligence mode. Implements rename, which the drawer omits. |
+| [Thread & History Lifecycle](https://docs.copilotkit.ai/llamaindex/threads-lifecycle) | `/threads-lifecycle` | ✅ Working | Switch/start always live; replay needs a server-side store. |
+| [Synchronize Thread History](https://docs.copilotkit.ai/llamaindex/threads-import) | `/threads-import` | 📄 Reference | **Not implementable** — the importer supports ADK and LangGraph only. No LlamaIndex source exists. |
 | [Slots](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ✅ Working | Not in the doc sidebar. Custom-component sample needs a cast. |
 | [Headless UI](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/headless-ui) | `/custom-look-and-feel/headless-ui` | ✅ Working | Not in the doc sidebar. |
 | [Programmatic Control](https://docs.copilotkit.ai/llamaindex/programmatic-control) | `/programmatic-control` | ✅ Working | Bare `useAgent()` replaced with an explicit `agentId`. |
@@ -284,6 +350,72 @@ Pages in the LlamaIndex sidebar that this repo does **not** cover, because they 
 ---
 
 ## 9. Known issues / doc-vs-implementation discrepancies
+
+### Two credentials gate Intelligence, and the Threads Drawer uses the less obvious one
+
+The docs consistently say threads "require CopilotKit Intelligence" and point at the project API key. That is necessary but not sufficient for the prebuilt drawer. Traced through the shipped code:
+
+| Credential | What it controls | How to check |
+| --- | --- | --- |
+| `INTELLIGENCE_API_KEY` (`cpk-…`) | Runtime → platform. Makes `/info` report `mode: "intelligence"`; makes the thread endpoints return real rows. | `curl .../info \| grep mode` |
+| `COPILOTKIT_LICENSE_TOKEN` / `licenseToken` | The runtime's `licenseChecker`. `/info` reports `licenseStatus` off it, `"none"` when absent. | `curl .../info \| grep licenseStatus` |
+
+`<CopilotThreadsDrawer>` computes `licensed = licensePresent && checkFeature("threads")`, where `licensePresent` is `status === "valid" || status === "expiring"` — reading the **second** row. So with only the project key set, the drawer renders "Threads are a CopilotKit Intelligence feature / Upgrade" while `useThreads` on `/headless-threads` lists the same threads without complaint. While unlicensed the drawer also skips its thread fetch entirely, so it issues no network requests to debug from.
+
+The connection panel now reports both axes on separate rows for exactly this reason.
+
+### Two `startNewThread` functions, and only one moves the chat
+
+`useThreads()` and `useCopilotChatConfiguration()` both return a `startNewThread`, and they do different jobs. The prebuilt drawer calls **both**: the `useThreads` one dispatches `newThreadStarted()` to the thread store (deselects the row, nothing more), and the configuration one mints the new id and shows the welcome screen.
+
+In a prop-controlled chat — which is the shape of the docs' own headless `App.tsx` sample — the configuration setters no-op and warn, so the second step has to be yours. And clearing the `threadId` prop to `undefined` does **not** do it: the chat's fallback id is computed with `useMemo` at mount, so clearing the prop returns to the same id every time and the button appears dead. Bumping a React `key` forces the remount that re-runs that memo. The Lifecycle page documents this exact behaviour as a footgun ("a changed React `key` … produces a new id and silently starts a new conversation"); `/headless-threads` uses it deliberately.
+
+### There is no LlamaIndex thread importer
+
+[Synchronize Thread History](https://docs.copilotkit.ai/llamaindex/threads-import).
+
+The page is served under `/llamaindex/`, but its supported-sources table lists only Google ADK and LangGraph, each linking to a framework-specific guide. Nothing on the page imports LlamaIndex conversations, so `/threads-import` in this harness is a notes route rather than a working one — not a gap in this repo. The final step of that flow ("keep future conversations synced") *is* implemented, by the Threads Drawer and Headless Threads routes.
+
+### The Rich Threads group is absent from the sidebar's own framework pages
+
+The LlamaIndex sidebar lists Rich Threads (Overview, Threads Drawer, Headless Threads, Thread & History Lifecycle, Synchronize Thread History), and all of those pages resolve. But their samples are framework-neutral — `useThreads`, `CopilotThreadsDrawer`, and `setActiveThreadId` are the same on every integration, and the only LlamaIndex-specific content is the URL prefix. Nothing on these four pages needed adapting for LlamaIndex; the runtime half was already in place from the Intelligence wiring.
+
+### The runtime route moved, and the old shape fails silently
+
+[Quickstart](https://docs.copilotkit.ai/llamaindex/quickstart?agent=bring-your-own), [Copilot Runtime](https://docs.copilotkit.ai/llamaindex/copilot-runtime).
+
+The docs moved from the v1 GraphQL runtime to `@copilotkit/runtime/v2`. This repo followed. What changed:
+
+| | Before | After |
+| --- | --- | --- |
+| Import | `@copilotkit/runtime` | `@copilotkit/runtime/v2` |
+| Route file | `app/api/copilotkit/route.ts` | `app/api/copilotkit/[[...slug]]/route.ts` |
+| Verbs | `POST` | `GET`, `POST`, `PATCH`, `DELETE` |
+| Handler | `copilotRuntimeNextJSAppRouterEndpoint` → `{ handleRequest }` | `createCopilotRuntimeHandler` → a fetch handler |
+| Service adapter | required (`ExperimentalEmptyAdapter`) | **gone** — no counterpart on the v2 surface |
+
+The failure mode for the old shape is worth stating plainly: `GET /info` keeps returning 200 while every agent run 404s, so the app looks connected and simply never answers. That is why the connection panel probes `/info` and prints the reported `mode` instead of just checking reachability.
+
+### `useSingleEndpoint` means different things on `<CopilotKit>` and `<CopilotKitProvider>`
+
+[Copilot Runtime](https://docs.copilotkit.ai/llamaindex/copilot-runtime), [Runtime endpoints](https://docs.copilotkit.ai/llamaindex/backend/runtime-endpoints#provider-and-handler-pairs).
+
+The Quickstart passes `useSingleEndpoint={false}` because it uses `<CopilotKit>`, which pins the flag to `true` in every released version — against a multi-route handler, that 404s. This repo uses `<CopilotKitProvider>`, where an omitted flag means auto-detect from `/info`, so it omits the prop. Both are correct; copying the Quickstart's prop into a `<CopilotKitProvider>` app is harmless but unnecessary, and copying the *absence* of it into a `<CopilotKit>` app breaks the app.
+
+### `/info` reports `threadEndpoints.list: true` in SSE mode
+
+Not a doc error, but a trap when writing a health check. The in-memory runner backs thread list and inspect locally, so those two flags are `true` with no key at all — only `mutations` and `realtimeMetadata` flip with Intelligence. Verified both ways against this repo's runtime:
+
+```
+no key   → mode "sse"          threadEndpoints { list: true, inspect: true, mutations: false, realtimeMetadata: false }
+with key → mode "intelligence" threadEndpoints { list: true, inspect: true, mutations: true,  realtimeMetadata: true  }
+```
+
+The panel therefore keys off `mode`, not off the flags.
+
+### "Enterprise Intelligence Platform" was renamed to "CopilotKit Intelligence"
+
+Renamed across the docs on 2026-08-26 (see `doc-snapshot/CHANGELOG.md`). The old `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` / `publicLicenseKey` provider prop is not how the runtime is wired to the platform: the key is `INTELLIGENCE_API_KEY`, it is server-side only, and it reaches the runtime through a `CopilotKitIntelligence` client rather than through the provider. This repo dropped the public license key entirely.
 
 ### `OpenAI(model="gpt-5.4")` — every Python sample
 
@@ -346,8 +478,32 @@ The LlamaIndex Troubleshooting doc pages were outside the requested scope, so th
 **`PydanticUserError: 'addSearch' is not fully defined; you should define 'Context'`.**
 Adding `from __future__ import annotations` to `backend/agents.py` breaks every tool that takes `ctx: Context`. With postponed annotations the parameter type stays a string that Pydantic cannot resolve when it builds the tool schema, and the failure surfaces on the first model call rather than at import. The doc samples have no such import, and neither does this repo — do not add one to that file.
 
+**Chat sends but nothing streams, and `/info` returns 200.**
+The classic mis-mounted-handler signature. Confirm the route file is at `frontend/src/app/api/copilotkit/[[...slug]]/route.ts` — not `route.ts` — and that it exports all four verbs. A single-segment route serves `/info` and 404s every run.
+
+**Threads stay locked even though the key is set.**
+Check three things in order: the key is in `frontend/.env.local` (the runtime runs in the Next process, not the Python one), it has no `NEXT_PUBLIC_` prefix, and the home page's Intelligence row reports `mode "intelligence"`. If the row says `mode "sse"`, the key was never read. If it says `mode "intelligence"` but no thread appears in your project dashboard, the key was read and rejected — it is empty or belongs to a different project.
+
 **Chat sends but nothing streams; the agent process logs nothing.**
 The runtime cannot reach the backend. Check `curl http://localhost:8000/health` first. If that works but the app still cannot, set `LLAMAINDEX_AGENT_URL=http://127.0.0.1:8000` in `frontend/.env.local` — `localhost` resolving to IPv6 while uvicorn binds IPv4 is the usual cause, and it is the first item in the docs' own troubleshooting accordion.
+
+**Every chat is silent, but the home page says the runtime is up.**
+Classic mis-mounted handler. `GET /api/copilotkit/info` returning 200 only proves the handler is reachable *somewhere*; runs live on sub-paths. Confirm the file is at `frontend/src/app/api/copilotkit/[[...slug]]/route.ts` — a catch-all — and that it exports GET, POST, PATCH, and DELETE. `curl -s -o /dev/null -w '%{http_code}' -XPOST localhost:3000/api/copilotkit` returning 404 is correct and expected; the bare URL is not the transport.
+
+**"New conversation" in a custom thread UI does nothing.**
+`useThreads().startNewThread()` only clears the list selection — it does not change the chat's thread. If your chat takes a `threadId` prop, the configuration setters no-op, and setting the prop to `undefined` reuses the id minted at mount. Force a remount (change the React `key`) so a fresh id is minted. See `/headless-threads` for the working two-step.
+
+**The Threads Drawer shows "Threads are a CopilotKit Intelligence feature / Upgrade".**
+That is the license axis, not the threads axis — and the two are independent. Check `curl -s localhost:3000/api/copilotkit/info | grep -o '"licenseStatus":"[a-z]*"'`. If it says `none`, set `COPILOTKIT_LICENSE_TOKEN`; the `cpk-` project key does not supply it. Confirm threads themselves are fine by opening `/headless-threads`, which reads the same data through `useThreads` and is not license-gated.
+
+**Threads are empty, or the Inspector's Threads tab shows example rows.**
+The runtime is in SSE mode. Check the home page's "CopilotKit Intelligence" row, or `curl -s localhost:3000/api/copilotkit/info | grep -o '"mode":"[a-z]*"'`. If it says `sse` with a key set, the key is in the wrong file (it belongs in `frontend/.env.local`, since the runtime route runs in the Next process) or was given a `NEXT_PUBLIC_` prefix, which the runtime does not read.
+
+**`mode` says `intelligence` but no threads appear in the dashboard.**
+The key was read but rejected. `mode` reflects which constructor branch ran, not whether the platform accepted the credential — the docs are explicit that a green round trip in the browser proves nothing. A rejected key looks identical from inside the app; the project dashboard is the only confirmation.
+
+**Every visitor shares one thread history.**
+`identifyUser` is returning the same id for everyone. This repo derives it from the `x-user-id` header the provider sends, defaulting to `harness-local`. That is fine for a local harness and wrong for anything deployed — swap it for a server-verified session before putting this anywhere real.
 
 **A route errors with an agent-not-found style message.**
 The `agentId` on that page is not in the runtime's `agents` map, or its router is not included in `main.py`. This repo registers no `default` agent on purpose, so a missing id fails loudly instead of quietly answering from somewhere else.
@@ -408,7 +564,9 @@ llamaindex/
         │   ├── layout.tsx                 root layout; one provider for the whole app
         │   ├── page.tsx                   Introduction + health probe
         │   ├── status/page.tsx            the status table
-        │   ├── api/copilotkit/route.ts    the Copilot Runtime — five agent bindings
+        │   ├── api/copilotkit/[[...slug]]/route.ts
+        │   │                              the Copilot Runtime — five agent
+        │   │                              bindings + optional Intelligence
         │   └── <doc-path>/
         │       ├── page.tsx               notes, discrepancies, live source
         │       └── demo-chat/page.tsx     the chrome-free interactive demo
@@ -434,7 +592,7 @@ llamaindex/
 
 ## References
 
-Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups them. Pages marked *(off-sidebar)* resolve but are absent from that nav as of 2026-08-10.
+Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups them. Pages marked *(off-sidebar)* resolve but are absent from that nav as of the last sync — see `doc-snapshot/manifest.json` for the exact timestamp.
 
 **Getting Started**
 - [Introduction](https://docs.copilotkit.ai/llamaindex)
@@ -442,6 +600,12 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 
 **Basics**
 - [Prebuilt Components](https://docs.copilotkit.ai/llamaindex/prebuilt-components)
+
+**Rich Threads**
+- [Threads Drawer](https://docs.copilotkit.ai/llamaindex/prebuilt-components/copilot-threads-drawer)
+- [Headless Threads](https://docs.copilotkit.ai/llamaindex/headless-threads)
+- [Thread & History Lifecycle](https://docs.copilotkit.ai/llamaindex/threads-lifecycle)
+- [Synchronize Thread History](https://docs.copilotkit.ai/llamaindex/threads-import)
 
 **Custom Look and Feel**
 - [Programmatic Control](https://docs.copilotkit.ai/llamaindex/programmatic-control)
@@ -470,3 +634,7 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 **Backend**
 - [Copilot Runtime](https://docs.copilotkit.ai/llamaindex/copilot-runtime)
 - [AG-UI](https://docs.copilotkit.ai/llamaindex/ag-ui)
+
+**CopilotKit Intelligence** — consulted for the runtime wiring, not implemented as routes
+- [Connect your runtime to Intelligence](https://docs.copilotkit.ai/llamaindex/premium/connect-your-runtime) — the `CopilotKitIntelligence` constructor and how to confirm the key is in use
+- [Runtime endpoints](https://docs.copilotkit.ai/llamaindex/backend/runtime-endpoints) — the provider/handler transport pairing table
