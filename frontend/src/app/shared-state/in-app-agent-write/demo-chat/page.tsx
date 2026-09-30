@@ -3,6 +3,7 @@
 import { CopilotChat, useAgent, useCopilotKit } from "@copilotkit/react-core/v2";
 
 import { DemoFrame } from "@/components/demo-frame";
+import { useEffect } from "react";
 
 /** The runtime id this demo binds to. Also shown in the demo header. */
 const AGENT_ID = "sample_agent";
@@ -29,26 +30,19 @@ type AgentState = {
 export default function Page() {
   // No `initialState` here — that prop does not exist on `useAgent` in 1.66.x.
   // The starting value comes from `initial_state` on the router.
-  const { agent } = useAgent({ agentId: AGENT_ID });
-  const { copilotkit } = useCopilotKit();
-  const state = agent.state as AgentState | undefined;
+  const { agent, isReady } = useAgent({
+    agentId: AGENT_ID,
+  });
 
-  const nextLanguage = () =>
-    state?.language === "english" ? "spanish" : "english";
+  const state = (agent.state ?? {}) as Partial<AgentState>;
 
+  useEffect(() => {
+if (!isReady || state.language !== undefined) return;
+    agent.setState({ ...(agent.state ?? {}), language: "english" });
+  }, [agent, isReady, state.language]);
+  // ...
   const toggleLanguage = () => {
-    agent.setState({ language: nextLanguage() });
-  };
-
-  const toggleAndRerun = async () => {
-    const newLanguage = nextLanguage();
-    agent.setState({ language: newLanguage });
-    agent.addMessage({
-      id: crypto.randomUUID(),
-      role: "user",
-      content: `the language has been updated to ${newLanguage}`,
-    });
-    await copilotkit.runAgent({ agent });
+    agent.setState({ ...(agent.state ?? {}), language: state.language === "english" ? "spanish" : "english" }); 
   };
 
   return (
@@ -76,14 +70,6 @@ export default function Page() {
             >
               Toggle Language
             </button>
-            {/* <button
-              type="button"
-              onClick={() => void toggleAndRerun()}
-              disabled={agent.isRunning}
-              className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40"
-            >
-              Toggle + re-run agent
-            </button> */}
           </div>
 
           <h2 className="mt-6 text-xs font-semibold uppercase tracking-wide text-slate-500">

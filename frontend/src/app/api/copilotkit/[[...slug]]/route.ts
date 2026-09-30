@@ -27,9 +27,10 @@ import { LlamaIndexAgent } from "@ag-ui/llamaindex";
 // speaks, but the URL is still a plain HTTP endpoint.
 const AGENT_URL = process.env.LLAMAINDEX_AGENT_URL ?? "http://localhost:8000";
 
-// Five agents, one per AG-UI router. `my_agent` is the Quickstart's; the other
-// four exist because `get_ag_ui_workflow_router` takes exactly one
-// `initial_state`, and the doc pages define four different state shapes.
+// One agent per AG-UI router. `my_agent` is the Quickstart's; the next four
+// exist because `get_ag_ui_workflow_router` takes exactly one `initial_state`,
+// and the doc pages define four different state shapes. The last three serve
+// the HITL and Sub-Agents pages.
 //
 // Every path ends in `/run` because `AGUIWorkflowRouter` always registers
 // `POST /run` — the prefixes are how `main.py` serves more than one.
@@ -39,6 +40,18 @@ const agents = {
   search_agent: new LlamaIndexAgent({ url: `${AGENT_URL}/search_agent/run` }),
   qa_agent: new LlamaIndexAgent({ url: `${AGENT_URL}/qa_agent/run` }),
   task_agent: new LlamaIndexAgent({ url: `${AGENT_URL}/task_agent/run` }),
+
+  // The HITL pages. Both only need their frontend tool forwarded, which the
+  // stock router does for any tool it did not declare — so both reuse the
+  // Quickstart router. The docs route `hitl-in-chat` to a dedicated
+  // `/hitl-in-chat` router whose code is published nowhere, and publish no
+  // agent at all for governed actions (README §9).
+  "hitl-in-chat": new LlamaIndexAgent({ url: `${AGENT_URL}/run` }),
+  "governed-actions": new LlamaIndexAgent({ url: `${AGENT_URL}/run` }),
+
+  // Sub-Agents: the supervisor from the page's demo code, mounted by
+  // `backend/main.py` at the `/subagents` prefix its own route.ts names.
+  subagents: new LlamaIndexAgent({ url: `${AGENT_URL}/subagents/run` }),
 };
 
 /**

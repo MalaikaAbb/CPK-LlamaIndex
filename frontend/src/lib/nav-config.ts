@@ -232,6 +232,66 @@ export const NAV: NavGroup[] = [
         statusNote:
           "The state itself streams. The doc's in-chat variant does not — useAgent has no `render` prop in the shipped v2 API.",
       },
+      {
+        path: "/generative-ui/a2ui/dynamic-schema",
+        hasDemo: true,
+        title: "A2UI · Dynamic Schema",
+        docPath: "/llamaindex/generative-ui/a2ui/dynamic-schema",
+        summary:
+          "A secondary LLM designs a dashboard surface per request from a bring-your-own catalog.",
+        status: "partial",
+        statusNote:
+          "Frontend and runtime from the page's demo Code tab, verbatim; the agent is a simplified plain router (prompt only). Not yet checked in a browser. The demo's runtime sets injectA2UITool: true, which the page's prose says is unnecessary.",
+      },
+      {
+        path: "/generative-ui/a2ui/fixed-schema",
+        hasDemo: true,
+        title: "A2UI · Fixed Schema",
+        docPath: "/llamaindex/generative-ui/a2ui/fixed-schema",
+        summary:
+          "A flight card whose component tree is pre-authored JSON; the tool supplies only the data.",
+        status: "partial",
+        statusNote:
+          "Built from the page's demo Code tab, verbatim. Not yet checked in a browser. The demo's runtime sets injectA2UITool: true where the page's prose says false. The Book button is inert by design.",
+      },
+      {
+        path: "/generative-ui/open-generative-ui",
+        hasDemo: true,
+        title: "Open Generative UI",
+        docPath: "/llamaindex/generative-ui/open-generative-ui",
+        summary:
+          "The agent writes sandboxed HTML/CSS/JS that streams into an iframe, optionally calling back into host functions.",
+        status: "partial",
+        statusNote:
+          "Built from the page's demo Code tab. Both agents import an unpublished make_request_aware_router, swapped here for the stock router. The published prompts re-draw the UI on every follow-up; a harness remedy region adds a stop rule.",
+      },
+    ],
+  },
+  {
+    title: "Human-in-the-loop",
+    routes: [
+      {
+        path: "/human-in-the-loop/index",
+        hasDemo: true,
+        title: "HITL Overview",
+        docPath: "/llamaindex/human-in-the-loop/index",
+        summary:
+          "useHumanInTheLoop suspending the run behind a time picker until the user answers.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. The docs route hitl-in-chat to an unpublished /hitl-in-chat router; this repo uses the Quickstart router, which forwards book_call like any frontend tool.",
+      },
+      {
+        path: "/human-in-the-loop/governed-actions",
+        hasDemo: true,
+        title: "Governed Action Approval UI",
+        docPath: "/llamaindex/human-in-the-loop/governed-actions",
+        summary:
+          "Gating a side-effecting action behind an approve/reject card, driven by the action's verdict.",
+        status: "broken",
+        statusNote:
+          "Observed: the card renders without its Approve/Reject buttons. llama-index-protocols-ag-ui 0.5.0 flattens every frontend-tool parameter to a plain string, so the model never sees the verdict enum and rarely writes exactly require_approval. Naming the verdict in the prompt works around it. The useInterrupt half cannot run (no AG-UI interrupts), and no policy engine, agent or executeSideEffect is published.",
+      },
     ],
   },
   {
@@ -307,6 +367,17 @@ export const NAV: NavGroup[] = [
         status: "partial",
         statusNote:
           "Agent Lock is fully exercisable. Router Mode needs an LLM service adapter this repo deliberately does not configure.",
+      },
+      {
+        path: "/multi-agent/subagents",
+        hasDemo: true,
+        title: "Sub-Agents",
+        docPath: "/llamaindex/multi-agent/subagents",
+        summary:
+          "A supervisor delegating to research, writing and critique sub-agents, with a live delegation log.",
+        status: "partial",
+        statusNote:
+          "Built from the page's demo Code tab, verbatim. Not yet checked in a browser.",
       },
     ],
   },
