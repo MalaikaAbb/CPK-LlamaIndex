@@ -59,7 +59,7 @@ export default function Page() {
         <div className="mt-4">
           <TryIt
             prompts={["What's the weather in San Francisco?"]}
-            expect="The event list fills, and Available Agents lists all five ids: my_agent, sample_agent, search_agent, qa_agent, task_agent."
+            expect="The event list fills, and Available Agents lists all eight ids on the main runtime: my_agent, sample_agent, search_agent, qa_agent, task_agent, hitl-in-chat, governed-actions, subagents."
             fail="The inspector never appears — it is force-disabled in production builds, so confirm you are running the dev server."
           />
         </div>

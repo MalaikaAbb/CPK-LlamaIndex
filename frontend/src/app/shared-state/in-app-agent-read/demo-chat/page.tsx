@@ -3,6 +3,7 @@
 import { CopilotChat, useAgent } from "@copilotkit/react-core/v2";
 
 import { DemoFrame } from "@/components/demo-frame";
+import { useEffect } from "react";
 
 /** The runtime id this demo binds to. Also shown in the demo header. */
 const AGENT_ID = "sample_agent";
@@ -26,8 +27,15 @@ type AgentState = {
 };
 
 export default function Page() {
-  const { agent } = useAgent({ agentId: AGENT_ID });
-  const state = agent.state as AgentState | undefined;
+  const { agent, isReady } = useAgent({
+    agentId: AGENT_ID,
+  });
+  const state = (agent.state ?? {}) as Partial<AgentState>;
+
+  useEffect(() => {
+if (!isReady || state.language !== undefined) return;
+    agent.setState({ ...(agent.state ?? {}), language: "english" });
+  }, [agent, isReady, state.language]);
 
   return (
     <DemoFrame

@@ -25,7 +25,7 @@ export default function Page() {
         <div className="mt-4">
           <TryIt
             prompts={["Can you tell me a joke?", "Can you help me understand AI?"]}
-            expect="Tokens stream in a word at a time and the reply renders as markdown."
+            expect="The sidebar is open on load (defaultOpen is true in 1.75.1). Tokens stream in a word at a time and the reply renders as markdown."
             fail="Nothing streams, or an error appears — the agent process is probably down. Check the connection panel on the home page."
           />
         </div>
@@ -33,6 +33,29 @@ export default function Page() {
 
       <Panel title="The demo">
         <SourceCode file="frontend/src/app/quickstart/demo-chat/page.tsx" />
+      </Panel>
+
+      <Panel
+        title="The provider"
+        description="The doc's app/providers.tsx, verbatim, and the layout that renders it around the demo."
+      >
+        <SourceCodeGroup
+          files={[
+            { file: "frontend/src/app/quickstart/demo-chat/providers.tsx" },
+            { file: "frontend/src/app/quickstart/demo-chat/layout.tsx" },
+          ]}
+          note={
+            <>
+              The rest of this harness shares one root{" "}
+              <code>&lt;CopilotKitProvider&gt;</code> so chats survive
+              navigation. The Quickstart demo swaps in the doc&apos;s own{" "}
+              <code>Providers</code> instead, so what you exercise is exactly
+              what the page tells you to write:{" "}
+              <code>agent=&quot;my_agent&quot;</code> on the provider (the
+              sidebar is bare) and <code>useSingleEndpoint={"{false}"}</code>.
+            </>
+          }
+        />
       </Panel>
 
       <Panel
@@ -46,9 +69,9 @@ export default function Page() {
           ]}
           note={
             <>
-              The runtime registers five agent ids rather than the doc&apos;s
-              one, and the server includes five routers rather than one. That is
-              the only structural departure, and it exists because{" "}
+              The runtime registers several agent ids rather than the doc&apos;s
+              one, and the server includes several routers rather than one. That
+              is the only structural departure, and it exists because{" "}
               <code>get_ag_ui_workflow_router</code> takes exactly one{" "}
               <code>initial_state</code> — see the{" "}
               <a
@@ -81,13 +104,22 @@ export default function Page() {
         route has the full before/after.
       </Callout>
 
-      <Callout tone="info" title="`useSingleEndpoint={false}` is the doc's, not this repo's">
-        The Quickstart passes it because it wraps the app in{" "}
-        <code>&lt;CopilotKit&gt;</code>, which pins the flag to <code>true</code>{" "}
-        in every released version — against a multi-route handler that 404s. This
-        harness uses <code>&lt;CopilotKitProvider&gt;</code>, where an omitted
-        flag means auto: the client probes <code>/info</code> and picks the
-        matching transport. Both are correct; only one is necessary.
+      <Callout tone="info" title="What `useSingleEndpoint={false}` does here">
+        It pins the client to the REST transport — one URL per operation under{" "}
+        <code>/api/copilotkit</code> — which is why the runtime route has to be{" "}
+        <code>[[...slug]]</code>. Older <code>&lt;CopilotKit&gt;</code> releases
+        pinned the flag to <code>true</code> internally, so the doc had to
+        override it; in 1.75.1 the wrapper forwards the prop, and leaving it out
+        means auto (probe <code>/info</code>, pick the matching transport). The
+        flag is kept because the doc sets it.
+        <p className="mt-2">
+          Side effects of copying the provider verbatim: no{" "}
+          <code>x-user-id</code> header is sent, so in Intelligence mode{" "}
+          <code>identifyUser</code> resolves this route&apos;s threads to{" "}
+          <code>anonymous</code>. The inspector follows the package default
+          (localhost only), and the root provider&apos;s inspector turns itself
+          off on this route so there is only one.
+        </p>
       </Callout>
 
       <Panel title="The agent and its LLM">

@@ -131,6 +131,17 @@ export default function Page() {
           <code>POST /run</code> on the router it returns. FastAPI{" "}
           <code>prefix=</code> is what lets five of them coexist.
         </p>
+        <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+          The newer pages add five more routers, copied verbatim from their
+          demo Code tabs into <code>backend/demos/</code>:{" "}
+          <code>/a2ui-dynamic</code>, <code>/a2ui-fixed</code>,{" "}
+          <code>/open-gen-ui</code>, <code>/open-gen-ui-advanced</code> and{" "}
+          <code>/subagents</code>. All but the last are reached through their
+          own single-route runtimes rather than this table&apos;s. The HITL
+          pages register <code>hitl-in-chat</code> and{" "}
+          <code>governed-actions</code> against <code>my_agent</code>&apos;s
+          endpoint.
+        </p>
       </Panel>
 
       <Panel title="How a message travels">
