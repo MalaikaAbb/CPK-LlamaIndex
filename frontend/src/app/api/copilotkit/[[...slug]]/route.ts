@@ -49,6 +49,9 @@ const agents = {
   "hitl-in-chat": new LlamaIndexAgent({ url: `${AGENT_URL}/run` }),
   "governed-actions": new LlamaIndexAgent({ url: `${AGENT_URL}/run` }),
 
+  // Tool-based Generative UI: the chart is registered as a frontend tool.
+  tool_based_agent: new LlamaIndexAgent({ url: `${AGENT_URL}/tool-based/run` }),
+
   // Sub-Agents: the supervisor from the page's demo code, mounted by
   // `backend/main.py` at the `/subagents` prefix its own route.ts names.
   subagents: new LlamaIndexAgent({ url: `${AGENT_URL}/subagents/run` }),
