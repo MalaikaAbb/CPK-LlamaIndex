@@ -222,17 +222,39 @@ export const NAV: NavGroup[] = [
         status: "working",
       },
       {
+        path: "/generative-ui/tool-based",
+        hasDemo: true,
+        title: "Tool-based Generative UI",
+        docPath: "/llamaindex/generative-ui/tool-based",
+        summary:
+          "Registering a typed React chart as a frontend tool, with built-in and headless chat rendering.",
+        status: "partial",
+        statusNote:
+          "Implemented from the guide. The live model/tool interaction has not yet been verified.",
+      },
+      {
         path: "/generative-ui/state-rendering",
         hasDemo: true,
         title: "State Rendering",
         docPath: "/llamaindex/generative-ui/state-rendering",
         summary:
-          "Streaming agent state to the UI: a searches list kept in sync by StateSnapshotWorkflowEvent.",
+        "Streaming agent state to the UI: a searches list kept in sync by StateSnapshotWorkflowEvent.",
         status: "partial",
         statusNote:
           "The state itself streams. The doc's in-chat variant does not — useAgent has no `render` prop in the shipped v2 API.",
-      },
-      {
+        },
+        {
+          path: "/generative-ui/mcp-apps",
+          hasDemo: true,
+          title: "MCP Apps",
+          docPath: "/llamaindex/generative-ui/mcp-apps",
+          summary:
+            "The guide's BuiltInAgent runtime renders MCP-provided UI resources from either a local or live Excalidraw server.",
+          status: "partial",
+          statusNote:
+            "This tests the guide's BuiltInAgent example, not the LlamaIndex backend. Tool/UI rendering requires the selected MCP server and frontend OpenAI key; neither server path has been verified here.",
+        },
+        {
         path: "/generative-ui/a2ui/dynamic-schema",
         hasDemo: true,
         title: "A2UI · Dynamic Schema",
