@@ -26,6 +26,7 @@ URLs name — the docs never show the mounting server itself:
     POST /open-gen-ui/run           →  api/copilotkit-ogui
     POST /open-gen-ui-advanced/run  →  api/copilotkit-ogui
     POST /subagents/run             →  api/copilotkit (agent "subagents")
+    POST /voice/run                 →  api/copilotkit-voice (agent "voice-demo")
 """
 
 from __future__ import annotations
@@ -55,6 +56,7 @@ from demos.a2ui_fixed import a2ui_fixed_router  # noqa: E402
 from demos.open_gen_ui_advanced_agent import open_gen_ui_advanced_router  # noqa: E402
 from demos.open_gen_ui_agent import open_gen_ui_router  # noqa: E402
 from demos.subagents_agent import subagents_router  # noqa: E402
+from demos.voice_agent import voice_router  # noqa: E402
 
 PORT = int(os.getenv("AGENT_PORT", "8000"))
 
@@ -85,6 +87,8 @@ app.include_router(a2ui_fixed_router, prefix="/a2ui-fixed")
 app.include_router(open_gen_ui_router, prefix="/open-gen-ui")
 app.include_router(open_gen_ui_advanced_router, prefix="/open-gen-ui-advanced")
 app.include_router(subagents_router, prefix="/subagents")
+# Step 4: Mount the tool-free endpoint used by the Voice runtime.
+app.include_router(voice_router, prefix="/voice")
 
 
 # Health check endpoint

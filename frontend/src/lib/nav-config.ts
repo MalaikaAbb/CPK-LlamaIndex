@@ -268,6 +268,22 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
+    title: "Voice",
+    routes: [
+      {
+        path: "/voice",
+        hasDemo: true,
+        title: "Voice",
+        docPath: "/llamaindex/voice",
+        summary:
+          "Transcribing microphone audio into chat input through a dedicated Copilot Runtime transcription service.",
+        status: "partial",
+        statusNote:
+          "The mic and transcription service are wired. Live transcription requires microphone permission and an OpenAI API key in the Next.js environment.",
+      },
+    ],
+  },
+  {
     title: "Human-in-the-loop",
     routes: [
       {
