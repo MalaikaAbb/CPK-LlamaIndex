@@ -222,6 +222,17 @@ export const NAV: NavGroup[] = [
         status: "working",
       },
       {
+        path: "/generative-ui/tool-based",
+        hasDemo: true,
+        title: "Tool-based Generative UI",
+        docPath: "/llamaindex/generative-ui/tool-based",
+        summary:
+          "Registering a typed React chart as a frontend tool, with built-in and headless chat rendering.",
+        status: "partial",
+        statusNote:
+          "Implemented from the guide. The live model/tool interaction has not yet been verified.",
+      },
+      {
         path: "/generative-ui/state-rendering",
         hasDemo: true,
         title: "State Rendering",
