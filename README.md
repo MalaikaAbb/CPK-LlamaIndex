@@ -299,6 +299,9 @@ The next three routes are built from each page's **demo Code tab** — the full 
 *Fail:* no card and a prose answer — name the tool explicitly as above.
 *Broken because:* without `verdict require_approval` in the prompt, the card renders with no buttons (observed). The adapter flattens frontend-tool schemas to strings — see Known issues. The `useInterrupt` half also cannot run (the LlamaIndex adapter never emits interrupts) and is shown as text.
 
+**`/human-in-the-loop/useInterrupt` — Pausing the Agent for Input ❌.** Reference only, no demo. The page marks interrupts unsupported on LlamaIndex, its LlamaIndex frontend snippet is missing, and its backend is a fragment depending on the unpublished `FixedAGUIChatWorkflow`. Shows the backend fragment and the generic `useInterrupt` examples as text.
+*Pass:* the page renders the gap callout and the code. There is nothing to run.
+
 ### App Control
 
 **`/frontend-tools` → demo — Frontend Tools.** The doc's `sayHello` tool, executing in the browser.
@@ -383,6 +386,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ⚠️ Partial | From the demo Code tabs. Not yet checked in a browser. Unpublished `make_request_aware_router` swapped for the stock router. |
 | [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index) | `/human-in-the-loop/index` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Unpublished `/hitl-in-chat` router → Quickstart router. |
 | [Governed Action Approval UI](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/governed-actions) | `/human-in-the-loop/governed-actions` | ❌ Broken | Observed: card renders without Approve/Reject unless the prompt names the verdict — the adapter flattens frontend-tool params to strings. `useInterrupt` and `executeSideEffect` are reference text. |
+| [Pausing the Agent for Input](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/useInterrupt) | `/human-in-the-loop/useInterrupt` | ❌ Broken | Reference only. Page says interrupts aren't supported on LlamaIndex; frontend snippet missing; backend fragment needs unpublished `FixedAGUIChatWorkflow`. |
 | [Frontend Tools](https://docs.copilotkit.ai/llamaindex/frontend-tools) | `/frontend-tools` | ✅ Working | |
 | [Reading agent state](https://docs.copilotkit.ai/llamaindex/shared-state/in-app-agent-read) | `/shared-state/in-app-agent-read` | ✅ Working | Not in the doc sidebar. `initialState` on `useAgent` does not exist. |
 | [Writing agent state](https://docs.copilotkit.ai/llamaindex/shared-state/in-app-agent-write) | `/shared-state/in-app-agent-write` | ✅ Working | Not in the doc sidebar. |
@@ -578,6 +582,10 @@ The HITL demo's `route.ts` sends `hitl-in-chat` to a dedicated `/hitl-in-chat` r
 
 Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` directly so `OPENAI_CHAT_MODEL_ID` does not reach these agents. The copied runtime routes read `AGENT_URL`, not this repo's `LLAMAINDEX_AGENT_URL`. Both default to `http://localhost:8000`.
 
+
+### Interrupts: unsupported on LlamaIndex, and the stand-in is half-published
+
+[Pausing the Agent for Input](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/useInterrupt). The rendered page shows "Not supported on LlamaIndex" for interrupts and describes a stand-in: a `useFrontendTool` whose handler returns a Promise that the time picker resolves. The frontend code for that stand-in is missing from the page (an unresolved snippet region for `llamaindex::gen-ui-interrupt`), and there is no Code tab. The backend it prints (`src/agents/interrupt_agent.py`) is a fragment with no imports that builds a `FixedAGUIChatWorkflow`, a class no page publishes, and passes `workflow_factory=` to `get_ag_ui_workflow_router`. The route is reference-only and Broken; nothing was written in for the missing halves.
 ### MCP Apps — skipped
 
 [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps). Not implemented, by request. For whoever picks it up: the page's sample is a `BuiltInAgent` (`openai/gpt-5.4`) plus an MCP server you run yourself on `localhost:3108`, with no LlamaIndex code. The docs bundle has a separate LlamaIndex MCP demo (Excalidraw), which this page does not link and which also imports the unpublished `_request_tools`.
@@ -751,6 +759,7 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 **Human-in-the-loop**
 - [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index)
 - [Governed Action Approval UI](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/governed-actions)
+- [Pausing the Agent for Input](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/useInterrupt) — reference only
 
 **App Control**
 - [Frontend Tools](https://docs.copilotkit.ai/llamaindex/frontend-tools)

@@ -292,6 +292,16 @@ export const NAV: NavGroup[] = [
         statusNote:
           "Observed: the card renders without its Approve/Reject buttons. llama-index-protocols-ag-ui 0.5.0 flattens every frontend-tool parameter to a plain string, so the model never sees the verdict enum and rarely writes exactly require_approval. Naming the verdict in the prompt works around it. The useInterrupt half cannot run (no AG-UI interrupts), and no policy engine, agent or executeSideEffect is published.",
       },
+      {
+        path: "/human-in-the-loop/useInterrupt",
+        title: "Pausing the Agent for Input",
+        docPath: "/llamaindex/human-in-the-loop/useInterrupt",
+        summary:
+          "Pausing a run for user input and resuming with the answer: useInterrupt, or a Promise-holding frontend tool where interrupts don't exist.",
+        status: "broken",
+        statusNote:
+          "Reference only. The page says interrupts are not supported on LlamaIndex; its frontend snippet is missing from the page and its backend is an unimportable fragment (FixedAGUIChatWorkflow unpublished).",
+      },
     ],
   },
   {
