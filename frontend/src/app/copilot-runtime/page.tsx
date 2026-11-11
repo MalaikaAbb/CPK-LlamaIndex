@@ -93,6 +93,15 @@ export default function Page() {
           transport is an ordinary HTTP POST, which is why every URL here ends in{" "}
           <code>/run</code>.
         </p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          The runtime here is the TypeScript one, and that is not incidental:
+          the page now lists Python, Go, Ruby and C#/.NET runtimes too, but
+          says only the TypeScript runtime can run without a CopilotKit
+          Intelligence project. Since this harness must work with no
+          Intelligence key (SSE mode, in-memory runner), the LlamaIndex agent
+          stays a Python AG-UI server behind a TypeScript runtime — the
+          mixed-language split the page explicitly allows.
+        </p>
         <div className="mt-4">
           <TryIt
             prompts={["Hello"]}
