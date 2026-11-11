@@ -369,7 +369,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Headless Threads](https://docs.copilotkit.ai/llamaindex/headless-threads) | `/headless-threads` | ✅ Working | Needs Intelligence mode. Implements rename, which the drawer omits. |
 | [Thread & History Lifecycle](https://docs.copilotkit.ai/llamaindex/threads-lifecycle) | `/threads-lifecycle` | ✅ Working | Switch/start always live; replay needs a server-side store. |
 | [Synchronize Thread History](https://docs.copilotkit.ai/llamaindex/threads-import) | `/threads-import` | 📄 Reference | **Not implementable** — the importer supports ADK and LangGraph only. No LlamaIndex source exists. |
-| [Slots](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ✅ Working | Not in the doc sidebar. Custom-component sample needs a cast. |
+| [Slots](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ⚠️ Partial | Not in the doc sidebar. Custom-component sample needs a cast. The new `groupMessages` example is reference-only: needs `@copilotkit/react-core` 1.79+, repo pins 1.75.1. |
 | [Headless UI](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/headless-ui) | `/custom-look-and-feel/headless-ui` | ✅ Working | Not in the doc sidebar. |
 | [Programmatic Control](https://docs.copilotkit.ai/llamaindex/programmatic-control) | `/programmatic-control` | ✅ Working | Bare `useAgent()` replaced with an explicit `agentId`. |
 | [Inspector](https://docs.copilotkit.ai/llamaindex/inspector) | `/inspector` | ✅ Working | Enabled via `showDevConsole="auto"`, not `enableInspector`. |
@@ -489,6 +489,10 @@ Every LlamaIndex doc page opens with this line. `gpt-5.4` is not an id the OpenA
 ### `useHumanInTheLoop` does not infer its arg type
 
 [Interactive](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/interactive). Unlike `useRenderTool`, this hook does not derive its render-prop type from `parameters`; it defaults to `Record<string, unknown>`, which makes `args.command` unusable in JSX. The demo supplies the generic explicitly: `useHumanInTheLoop<{ command: string }>({ ... })`.
+
+### Slots: `groupMessages` needs a newer CopilotKit than this repo pins
+
+[Slots](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/slots). The page's "Grouping messages into one row" sample imports `messageGroup`, `messageRow`, `MessageRow` and `MessageGroupWrapperProps` from `@copilotkit/react-core/v2`, and the slot tables add `workSummary` and `toolCallsView.group`. None of these exist in 1.75.1 (the lockfile's version); they appear in 1.79. The page doesn't state a minimum version. `/custom-look-and-feel/slots` shows the sample verbatim as text and doesn't run it.
 
 ### The custom `messageView` slot needs a cast
 
