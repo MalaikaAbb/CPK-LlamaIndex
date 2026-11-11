@@ -335,6 +335,16 @@ export const NAV: NavGroup[] = [
           "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text. The page's backend example reads forwarded props in a generic Python snippet; no LlamaIndex router is shown.",
       },
       {
+        path: "/generative-ui/components/from-a2ui",
+        title: "Components · Adopt from A2UI",
+        docPath: "/llamaindex/generative-ui/components/from-a2ui",
+        summary:
+          "Migrating from the a2ui renderer (A2UI v0.9) to components and surfaces (A2UI 1.0), with the mapping and support matrix.",
+        status: "broken",
+        statusNote:
+          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",
