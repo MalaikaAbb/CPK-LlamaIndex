@@ -29,6 +29,7 @@ export const NESTED_PROVIDER_ROUTES = [
   "/generative-ui/open-generative-ui/demo-chat",
   "/human-in-the-loop/index/demo-chat",
   "/multi-agent/subagents/demo-chat",
+  "/generative-ui/mcp-apps/demo-chat",
 ] as const;
 
 /**

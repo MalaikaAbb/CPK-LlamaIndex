@@ -255,6 +255,17 @@ export const NAV: NavGroup[] = [
           "Built from the page's demo Code tab, verbatim. Not yet checked in a browser. The demo's runtime sets injectA2UITool: true where the page's prose says false. The Book button is inert by design.",
       },
       {
+        path: "/generative-ui/mcp-apps",
+        hasDemo: true,
+        title: "Open-ended · MCP Apps",
+        docPath: "/llamaindex/generative-ui/mcp-apps",
+        summary:
+          "An MCP server's UI-bearing tools rendered as sandboxed iframes in the chat, wired through the runtime's mcpApps option.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. Agent: LlamaIndex, not the doc's BuiltInAgent (a stock router with the page's prompt). Own runtime path /api/copilotkit-mcp-apps. Needs an MCP server you run on localhost:3108; the page publishes none. Page asks for runtime 1.76+, repo pins 1.75.1.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",

@@ -279,6 +279,12 @@ The next three routes are built from each page's **demo Code tab** — the full 
 *Fail:* blank codes/airline/price means the binder did not resolve `{ "path": … }` bindings (it only understands zod 3 schemas — see Known issues); React error #31 means a bound prop reached a renderer as a raw object.
 *Partial because:* not yet checked in a browser.
 
+**`/generative-ui/mcp-apps` → demo — Open-ended · MCP Apps ⚠️.** The page's runtime with `mcpApps.servers` (HTTP, `localhost:3108/mcp`, `serverId: "my-server"`), its provider and its sidebar page; the `BuiltInAgent` is swapped for a prompt-only LlamaIndex router, and the route has its own `/api/copilotkit-mcp-apps` runtime.
+*Try:* start an MCP Apps example server from `modelcontextprotocol/ext-apps` on port 3108, then ask `What tools do you have?` and ask for something one of them draws.
+*Pass:* the agent lists the server's tools, and a UI tool call renders an interactive iframe in the sidebar.
+*Fail:* no MCP tools listed (server not reachable at `:3108/mcp`), or the call runs and no iframe appears.
+*Partial because:* not yet checked in a browser; needs an external server; the page asks for runtime 1.76+ and the repo pins 1.75.1.
+
 **`/generative-ui/open-generative-ui` → demo — Open Generative UI ⚠️.** The runtime's `openGenerativeUI` flag injects `generateSandboxedUi`; the model writes HTML/CSS/JS into a sandboxed iframe. A minimal/advanced switcher flips between the page's two demos.
 *Try:* minimal — `Quicksort visualization`; advanced — `Calculator (calls evaluateExpression)`.
 *Pass:* minimal — placeholder lines, then one animated, labelled SVG visual in an iframe, and the run ends. Advanced — one interactive widget at full height; using it logs `[open-gen-ui/advanced] evaluateExpression …` in the browser console and shows the host's result.
@@ -379,7 +385,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [State Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ⚠️ Partial | State streams; the doc's in-chat `render` prop does not exist. |
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo runtime sets `injectA2UITool: true`; prose says no `a2ui` block is needed. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo sets `injectA2UITool: true` where prose says `false`. Book button inert by design. |
-| [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) | — | 🚧 Not started | Skipped by request. The page's sample is a `BuiltInAgent`, not LlamaIndex. |
+| [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) | `/generative-ui/mcp-apps` | ⚠️ Partial | Not yet checked in a browser. `BuiltInAgent` → LlamaIndex router (page's prompt); own runtime path; needs your own MCP server on :3108; page asks for runtime 1.76+, repo pins 1.75.1. |
 | [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ⚠️ Partial | From the demo Code tabs. Not yet checked in a browser. Unpublished `make_request_aware_router` swapped for the stock router. |
 | [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index) | `/human-in-the-loop/index` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Unpublished `/hitl-in-chat` router → Quickstart router. |
 | [Governed Action Approval UI](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/governed-actions) | `/human-in-the-loop/governed-actions` | ❌ Broken | Observed: card renders without Approve/Reject unless the prompt names the verdict — the adapter flattens frontend-tool params to strings. `useInterrupt` and `executeSideEffect` are reference text. |
@@ -393,7 +399,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Copilot Runtime](https://docs.copilotkit.ai/llamaindex/copilot-runtime) | `/copilot-runtime` | ✅ Working | `a2ui` / `mcpApps` middleware not configured — no route needs them. |
 | [AG-UI](https://docs.copilotkit.ai/llamaindex/ag-ui) | `/ag-ui` | ✅ Working | |
 
-Pages in the LlamaIndex sidebar that this repo does **not** cover, because they were outside the requested scope: CopilotKit CLI, Build with agents, the whole Rich Threads group, MCP Apps, A2UI, the Intelligence Platform group, and Troubleshooting.
+Pages in the LlamaIndex sidebar that this repo does **not** cover, because they were outside the requested scope: CopilotKit CLI, Build with agents, the whole Rich Threads group, A2UI, the Intelligence Platform group, and Troubleshooting.
 
 ---
 
@@ -578,9 +584,9 @@ The HITL demo's `route.ts` sends `hitl-in-chat` to a dedicated `/hitl-in-chat` r
 
 Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` directly so `OPENAI_CHAT_MODEL_ID` does not reach these agents. The copied runtime routes read `AGENT_URL`, not this repo's `LLAMAINDEX_AGENT_URL`. Both default to `http://localhost:8000`.
 
-### MCP Apps — skipped
+### MCP Apps: a BuiltInAgent runtime, no MCP server, and a version floor
 
-[MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps). Not implemented, by request. For whoever picks it up: the page's sample is a `BuiltInAgent` (`openai/gpt-5.4`) plus an MCP server you run yourself on `localhost:3108`, with no LlamaIndex code. The docs bundle has a separate LlamaIndex MCP demo (Excalidraw), which this page does not link and which also imports the unpublished `_request_tools`.
+[MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps). The page prints no LlamaIndex code: its runtime builds a CopilotKit `BuiltInAgent` (`openai/gpt-6-luna`, "You are a helpful assistant."). This harness keeps the runtime snippet's CopilotKit parts verbatim (`mcpApps.servers`, `InMemoryAgentRunner`, the GET/POST handler) and swaps the agent for a `LlamaIndexAgent` pointing at `create_mcp_apps_router()` in `backend/agents.py` (the page's prompt, no tools, `build_llm()`). The route runs on its own `/api/copilotkit-mcp-apps` path so the MCP middleware doesn't wrap every agent. The page names no MCP server of its own, only the `modelcontextprotocol/ext-apps` examples; you run one on `localhost:3108`. The page also asks for `@copilotkit/runtime` 1.76.0 or later, and this repo pins 1.75.1 (whose typings do include `mcpApps`). The MCP tools reach the LlamaIndex model as frontend tools, so the string-flattening entry above applies to their arguments. The docs bundle also has a separate LlamaIndex MCP demo (Excalidraw) that this page does not embed; it imports the unpublished `_request_tools` and is not used here.
 
 ## Troubleshooting
 
@@ -746,7 +752,7 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 - [A2UI — Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) *(sidebar: Declarative)*
 - [A2UI — Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) *(sidebar: Declarative)*
 - [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) *(sidebar: Open-ended)*
-- [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) — not implemented
+- [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) *(sidebar: Open-ended)*
 
 **Human-in-the-loop**
 - [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index)

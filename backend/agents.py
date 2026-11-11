@@ -346,3 +346,28 @@ def create_task_router() -> APIRouter:
             "observed_steps": [],
         },
     )
+
+
+# --------------------------------------------------------------------------
+# MCP Apps
+# docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps
+# --------------------------------------------------------------------------
+
+
+# region mcp-apps-router
+def create_mcp_apps_router() -> APIRouter:
+    """Agent: LlamaIndex, not the doc's BuiltInAgent.
+
+    The page's runtime builds `new BuiltInAgent({ model: "openai/gpt-6-luna",
+    prompt: "You are a helpful assistant." })`. This harness runs its own
+    framework's agent instead: a stock AG-UI workflow router with that prompt
+    and no tools of its own. The MCP server's tools are added to each run by
+    the runtime's `mcpApps` middleware and forwarded to the model like any
+    frontend tool. The model goes through `build_llm()` like every other
+    router here (README Known issues on the model id).
+    """
+    return get_ag_ui_workflow_router(
+        llm=build_llm(),
+        system_prompt="You are a helpful assistant.",
+    )
+# endregion

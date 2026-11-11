@@ -13,6 +13,7 @@ the only way to serve more than one is FastAPI's `prefix=`. That gives:
     POST /search_agent/run       →  search_agent  (State Rendering)
     POST /qa_agent/run           →  qa_agent      (Workflow Execution)
     POST /task_agent/run         →  task_agent    (Predictive State Updates)
+    POST /mcp-apps/run           →  default on api/copilotkit-mcp-apps (MCP Apps)
 
 Those paths are what `frontend/src/app/api/copilotkit/[[...slug]]/route.ts`
 binds to.
@@ -45,6 +46,7 @@ load_dotenv(_ROOT_ENV, override=False)
 
 from agents import (  # noqa: E402 - must follow load_dotenv
     create_main_router,
+    create_mcp_apps_router,
     create_qa_router,
     create_sample_router,
     create_search_router,
@@ -78,6 +80,7 @@ app.include_router(create_sample_router(), prefix="/sample_agent")
 app.include_router(create_search_router(), prefix="/search_agent")
 app.include_router(create_qa_router(), prefix="/qa_agent")
 app.include_router(create_task_router(), prefix="/task_agent")
+app.include_router(create_mcp_apps_router(), prefix="/mcp-apps")
 
 # Routers copied from the docs' demo "Code" tabs (see demos/__init__.py).
 app.include_router(a2ui_dynamic_router, prefix="/a2ui-dynamic")
