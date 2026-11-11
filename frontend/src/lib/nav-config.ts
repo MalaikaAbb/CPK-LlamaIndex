@@ -302,6 +302,16 @@ export const NAV: NavGroup[] = [
         statusNote:
           "Reference only. The page says interrupts are not supported on LlamaIndex; its frontend snippet is missing from the page and its backend is an unimportable fragment (FixedAGUIChatWorkflow unpublished).",
       },
+      {
+        path: "/human-in-the-loop/headless",
+        title: "Headless Interrupts",
+        docPath: "/llamaindex/human-in-the-loop/headless",
+        summary:
+          "Resolving an agent's pause from a UI outside the chat, without a useInterrupt render slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The page says interrupts are not supported on LlamaIndex and prints no code for it (snippet region missing, no Code tab).",
+      },
     ],
   },
   {
