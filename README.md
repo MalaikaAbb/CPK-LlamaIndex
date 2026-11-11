@@ -87,7 +87,7 @@ cp .env.example backend/.env
 | Variable | Required | What it does |
 | --- | --- | --- |
 | `OPENAI_API_KEY` | **yes** | The key every agent uses. `main.py` exits at startup if it is unset. |
-| `OPENAI_CHAT_MODEL_ID` | no | Overrides the model. Defaults to `gpt-4o-mini`. Set it to `gpt-5.4` to reproduce the doc's literal call — see [Known issues](#9-known-issues--doc-vs-implementation-discrepancies). |
+| `OPENAI_CHAT_MODEL_ID` | no | Overrides the model. Defaults to `gpt-4o-mini`. Set it to `gpt-6-luna` to reproduce the doc's literal call — see [Known issues](#9-known-issues--doc-vs-implementation-discrepancies). |
 | `AGENT_PORT` | no | Uvicorn port. Defaults to `8000`. Change this and `LLAMAINDEX_AGENT_URL` together. |
 
 Frontend variables go in `frontend/.env.local` (Next.js does not read `backend/.env`):
@@ -465,9 +465,9 @@ The panel therefore keys off `mode`, not off the flags.
 
 Renamed across the docs on 2026-08-26 (see `doc-snapshot/CHANGELOG.md`). The old `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` / `publicLicenseKey` provider prop is not how the runtime is wired to the platform: the key is `INTELLIGENCE_API_KEY`, it is server-side only, and it reaches the runtime through a `CopilotKitIntelligence` client rather than through the provider. This repo dropped the public license key entirely.
 
-### `OpenAI(model="gpt-5.4")` — every Python sample
+### `OpenAI(model="gpt-6-luna")` — every Python sample
 
-Every LlamaIndex doc page opens with this line. `gpt-5.4` is not an id the OpenAI API serves, so a verbatim copy fails on the first request with a model-not-found error. `backend/llm.py` keeps the shape of the call, defaults to `gpt-4o-mini`, and reads `OPENAI_CHAT_MODEL_ID` as the override. Set that variable to `gpt-5.4` to reproduce the published behaviour.
+Every LlamaIndex doc page opens with this line. Until the November 2026 sync it read `gpt-5.4`, which the OpenAI API did not serve, so a verbatim copy failed on the first request with a model-not-found error. The pages now print `gpt-6-luna` (seen on Quickstart, Tool Rendering, State Rendering and the Shared State pages); this harness hasn't confirmed that id is served either. `backend/llm.py` keeps the shape of the call, defaults to `gpt-4o-mini`, and reads `OPENAI_CHAT_MODEL_ID` as the override. Set that variable to `gpt-6-luna` to reproduce the published behaviour.
 
 ### `useAgent` has no `initialState` and no `render`
 
@@ -587,7 +587,7 @@ Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` direct
 The LlamaIndex Troubleshooting doc pages were outside the requested scope, so this section records what actually goes wrong in this repo.
 
 **`ModuleNotFoundError` or an unexpected model error at backend startup.**
-`main.py` exits immediately with a message if `OPENAI_API_KEY` is missing. If it starts but every chat errors, `OPENAI_CHAT_MODEL_ID` probably names a model your key cannot reach — including the docs' own `gpt-5.4`.
+`main.py` exits immediately with a message if `OPENAI_API_KEY` is missing. If it starts but every chat errors, `OPENAI_CHAT_MODEL_ID` probably names a model your key cannot reach — including the docs' own `gpt-6-luna`.
 
 **`PydanticUserError: 'addSearch' is not fully defined; you should define 'Context'`.**
 Adding `from __future__ import annotations` to `backend/agents.py` breaks every tool that takes `ctx: Context`. With postponed annotations the parameter type stays a string that Pydantic cannot resolve when it builds the tool schema, and the failure surfaces on the first model call rather than at import. The doc samples have no such import, and neither does this repo — do not add one to that file.
