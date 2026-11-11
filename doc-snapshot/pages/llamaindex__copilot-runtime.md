@@ -4,6 +4,27 @@
 
 The Copilot Runtime is the backend layer that connects your frontend application to your AI agents. It's set up during the [quickstart](/llamaindex/quickstart) and is the recommended way to use CopilotKit.
 
+## Runtime languages
+
+**TypeScript is the default and most fully featured runtime. It is the only runtime that can run without CopilotKit Intelligence.** Use it for an open-source setup, or connect it to Intelligence when you need its services.
+
+Python, Go, Ruby, and C#/.NET runtimes require an Intelligence project and server-side API key. They work with both [cloud-hosted](/llamaindex/intelligence/managed-intelligence-platform) and [self-hosted](/llamaindex/intelligence/self-hosting) Intelligence; they do not provide an in-memory or SQLite runner.
+
+| Language | Host | Without Intelligence |
+| --- | --- | --- |
+| TypeScript | Next.js, Express, Hono, and other JavaScript servers | Yes |
+| Python | ASGI, with Python 3.11+ | No |
+| Go | `net/http`, with Go 1.22+ | No |
+| Ruby | Rack, including Rails and Sinatra, with Ruby 2.7+ | No |
+| C#/.NET | ASP.NET Core, with .NET 8 | No |
+
+Your runtime language does not have to match your agent language. Each runtime can connect to a remote AG-UI agent. A Python agent can stay behind a TypeScript runtime, for example.
+
+Use the [Intelligence quickstart](/llamaindex/intelligence/quickstart#connect-your-runtime) for language-specific installation, authentication, and server setup. Shared Intelligence capabilities do not imply identical runtime APIs: TypeScript options such as `BuiltInAgent`, custom `AgentRunner` classes, audio transcription, and Open Generative UI are not available in every implementation.
+
+The examples below use the TypeScript runtime.
+
+
 ## Setting Up the Runtime
 
 The runtime is a lightweight server endpoint that you add to your backend:
@@ -13,8 +34,8 @@ npm install @copilotkit/runtime
 ```
 
 Here's a minimal example using Next.js. `createCopilotRuntimeHandler` returns a
-plain fetch handler, so the route is just two exports. It lives at a **catch-all**
-path and exports **both** verbs, so the runtime can serve its sub-routes (`/info`,
+plain fetch handler. It lives at a **catch-all**
+path and exports **GET, POST, PATCH, and DELETE**, so the runtime can serve its sub-routes (`/info`,
 agent runs, threads) rather than a single URL:
 
 ```ts title="app/api/copilotkit/[[...slug]]/route.ts" doctest="component"
@@ -158,7 +179,7 @@ When you register multiple agents with the runtime, it handles discovery and rou
 
 ### CopilotKit Intelligence
 
-Features like [threads](/llamaindex/threads) and the [inspector](/llamaindex/inspector) are provided through the runtime and CopilotKit Intelligence. These give you conversation persistence and debugging capabilities out of the box.
+Features like [threads](/llamaindex/AG-UI-Streams) and the [inspector](/llamaindex/inspector) are provided through the runtime and CopilotKit Intelligence. These give you conversation persistence and debugging capabilities out of the box.
 
 ## Built-in Middleware
 
@@ -248,7 +269,7 @@ There are important things to understand before going this route:
 
 1. **Authentication is your responsibility.** When you use the Copilot Runtime, safe defaults are put in place so that your agent endpoints are not exposed to unauthenticated access. When you connect directly, it is entirely up to you to secure your agent endpoint and manage authentication.
 
-2. **Many ecosystem features won't work.** The AG-UI protocol supports a middleware layer designed to run on the backend. Many features in the CopilotKit ecosystem depend on this server-side middleware. Without the runtime, these features — including [threads](/llamaindex/threads) and other capabilities — will not be available.
+2. **Many ecosystem features won't work.** The AG-UI protocol supports a middleware layer designed to run on the backend. Many features in the CopilotKit ecosystem depend on this server-side middleware. Without the runtime, these features — including [threads](/llamaindex/AG-UI-Streams) and other capabilities — will not be available.
 
 ### Comparison
 

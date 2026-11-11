@@ -8,6 +8,256 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-11-11
+
+### 14:10 UTC — 21 pages, highest severity high
+
+**High — Slots**
+
+`/llamaindex/custom-look-and-feel/slots` · route `/custom-look-and-feel/slots` · under “Reshaping the Message List”
+
+52 code lines, 2 headings, 13 prose lines changed. The number of fenced code blocks changed.
+
+````diff
+- If you pass the message view a `children` render function to lay out the rendered messages yourself, virtualization turns off and every message is mounted. Prefer `transformMessages` for list-level changes; in development the chat warns when `children` is what turned virtualization off.
++ ### Grouping messages into one row
++ To render several messages together — a run of tool calls collapsed into one block, say — pass `groupMessages`. It receives the list (after `transformMessages`, if you use both) and returns rows: `messageRow(message)` for a message on its own, `messageGroup({ key, messages, wrapper })` for messages rendered together inside your `wrapper`.
++ 
++ ```tsx title="page.tsx"
++ import { useCallback } from "react";
++ import {
++ CopilotChat,
+````
+
+**High — State Rendering**
+
+`/llamaindex/generative-ui/state-rendering` · route `/generative-ui/state-rendering` · under “Set up your agent with state” · in a `python` block
+
+2 code lines changed.
+
+````diff
+- llm = OpenAI(model="gpt-5.4")
++ llm = OpenAI(model="gpt-6-luna")
+````
+
+**High — Tool Rendering**
+
+`/llamaindex/generative-ui/tool-rendering` · route `/generative-ui/tool-rendering` · under “Give your agent a tool to call” · in a `python` block
+
+2 code lines changed.
+
+````diff
+- llm = OpenAI(model="gpt-5.4")
++ llm = OpenAI(model="gpt-6-luna")
+````
+
+**High — Inspector**
+
+`/llamaindex/inspector` · route `/inspector` · under “Follow and reproduce a run”
+
+4 code lines, 20 prose lines changed. The number of fenced code blocks changed.
+
+````diff
+- [Thread](/llamaindex/threads) and choose **Try from here**. Inspector copies its
++ [Thread](/llamaindex/AG-UI-Streams) and choose **Try from here**. Inspector copies its
+- | Goal                                      | Action                                                                                                    |
+- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+- | Close the current view                    | Use the close control; reopen it from the Inspector button                                                |
+- | See your application without an overlay   | Use the pop-out control in the Inspector header                                                           |
+- | Hide Inspector temporarily on this domain | Choose **Hide Inspector for a day** from the launcher HUD, or **Hide Inspector for one week** in settings |
+- | Disable Inspector for the development app | Set `enableInspector` to `false`                                                                          |
+````
+
+**High — Threads Drawer**
+
+`/llamaindex/prebuilt-components/copilot-threads-drawer` · route `/prebuilt-components/copilot-threads-drawer` · under “Add your own "New conversation" button”
+
+41 code lines, 1 heading, 19 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ ## Add your own "New conversation" button
++ 
++ The Drawer has its own "New Conversation" row. Your app can also keep its own
++ button, for example in a toolbar or a page header. To start a new conversation
++ from that button, call `startNewThread()` from
++ [`useCopilotChatConfiguration`](/reference/hooks/useCopilotChatConfiguration).
++ This is the same function the Drawer calls for its own row.
++ 
+````
+
+**High — Quickstart**
+
+`/llamaindex/quickstart` · route `/quickstart` · under “Configure your environment”
+
+12 code lines, 4 prose lines changed.
+
+````diff
+- The starter template is configured to use OpenAI's GPT-4o by default, but you can modify it to use any language model supported by LlamaIndex.
++ The starter template is configured to use OpenAI's GPT-6 Luna by default, but you can modify it to use any language model supported by LlamaIndex.
+- uv add llama-index llama-index-llms-openai llama-index-protocols-ag-ui fastapi uvicorn
++ uv add llama-index llama-index-llms-openai-like llama-index-protocols-ag-ui fastapi uvicorn
+- This example uses OpenAI's GPT-4o, but you can modify it to use any language model supported by LlamaIndex.
++ This example uses OpenAI's GPT-6 Luna, but you can modify it to use any language model supported by LlamaIndex.
+- from llama_index.llms.openai import OpenAI
++ from llama_index.llms.openai_like import OpenAILike
+````
+
+**High — Reading agent state**
+
+`/llamaindex/shared-state/in-app-agent-read` · route `/shared-state/in-app-agent-read` · under “Define the Agent State” · in a `python` block
+
+2 code lines changed.
+
+````diff
+- llm = OpenAI(model="gpt-5.4")
++ llm = OpenAI(model="gpt-6-luna")
+````
+
+**High — Writing agent state**
+
+`/llamaindex/shared-state/in-app-agent-write` · route `/shared-state/in-app-agent-write` · under “Define the Agent State” · in a `python` block
+
+2 code lines changed.
+
+````diff
+- llm = OpenAI(model="gpt-5.4")
++ llm = OpenAI(model="gpt-6-luna")
+````
+
+**High — Predictive State Updates**
+
+`/llamaindex/shared-state/predictive-state-updates` · route `/shared-state/predictive-state-updates` · under “Emit the intermediate state” · in a `python` block
+
+2 code lines changed.
+
+````diff
+- llm = OpenAI(model="gpt-5.4")
++ llm = OpenAI(model="gpt-6-luna")
+````
+
+**High — Workflow Execution**
+
+`/llamaindex/shared-state/workflow-execution` · route `/shared-state/workflow-execution` · under “Organize state by purpose” · in a `python` block
+
+2 code lines changed.
+
+````diff
+- llm = OpenAI(model="gpt-5.4")
++ llm = OpenAI(model="gpt-6-luna")
+````
+
+**High — Synchronize Thread History**
+
+`/llamaindex/threads-import` · route `/threads-import` · under “Add Intelligence to your existing app”
+
+5 code lines, 34 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ For a concrete example without historical import, see [keep an existing LangGraph conversation](/llamaindex/intelligence/bring-your-own-thread-system#example-keep-an-existing-langgraph-conversation).
++ 
+- If you also want users to reopen history recorded before Intelligence was connected, copy supported history into Intelligence using the steps below. The importer currently supports Google ADK and LangGraph stores. It copies historical content; it does not enable live delivery, recover past execution, or establish ongoing database replication.
++ If you also want users to reopen history recorded before Intelligence was connected, copy supported history into Intelligence using the steps below. This guide covers Google ADK, LangGraph, Mastra, and AWS Strands stores. It copies historical content; it does not enable live delivery, recover past execution, or establish ongoing database replication.
+- | LangGraph | [Add AG-UI streams to LangGraph threads](/langgraph-python/threads-import) | LangGraph Server, LangGraph Platform, or LangSmith Deployment threads exposed through the LangGraph SDK thread/run APIs. |
++ | LangGraph | [Add AG-UI streams to LangGraph threads](/langgraph-python/threads-import) | Saved conversations from LangGraph Server / LangSmith deployments or Python FastAPI apps with durable persistence. |
++ | Mastra | [Add AG-UI streams to Mastra conversations](/mastra/threads-import) | Saved conversations from a local LibSQL database or a Mastra server. |
++ | AWS Strands | [Python](/strands/threads-import) · [TypeScript](/strands-typescript/threads-import) | Saved single-agent conversations from local session files or S3; Python also supports AgentCore Memory native sessions. |
+````
+
+**Medium — Copilot Runtime**
+
+`/llamaindex/copilot-runtime` · route `/copilot-runtime` · under “Runtime languages”
+
+1 heading, 28 prose lines changed.
+
+````diff
++ ## Runtime languages
++ 
++ **TypeScript is the default and most fully featured runtime. It is the only runtime that can run without CopilotKit Intelligence.** Use it for an open-source setup, or connect it to Intelligence when you need its services.
++ 
++ Python, Go, Ruby, and C#/.NET runtimes require an Intelligence project and server-side API key. They work with both [cloud-hosted](/llamaindex/intelligence/managed-intelligence-platform) and [self-hosted](/llamaindex/intelligence/self-hosting) Intelligence; they do not provide an in-memory or SQLite runner.
++ 
++ | Language | Host | Without Intelligence |
++ | --- | --- | --- |
+````
+
+**Medium — Thread & History Lifecycle**
+
+`/llamaindex/threads-lifecycle` · route `/threads-lifecycle` · under “Future runs can remain durable in both places”
+
+1 heading, 7 prose lines changed.
+
+````diff
+- After historical import, future conversations that run through CopilotKit are
+- written to CopilotKit Intelligence as threads. If your LangGraph agent
++ Once Intelligence is connected, conversations that run through that runtime are
++ recorded automatically in Intelligence. Historical import is optional. If your LangGraph agent
++ 
++ ## Example: keep an existing LangGraph conversation
++ 
++ Follow [Bring your own thread system](/llamaindex/intelligence/bring-your-own-thread-system#example-keep-an-existing-langgraph-conversation) for an example that keeps native persistence and continues the same conversation.
+````
+
+**Low — AG-UI**
+
+`/llamaindex/ag-ui` · route `/ag-ui` · under “How agents slot into the runtime”
+
+3 prose lines changed.
+
+````diff
++ To write the custom implementation yourself, and keep its own fields through
++ the clone in step 2, see [Write your own AG-UI agent](/llamaindex/backend/custom-ag-ui-agent).
++ 
+````
+
+**Low — Programmatic Control**
+
+`/llamaindex/programmatic-control` · route `/programmatic-control` · under “`copilotkit.runAgent()` vs `agent.runAgent()`”
+
+2 prose lines changed.
+
+````diff
+- - **`agent.runAgent()`** — Low-level method on the agent instance. Sends the request to the runtime but does **not** execute frontend tools or handle follow-ups. Use this only when you need direct control over the agent execution (e.g., resuming from an interrupt with `forwardedProps`).
++ - **`agent.runAgent()`** — Low-level method on the agent instance. Sends the request to the runtime but does **not** execute frontend tools or handle follow-ups. Use this only when you need direct control over the agent execution. To resume from an interrupt, use `copilotkit.runAgent({ agent, resume })` for standard AG-UI interrupts, or `copilotkit.runAgent({ agent, forwardedProps: { command: { resume, interruptEvent } } })` for legacy `on_interrupt` custom events, so that the subscriber lifecycle still wraps the resumed run.
+````
+
+**Info — A2UI · Dynamic Schema**
+
+`/llamaindex/generative-ui/a2ui/dynamic-schema` · route `/generative-ui/a2ui/dynamic-schema`
+
+Now tracked for the first time.
+
+**Info — A2UI · Fixed Schema**
+
+`/llamaindex/generative-ui/a2ui/fixed-schema` · route `/generative-ui/a2ui/fixed-schema`
+
+Now tracked for the first time.
+
+**Info — Open Generative UI**
+
+`/llamaindex/generative-ui/open-generative-ui` · route `/generative-ui/open-generative-ui`
+
+Now tracked for the first time.
+
+**Info — Governed Action Approval UI**
+
+`/llamaindex/human-in-the-loop/governed-actions` · route `/human-in-the-loop/governed-actions`
+
+Now tracked for the first time.
+
+**Info — HITL Overview**
+
+`/llamaindex/human-in-the-loop/index` · route `/human-in-the-loop/index`
+
+Now tracked for the first time.
+
+**Info — Sub-Agents**
+
+`/llamaindex/multi-agent/subagents` · route `/multi-agent/subagents`
+
+Now tracked for the first time.
+
+---
+
 ## 2026-09-30
 
 ### 12:49 UTC — 13 pages, highest severity high
@@ -223,6 +473,8 @@ weeks between changes does not expire anything.
 
 ---
 
+---
+
 ## 2026-08-31
 
 ### 12:05 UTC — 5 pages, highest severity low
@@ -266,76 +518,6 @@ Now tracked for the first time.
 `/llamaindex/threads-lifecycle` · route `/threads-lifecycle`
 
 Now tracked for the first time.
-
----
-
----
-
-## 2026-08-26
-
-### 10:32 UTC — 4 pages, highest severity high
-
-**High — Copilot Runtime**
-
-`/llamaindex/copilot-runtime` · route `/copilot-runtime` · under “Setting Up the Runtime”
-
-41 code lines, 2 headings, 15 prose lines changed. The number of fenced code blocks changed.
-
-````diff
-- The runtime is a lightweight server endpoint that you add to your backend. Here's a minimal example using Next.js:
-+ The runtime is a lightweight server endpoint that you add to your backend:
-- ```ts title="app/api/copilotkit/route.ts"
-+ ```npm
-+ npm install @copilotkit/runtime
-+ ```
-+ 
-+ Here's a minimal example using Next.js. `createCopilotRuntimeHandler` returns a
-````
-
-**High — Quickstart**
-
-`/llamaindex/quickstart` · route `/quickstart` · under “Quickstart”
-
-41 code lines, 2 headings, 48 prose lines changed. The number of fenced code blocks changed.
-
-````diff
-+ 
-- body="Add persistent threads and the inspector with the Enterprise Intelligence Platform."
-+ body="Add persistent threads and the inspector with CopilotKit Intelligence."
-- <SignupLink surface="docs_llamaindex_quickstart_step1">Sign up for a free developer account</SignupLink> on our Enterprise Intelligence Platform to get a license key. You'll use it later to enable persistent threads and the inspector.
-+ <SignupLink surface="docs_llamaindex_quickstart_step1">Sign up for a free developer account</SignupLink> for CopilotKit Intelligence to get a license key. You'll use it later to enable persistent threads and the inspector.
-- - **Enterprise Intelligence Platform** — persistent threads and the inspector. Choose **Yes** to scaffold a project pre-wired for the platform (the CLI walks you through sign-up, or you can [create an account](https://dashboard.operations.copilotkit.ai/?utm_source=docs&utm_medium=cta&utm_campaign=intelligence&utm_content=docs_cli_prompt) first), or **No** for a standard LlamaIndex setup.
-+ - **CopilotKit Intelligence** — persistent threads and the inspector. Choose **Yes** to scaffold a project pre-wired for the platform (the CLI walks you through sign-up, or you can [create an account](https://dashboard.operations.copilotkit.ai/?utm_source=docs&utm_medium=cta&utm_campaign=intelligence&utm_content=docs_cli_prompt) first), or **No** for a standard LlamaIndex setup.
-+ 
-````
-
-**Low — AG-UI**
-
-`/llamaindex/ag-ui` · route `/ag-ui` · under “The proxy pattern”
-
-2 prose lines changed.
-
-````diff
-- routing, and CopilotKit Enterprise Intelligence without changing how the
-+ routing, and CopilotKit Intelligence without changing how the
-````
-
-**Low — Inspector**
-
-`/llamaindex/inspector` · route `/inspector` · under “What it shows”
-
-21 prose lines changed.
-
-````diff
-- The CopilotKit Inspector is a built-in debugging tool that overlays on your app, giving you full visibility into what's happening between your frontend and your agents in real time.
-+ The CopilotKit Inspector is a built-in debugging tool that overlays on your app.
-+ The first open lands on **Home**. Later opens return to the last pane you used.
-+ | **Home** | Project, runtime, services, and CopilotKit news. |
-+ | **Memory** | Inspect long-term memory when Intelligence exposes it. |
-- The primary navigation groups the Inspector into **Threads**, **Agents**, and
-- **Learning**. Threads is the default. Open a real Thread to inspect its
-+ The sidebar has three groups: **Home**, **Workbench** (Threads, Memory), and
-````
 
 ---
 
