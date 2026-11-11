@@ -275,6 +275,16 @@ export const NAV: NavGroup[] = [
           "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
       },
       {
+        path: "/generative-ui/components/catalogs",
+        title: "Components · Catalogs",
+        docPath: "/llamaindex/generative-ui/components/catalogs",
+        summary:
+          "Declaring the components the agent may use, with typed props, schema libraries, combined catalogs and an A2UI export.",
+        status: "broken",
+        statusNote:
+          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",
