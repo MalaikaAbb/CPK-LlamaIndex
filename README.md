@@ -201,9 +201,9 @@ A caveat the panel states and the docs are explicit about: `mode "intelligence"`
 
 All three interactive routes below need the runtime in **Intelligence mode** — see the CopilotKit Intelligence section above. Verified against a live Intelligence-mode runtime: `/api/copilotkit/threads?agentId=my_agent` returns real rows with LLM-generated names, scoped to the `endUserId` the provider sends.
 
-**`/prebuilt-components/copilot-threads-drawer` → demo — Threads Drawer.** `<CopilotThreadsDrawer>` beside `<CopilotChat>`, both inside one shared `<CopilotChatConfigurationProvider>` — which is the whole integration. No active-thread state, no selection handler, no props between them.
-*Try:* say `Hello`, press **New Conversation** in the drawer, say `Hello` again, then click the first row.
-*Pass:* two rows, each with a generated name. Clicking a row replays that conversation into the chat; New Conversation clears to the welcome screen.
+**`/prebuilt-components/copilot-threads-drawer` → demo — Threads Drawer.** `<CopilotThreadsDrawer>` beside `<CopilotChat>`, both inside one shared `<CopilotChatConfigurationProvider>` — which is the whole integration. No active-thread state, no selection handler, no props between them. A header **New conversation** button (the page's own-button sample, `useCopilotChatConfiguration().startNewThread()`) sits above the chat.
+*Try:* say `Hello`, press **New Conversation** in the drawer, say `Hello` again, press the header's **New conversation** button, say `Hello` once more, then click the first row.
+*Pass:* three rows, each with a generated name. Clicking a row replays that conversation into the chat; both new-conversation controls clear to the welcome screen with no row selected.
 *Fail:* the drawer shows a locked view instead of a list — that is the no-key state, not a bug.
 
 **`/headless-threads` → demo — Headless Threads.** The same data through `useThreads`, drawn by hand, with the `threadId` passed to the chat as ordinary React state.
