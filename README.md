@@ -291,6 +291,9 @@ The next three routes are built from each page's **demo Code tab** — the full 
 **`/generative-ui/components/standard-catalog` — Components · Standard catalog ❌.** Reference only, no demo. The 69 ready-made components, and how to add, drop or replace entries. Shows the page's React and untabbed code blocks as text.
 *Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
 
+**`/generative-ui/components/state-and-actions` — Components · State and actions ❌.** Reference only, no demo. Binding live app state into generated UI, running your functions on click, sending clicks to the agent, and keeping user input. Shows the page's React and untabbed code blocks as text.
+*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+
 **`/generative-ui/open-generative-ui` → demo — Open Generative UI ⚠️.** The runtime's `openGenerativeUI` flag injects `generateSandboxedUi`; the model writes HTML/CSS/JS into a sandboxed iframe. A minimal/advanced switcher flips between the page's two demos.
 *Try:* minimal — `Quicksort visualization`; advanced — `Calculator (calls evaluateExpression)`.
 *Pass:* minimal — placeholder lines, then one animated, labelled SVG visual in an iframe, and the run ends. Advanced — one interactive widget at full height; using it logs `[open-gen-ui/advanced] evaluateExpression …` in the browser console and shows the host's result.
@@ -395,6 +398,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components/surfaces) | `/generative-ui/components/surfaces` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
 | [Catalogs](https://docs.copilotkit.ai/llamaindex/generative-ui/components/catalogs) | `/generative-ui/components/catalogs` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
 | [Standard catalog](https://docs.copilotkit.ai/llamaindex/generative-ui/components/standard-catalog) | `/generative-ui/components/standard-catalog` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
+| [State and actions](https://docs.copilotkit.ai/llamaindex/generative-ui/components/state-and-actions) | `/generative-ui/components/state-and-actions` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
 | [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) | — | 🚧 Not started | Skipped by request. The page's sample is a `BuiltInAgent`, not LlamaIndex. |
 | [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ⚠️ Partial | From the demo Code tabs. Not yet checked in a browser. Unpublished `make_request_aware_router` swapped for the stock router. |
 | [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index) | `/human-in-the-loop/index` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Unpublished `/hitl-in-chat` router → Quickstart router. |
@@ -769,6 +773,7 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 - [Components — Surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components/surfaces) *(sidebar: Declarative › Components and surfaces)* — reference only
 - [Components — Catalogs](https://docs.copilotkit.ai/llamaindex/generative-ui/components/catalogs) *(sidebar: Declarative › Components and surfaces)* — reference only
 - [Components — Standard catalog](https://docs.copilotkit.ai/llamaindex/generative-ui/components/standard-catalog) *(sidebar: Declarative › Components and surfaces)* — reference only
+- [Components — State and actions](https://docs.copilotkit.ai/llamaindex/generative-ui/components/state-and-actions) *(sidebar: Declarative › Components and surfaces)* — reference only
 - [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) *(sidebar: Open-ended)*
 - [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) — not implemented
 
