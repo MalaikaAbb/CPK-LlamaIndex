@@ -265,6 +265,16 @@ export const NAV: NavGroup[] = [
           "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text. The page's setup runs a CopilotKit BuiltInAgent (TanStack factory) as the agent, which this harness would swap for a LlamaIndex router; the provider config is the CopilotKit part.",
       },
       {
+        path: "/generative-ui/components/surfaces",
+        title: "Components · Surfaces",
+        docPath: "/llamaindex/generative-ui/components/surfaces",
+        summary:
+          "Where generated UI renders: the chat, or named page targets the agent can fill, limit, scroll to, or repeat per item.",
+        status: "broken",
+        statusNote:
+          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",
