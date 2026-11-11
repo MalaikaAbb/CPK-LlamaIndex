@@ -9,6 +9,10 @@ const CONTROL_SNIPPET = `// <CopilotKit> — takes enableInspector, defaults to 
 // "auto" reproduces the localhost-only behaviour.
 <CopilotKitProvider runtimeUrl="/api/copilotkit" showDevConsole="auto">`;
 
+// Verbatim from the Inspector page: undoes "Always hide Inspector" on this domain.
+const RESTORE_SNIPPET = `document.cookie = "cpk_inspector_dismissed_until=; Path=/; Max-Age=0";
+localStorage.removeItem("cpk:inspector:dismissed_until");`;
+
 const ROWS: [string, string][] = [
   [
     "Threads",
@@ -83,6 +87,20 @@ export default function Page() {
           filename="Inspector control by provider"
           language="tsx"
           code={CONTROL_SNIPPET}
+        />
+      </Panel>
+
+      <Panel title="Bringing it back after “Always hide Inspector”">
+        <p className="mb-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          The settings menu can now hide the overlay and launcher on this
+          domain with no expiry. The hide is stored in a cookie and in
+          localStorage, so clearing both from the browser console on this page
+          and reloading restores it.
+        </p>
+        <CodeBlock
+          filename="Browser console"
+          language="js"
+          code={RESTORE_SNIPPET}
         />
       </Panel>
 

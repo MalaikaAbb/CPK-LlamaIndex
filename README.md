@@ -623,7 +623,7 @@ The key was read but rejected. `mode` reflects which constructor branch ran, not
 The `agentId` on that page is not in the runtime's `agents` map, or its router is not included in `main.py`. This repo registers no `default` agent on purpose, so a missing id fails loudly instead of quietly answering from somewhere else.
 
 **The Inspector never appears.**
-It is force-disabled in production builds — run `npm run dev`. Do not mount `<CopilotKitInspector />` by hand either: it forwards `core ?? null` and reports "CopilotKit core not attached". `showDevConsole="auto"` on the provider is what mounts it correctly.
+It is force-disabled in production builds — run `npm run dev`. Do not mount `<CopilotKitInspector />` by hand either: it forwards `core ?? null` and reports "CopilotKit core not attached". `showDevConsole="auto"` on the provider is what mounts it correctly. If you (or anyone on this machine) chose **Always hide Inspector** in its settings, it stays hidden on `localhost` with no expiry: run the console snippet shown on `/inspector` (it clears the `cpk_inspector_dismissed_until` cookie and the `cpk:inspector:dismissed_until` localStorage key), then reload.
 
 **A search sits on ❌ forever.**
 `runSearches` was never called. The system prompt insists on it after every `addSearch`; a weaker model sometimes skips it. Ask the agent to run the searches.
