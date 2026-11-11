@@ -305,6 +305,16 @@ export const NAV: NavGroup[] = [
           "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
       },
       {
+        path: "/generative-ui/components/theming",
+        title: "Components · Theming",
+        docPath: "/llamaindex/generative-ui/components/theming",
+        summary:
+          "Colors, fonts and dark mode for the standard components through CSS variables and a theme map.",
+        status: "broken",
+        statusNote:
+          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",
