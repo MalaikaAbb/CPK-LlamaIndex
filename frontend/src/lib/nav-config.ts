@@ -255,6 +255,16 @@ export const NAV: NavGroup[] = [
           "Built from the page's demo Code tab, verbatim. Not yet checked in a browser. The demo's runtime sets injectA2UITool: true where the page's prose says false. The Book button is inert by design.",
       },
       {
+        path: "/generative-ui/components",
+        title: "Components · Components and surfaces",
+        docPath: "/llamaindex/generative-ui/components",
+        summary:
+          "Overview and setup: a catalog on the provider lets the agent render real components in the chat or in page areas.",
+        status: "broken",
+        statusNote:
+          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text. The page's setup runs a CopilotKit BuiltInAgent (TanStack factory) as the agent, which this harness would swap for a LlamaIndex router; the provider config is the CopilotKit part.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",
