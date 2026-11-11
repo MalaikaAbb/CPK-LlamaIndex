@@ -306,6 +306,17 @@ export const NAV: NavGroup[] = [
           "A tool the agent calls that executes in the browser, forwarded automatically over AG-UI.",
         status: "working",
       },
+      {
+        path: "/webmcp",
+        hasDemo: true,
+        title: "WebMCP",
+        docPath: "/llamaindex/webmcp",
+        summary:
+          "A frontend tool opted into WebMCP, so browser agents can discover and call it through document.modelContext.",
+        status: "broken",
+        statusNote:
+          "Page code verbatim. searchOrders is called but never defined on the page, so the handler throws on every call (CopilotKit agent or browser agent). The WebMCP half needs Chrome 149+ with the WebMCP flag; not checked in a browser.",
+      },
     ],
   },
   {

@@ -306,6 +306,11 @@ The next three routes are built from each page's **demo Code tab** — the full 
 *Pass:* a browser alert reads "Hello, Damien!"; after you dismiss it the agent confirms.
 *Fail:* a text reply with no alert — you are not on the demo route, so the tool was never registered.
 
+**`/webmcp` → demo — WebMCP ❌.** The page's `OrderSearch` (a `useFrontendTool` with `webmcp: { annotations: { readOnlyHint: true } }`), mounted next to a chat on `my_agent`; the core-only `webmcp.ts` snippet is type-checked but not run.
+*Try:* `Show my shipped orders`; in Chrome 149+ with `chrome://flags/#enable-webmcp-testing`, also open the Model Context Tool Inspector.
+*Pass (as published):* the agent calls `searchOrders` and the call fails with a ReferenceError, because the page never defines `searchOrders`. With WebMCP enabled, the inspector lists `searchOrders` with its status enum.
+*Fail:* the agent never calls the tool, or the inspector doesn't list it with WebMCP enabled.
+
 ### Shared State
 
 **`/shared-state/in-app-agent-read` → demo — Reading agent state.** `sample_agent`'s `language`, read through `agent.state` next to the chat.
@@ -384,6 +389,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index) | `/human-in-the-loop/index` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Unpublished `/hitl-in-chat` router → Quickstart router. |
 | [Governed Action Approval UI](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/governed-actions) | `/human-in-the-loop/governed-actions` | ❌ Broken | Observed: card renders without Approve/Reject unless the prompt names the verdict — the adapter flattens frontend-tool params to strings. `useInterrupt` and `executeSideEffect` are reference text. |
 | [Frontend Tools](https://docs.copilotkit.ai/llamaindex/frontend-tools) | `/frontend-tools` | ✅ Working | |
+| [WebMCP](https://docs.copilotkit.ai/llamaindex/webmcp) | `/webmcp` | ❌ Broken | Page code verbatim; `searchOrders` is never defined, so the handler throws. WebMCP half needs Chrome 149+ and isn't checked. |
 | [Reading agent state](https://docs.copilotkit.ai/llamaindex/shared-state/in-app-agent-read) | `/shared-state/in-app-agent-read` | ✅ Working | Not in the doc sidebar. `initialState` on `useAgent` does not exist. |
 | [Writing agent state](https://docs.copilotkit.ai/llamaindex/shared-state/in-app-agent-write) | `/shared-state/in-app-agent-write` | ✅ Working | Not in the doc sidebar. |
 | [Workflow Execution](https://docs.copilotkit.ai/llamaindex/shared-state/workflow-execution) | `/shared-state/workflow-execution` | ✅ Working | Not in the doc sidebar. |
@@ -578,6 +584,10 @@ The HITL demo's `route.ts` sends `hitl-in-chat` to a dedicated `/hitl-in-chat` r
 
 Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` directly so `OPENAI_CHAT_MODEL_ID` does not reach these agents. The copied runtime routes read `AGENT_URL`, not this repo's `LLAMAINDEX_AGENT_URL`. Both default to `http://localhost:8000`.
 
+
+### WebMCP: `searchOrders` is never defined
+
+[WebMCP](https://docs.copilotkit.ai/llamaindex/webmcp). Both the React `OrderSearch` snippet and the core-only `webmcp.ts` snippet call `await searchOrders(status)` without defining or importing it. `/webmcp` keeps both verbatim with a `@ts-expect-error` on that line; the handler throws a ReferenceError on every call, so the route is Broken. The `webmcp.ts` snippet also imports `@copilotkit/core`, which the page's install steps don't list (this repo gets it transitively from `@copilotkit/react-core`). The WebMCP side needs Chrome 149+ with an origin trial or the testing flag and was not checked.
 ### MCP Apps — skipped
 
 [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps). Not implemented, by request. For whoever picks it up: the page's sample is a `BuiltInAgent` (`openai/gpt-5.4`) plus an MCP server you run yourself on `localhost:3108`, with no LlamaIndex code. The docs bundle has a separate LlamaIndex MCP demo (Excalidraw), which this page does not link and which also imports the unpublished `_request_tools`.
@@ -754,6 +764,7 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 
 **App Control**
 - [Frontend Tools](https://docs.copilotkit.ai/llamaindex/frontend-tools)
+- [WebMCP](https://docs.copilotkit.ai/llamaindex/webmcp) *(sidebar: Interactivity)*
 
 **Shared State** *(the whole group is off-sidebar)*
 - [Reading agent state](https://docs.copilotkit.ai/llamaindex/shared-state/in-app-agent-read)
