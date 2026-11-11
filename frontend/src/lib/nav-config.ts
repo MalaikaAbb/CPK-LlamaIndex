@@ -325,6 +325,16 @@ export const NAV: NavGroup[] = [
           "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text. Both transports need the agent to pass the run's tools and context entries to its model; the page names CopilotKitMiddleware for LangGraph and says nothing for LlamaIndex.",
       },
       {
+        path: "/generative-ui/components/markdown-mode",
+        title: "Components · Markdown mode",
+        docPath: "/llamaindex/generative-ui/components/markdown-mode",
+        summary:
+          "The agent writes UI in a2ui code blocks inside its reply, with no tool call; includes the forwarded-props envelope for building your own prompt.",
+        status: "broken",
+        statusNote:
+          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text. The page's backend example reads forwarded props in a generic Python snippet; no LlamaIndex router is shown.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",
