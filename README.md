@@ -282,6 +282,9 @@ The next three routes are built from each page's **demo Code tab** — the full 
 **`/generative-ui/json-render` — Declarative · JSON Render ❌.** Reference only, no demo. The rendered LlamaIndex page says the feature is not supported on LlamaIndex and publishes no agent, prompt or runtime route; the route shows the page's example agent output and the Markdown export's four frontend files as text.
 *Pass:* the page renders the warning callout and the code blocks. There is nothing to run.
 
+**`/generative-ui/hashbrown` — Declarative · Hashbrown ❌.** Reference only, no demo, for the same reason: "Not supported on LlamaIndex" on the rendered page, no agent or runtime route. Shows the example assistant message and the Markdown export's three frontend files as text.
+*Pass:* the page renders the warning callout and the code blocks. There is nothing to run.
+
 **`/generative-ui/open-generative-ui` → demo — Open Generative UI ⚠️.** The runtime's `openGenerativeUI` flag injects `generateSandboxedUi`; the model writes HTML/CSS/JS into a sandboxed iframe. A minimal/advanced switcher flips between the page's two demos.
 *Try:* minimal — `Quicksort visualization`; advanced — `Calculator (calls evaluateExpression)`.
 *Pass:* minimal — placeholder lines, then one animated, labelled SVG visual in an iframe, and the run ends. Advanced — one interactive widget at full height; using it logs `[open-gen-ui/advanced] evaluateExpression …` in the browser console and shows the host's result.
@@ -383,6 +386,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo runtime sets `injectA2UITool: true`; prose says no `a2ui` block is needed. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo sets `injectA2UITool: true` where prose says `false`. Book button inert by design. |
 | [JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render) | `/generative-ui/json-render` | ❌ Broken | Reference only. Page says "Not supported on LlamaIndex"; no LlamaIndex agent/prompt/runtime route published. |
+| [Hashbrown](https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown) | `/generative-ui/hashbrown` | ❌ Broken | Reference only. Page says "Not supported on LlamaIndex"; no LlamaIndex agent/prompt/runtime route published. |
 | [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) | — | 🚧 Not started | Skipped by request. The page's sample is a `BuiltInAgent`, not LlamaIndex. |
 | [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ⚠️ Partial | From the demo Code tabs. Not yet checked in a browser. Unpublished `make_request_aware_router` swapped for the stock router. |
 | [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index) | `/human-in-the-loop/index` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Unpublished `/hitl-in-chat` router → Quickstart router. |
@@ -582,9 +586,9 @@ The HITL demo's `route.ts` sends `hitl-in-chat` to a dedicated `/hitl-in-chat` r
 
 Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` directly so `OPENAI_CHAT_MODEL_ID` does not reach these agents. The copied runtime routes read `AGENT_URL`, not this repo's `LLAMAINDEX_AGENT_URL`. Both default to `http://localhost:8000`.
 
-### JSON Render: listed in the LlamaIndex sidebar, marked unsupported on the page
+### JSON Render and Hashbrown: listed in the LlamaIndex sidebar, marked unsupported on the page
 
-[JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render). The page sits under Generative UI › Declarative in the LlamaIndex sidebar, but the rendered page shows "Not supported on LlamaIndex" and an empty demo slot ("hasn't been tagged in any LlamaIndex cell yet"). The only code it renders is an example of the JSON the agent should send. Its Markdown export adds frontend files (`chat.tsx`, `json-render-renderer.tsx`, `catalog.ts`, `registry.tsx`), which import unpublished `./suggestions`, `./types`, `./metric-card` and `./charts/*`, and need `@json-render/*` plus a `zod4` alias. No LlamaIndex agent, system prompt or runtime route is published. The route is reference-only and Broken; nothing was borrowed from other harnesses.
+[JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render), [Hashbrown](https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown). Both pages sit under Generative UI › Declarative in the LlamaIndex sidebar, but the rendered pages show "Not supported on LlamaIndex" and an empty demo slot ("hasn't been tagged in any LlamaIndex cell yet"). The only code they render is an example of the JSON the agent should send. Their Markdown exports add frontend files (JSON Render: `chat.tsx`, `json-render-renderer.tsx`, `catalog.ts`, `registry.tsx`; Hashbrown: `page.tsx`, `chat.tsx`, `hashbrown-renderer.tsx`), which import unpublished `./suggestions`, `./types`, `./metric-card` and `./charts/*`, and need `@json-render/*` + a `zod4` alias or `@hashbrownai/*` (`0.5.0-beta.4` per the page; the `prompt` and `useUiKit({ examples })` API the renderer uses was removed in Hashbrown 0.8). No LlamaIndex agent, system prompt or runtime route is published for either. Both routes are reference-only and Broken; nothing was borrowed from other harnesses.
 
 ### MCP Apps — skipped
 
@@ -754,6 +758,7 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 - [A2UI — Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) *(sidebar: Declarative)*
 - [A2UI — Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) *(sidebar: Declarative)*
 - [JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render) *(sidebar: Declarative)* — reference only
+- [Hashbrown](https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown) *(sidebar: Declarative)* — reference only
 - [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) *(sidebar: Open-ended)*
 - [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) — not implemented
 

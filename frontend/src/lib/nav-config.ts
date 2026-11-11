@@ -265,6 +265,16 @@ export const NAV: NavGroup[] = [
           "Reference only. The rendered page says 'Not supported on LlamaIndex' and publishes no LlamaIndex agent, prompt or runtime route; the .md export's frontend files import unpublished modules and uninstalled @json-render packages.",
       },
       {
+        path: "/generative-ui/hashbrown",
+        title: "Declarative · Hashbrown",
+        docPath: "/llamaindex/generative-ui/hashbrown",
+        summary:
+          "A streamed { ui: [...] } envelope rendered progressively through a Hashbrown UI kit in the assistant-message slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The rendered page says 'Not supported on LlamaIndex' and publishes no LlamaIndex agent, prompt or runtime route; the .md export's frontend files import unpublished modules and uninstalled @hashbrownai packages.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",
