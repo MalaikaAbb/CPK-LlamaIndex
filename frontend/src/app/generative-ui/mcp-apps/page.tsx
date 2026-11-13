@@ -89,9 +89,8 @@ export default function Page() {
           </li>
           <li>
             · <strong>Version.</strong> The page says to use{" "}
-            <code>@copilotkit/runtime</code> 1.76.0 or later; this repo pins
-            1.75.1. The <code>mcpApps</code> option and the middleware are
-            present in 1.75.1&apos;s typings, but the combination is untested.
+            <code>@copilotkit/runtime</code> 1.76.0 or later; this repo is on
+            1.87.1, so the floor is met.
           </li>
         </ul>
       </Callout>

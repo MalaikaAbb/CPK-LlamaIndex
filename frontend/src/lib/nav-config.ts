@@ -384,7 +384,9 @@ export const NAV: NavGroup[] = [
           "An MCP server's UI-bearing tools rendered as sandboxed iframes in the chat, wired through the runtime's mcpApps option.",
         status: "partial",
         statusNote:
-          "Not yet checked in a browser. Agent: LlamaIndex, not the doc's BuiltInAgent (a stock router with the page's prompt). Own runtime path /api/copilotkit-mcp-apps. Needs an MCP server you run on localhost:3108; the page publishes none. Page asks for runtime 1.76+, repo pins 1.75.1.",
+          "Not yet checked in a browser. Agent: LlamaIndex, not the doc's BuiltInAgent (a stock router with the page's prompt). Own runtime path /api/copilotkit-mcp-apps. Needs an MCP server you run on localhost:3108; the page publishes none. Runtime 1.87.1 meets the page's 1.76+ floor.",
+      },
+      {
         path: "/generative-ui/json-render",
         title: "Declarative · JSON Render",
         docPath: "/llamaindex/generative-ui/json-render",
