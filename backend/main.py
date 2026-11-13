@@ -13,6 +13,7 @@ the only way to serve more than one is FastAPI's `prefix=`. That gives:
     POST /search_agent/run       →  search_agent  (State Rendering)
     POST /qa_agent/run           →  qa_agent      (Workflow Execution)
     POST /task_agent/run         →  task_agent    (Predictive State Updates)
+    POST /mcp-apps/run           →  default on api/copilotkit-mcp-apps (MCP Apps)
 
 Those paths are what `frontend/src/app/api/copilotkit/[[...slug]]/route.ts`
 binds to.
@@ -26,6 +27,7 @@ URLs name — the docs never show the mounting server itself:
     POST /open-gen-ui/run           →  api/copilotkit-ogui
     POST /open-gen-ui-advanced/run  →  api/copilotkit-ogui
     POST /subagents/run             →  api/copilotkit (agent "subagents")
+    POST /gen-ui-tool-based/run     →  api/copilotkit (agent "gen-ui-tool-based")
 """
 
 from __future__ import annotations
@@ -45,6 +47,7 @@ load_dotenv(_ROOT_ENV, override=False)
 
 from agents import (  # noqa: E402 - must follow load_dotenv
     create_main_router,
+    create_mcp_apps_router,
     create_qa_router,
     create_sample_router,
     create_search_router,
@@ -52,6 +55,7 @@ from agents import (  # noqa: E402 - must follow load_dotenv
 )
 from demos.a2ui_dynamic import a2ui_dynamic_router  # noqa: E402
 from demos.a2ui_fixed import a2ui_fixed_router  # noqa: E402
+from demos.gen_ui_tool_based_agent import gen_ui_tool_based_router  # noqa: E402
 from demos.open_gen_ui_advanced_agent import open_gen_ui_advanced_router  # noqa: E402
 from demos.open_gen_ui_agent import open_gen_ui_router  # noqa: E402
 from demos.subagents_agent import subagents_router  # noqa: E402
@@ -78,6 +82,7 @@ app.include_router(create_sample_router(), prefix="/sample_agent")
 app.include_router(create_search_router(), prefix="/search_agent")
 app.include_router(create_qa_router(), prefix="/qa_agent")
 app.include_router(create_task_router(), prefix="/task_agent")
+app.include_router(create_mcp_apps_router(), prefix="/mcp-apps")
 
 # Routers copied from the docs' demo "Code" tabs (see demos/__init__.py).
 app.include_router(a2ui_dynamic_router, prefix="/a2ui-dynamic")
@@ -85,6 +90,7 @@ app.include_router(a2ui_fixed_router, prefix="/a2ui-fixed")
 app.include_router(open_gen_ui_router, prefix="/open-gen-ui")
 app.include_router(open_gen_ui_advanced_router, prefix="/open-gen-ui-advanced")
 app.include_router(subagents_router, prefix="/subagents")
+app.include_router(gen_ui_tool_based_router, prefix="/gen-ui-tool-based")
 
 
 # Health check endpoint
