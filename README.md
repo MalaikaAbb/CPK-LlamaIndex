@@ -267,6 +267,9 @@ All three interactive routes below need the runtime in **Intelligence mode** —
 
 The next three routes are built from each page's **demo Code tab** — the full llamaindex source the docs site shows under the interactive demo — copied byte-for-byte. Each mounts its own `<CopilotKit>` against its own single-route runtime, exactly as the demo does. The backend halves live in `backend/demos/`.
 
+**`/generative-ui/a2ui` — Declarative · A2UI 📄.** The A2UI overview page: no demo. Shows the page's runtime snippet (`a2ui: {}` on `CopilotRuntime`) and theme snippet (`a2ui={{ theme }}` on `<CopilotKit>`) byte-for-byte from `_doc/`, type-checked but never served.
+*Pass:* the page renders both snippets and the gap callout. The setup itself is exercised by the two routes below.
+
 **`/generative-ui/a2ui/dynamic-schema` → demo — A2UI · Dynamic Schema ⚠️.** A plain LlamaIndex router (prompt only, no backend tools) calls the runtime-injected `render_a2ui` tool to design a surface from the page's catalog; the A2UI middleware mounts the streamed call. The demo Code tab's planner agent was replaced with this, by request.
 *Try:* `Show me my sales dashboard for this quarter.`
 *Pass:* one short sentence, then a surface of metric tiles / a table / a chart under it, laid out differently per prompt.
@@ -390,6 +393,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Components as Tools](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-based) | `/generative-ui/tool-based` | ⚠️ Partial | From the demo Code tab. Not yet checked in a browser. Unpublished `agents._openai_models` import → page's `llama_index.llms.openai`; `./suggestions` commented out; model `gpt-6-luna` as published. |
 | [Tool Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ✅ Working | Tool name and render props both drift from the samples. |
 | [State Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ⚠️ Partial | State streams; the doc's in-chat `render` prop does not exist. |
+| [A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui) | `/generative-ui/a2ui` | 📄 Reference | Overview, no demo. Snippets verbatim and type-checked; `myAgent` and `children` undefined on the page (suppressed). |
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo runtime sets `injectA2UITool: true`; prose says no `a2ui` block is needed. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo sets `injectA2UITool: true` where prose says `false`. Book button inert by design. |
 | [JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render) | `/generative-ui/json-render` | ❌ Broken | Reference only. Page says "Not supported on LlamaIndex"; no LlamaIndex agent/prompt/runtime route published. |
@@ -593,6 +597,9 @@ The HITL demo's `route.ts` sends `hitl-in-chat` to a dedicated `/hitl-in-chat` r
 
 Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` directly so `OPENAI_CHAT_MODEL_ID` does not reach these agents. The copied runtime routes read `AGENT_URL`, not this repo's `LLAMAINDEX_AGENT_URL`. Both default to `http://localhost:8000`.
 
+### A2UI overview: snippets reference names the page never defines
+
+[A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui). The runtime snippet registers `agents: { default: myAgent }` without defining `myAgent`, and the theme snippet is a bare `<CopilotKit a2ui={{ theme }}>{children}</CopilotKit>` expression with `children` undefined. Both are kept byte-for-byte in `frontend/src/app/generative-ui/a2ui/_doc/` with a `@ts-expect-error` on each undefined name. The page has no LlamaIndex code: it says any A2UI the agent returns renders automatically, but doesn't show a LlamaIndex agent that returns A2UI.
 ### JSON Render and Hashbrown: listed in the LlamaIndex sidebar, marked unsupported on the page
 
 [JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render), [Hashbrown](https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown). Both pages sit under Generative UI › Declarative in the LlamaIndex sidebar, but the rendered pages show "Not supported on LlamaIndex" and an empty demo slot ("hasn't been tagged in any LlamaIndex cell yet"). The only code they render is an example of the JSON the agent should send. Their Markdown exports add frontend files (JSON Render: `chat.tsx`, `json-render-renderer.tsx`, `catalog.ts`, `registry.tsx`; Hashbrown: `page.tsx`, `chat.tsx`, `hashbrown-renderer.tsx`), which import unpublished `./suggestions`, `./types`, `./metric-card` and `./charts/*`, and need `@json-render/*` + a `zod4` alias or `@hashbrownai/*` (`0.5.0-beta.4` per the page; the `prompt` and `useUiKit({ examples })` API the renderer uses was removed in Hashbrown 0.8). No LlamaIndex agent, system prompt or runtime route is published for either. Both routes are reference-only and Broken; nothing was borrowed from other harnesses.
@@ -767,6 +774,7 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 - [Your Components — Display-only](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/display-only) *(off-sidebar)*
 - [Your Components — Interactive](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/interactive) *(off-sidebar)*
 
+- [A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui) *(sidebar: Declarative)*
 - [A2UI — Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) *(sidebar: Declarative)*
 - [A2UI — Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) *(sidebar: Declarative)*
 - [JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render) *(sidebar: Declarative)* — reference only

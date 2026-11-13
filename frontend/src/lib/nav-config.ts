@@ -244,6 +244,16 @@ export const NAV: NavGroup[] = [
           "The state itself streams. The doc's in-chat variant does not — useAgent has no `render` prop in the shipped v2 API.",
       },
       {
+        path: "/generative-ui/a2ui",
+        title: "Declarative · A2UI",
+        docPath: "/llamaindex/generative-ui/a2ui",
+        summary:
+          "The A2UI overview: the runtime's a2ui option that adds the A2UI middleware, and the optional theme prop on <CopilotKit>.",
+        status: "reference",
+        statusNote:
+          "Overview page with no demo. Both snippets are kept byte-for-byte and type-checked (myAgent and children are undefined on the page, suppressed). The setup runs in the Fixed and Dynamic Schema routes.",
+      },
+      {
         path: "/generative-ui/a2ui/dynamic-schema",
         hasDemo: true,
         title: "A2UI · Dynamic Schema",
