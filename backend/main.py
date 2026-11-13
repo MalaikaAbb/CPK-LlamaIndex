@@ -26,6 +26,7 @@ URLs name — the docs never show the mounting server itself:
     POST /open-gen-ui/run           →  api/copilotkit-ogui
     POST /open-gen-ui-advanced/run  →  api/copilotkit-ogui
     POST /subagents/run             →  api/copilotkit (agent "subagents")
+    POST /gen-ui-tool-based/run     →  api/copilotkit (agent "gen-ui-tool-based")
 """
 
 from __future__ import annotations
@@ -52,6 +53,7 @@ from agents import (  # noqa: E402 - must follow load_dotenv
 )
 from demos.a2ui_dynamic import a2ui_dynamic_router  # noqa: E402
 from demos.a2ui_fixed import a2ui_fixed_router  # noqa: E402
+from demos.gen_ui_tool_based_agent import gen_ui_tool_based_router  # noqa: E402
 from demos.open_gen_ui_advanced_agent import open_gen_ui_advanced_router  # noqa: E402
 from demos.open_gen_ui_agent import open_gen_ui_router  # noqa: E402
 from demos.subagents_agent import subagents_router  # noqa: E402
@@ -85,6 +87,7 @@ app.include_router(a2ui_fixed_router, prefix="/a2ui-fixed")
 app.include_router(open_gen_ui_router, prefix="/open-gen-ui")
 app.include_router(open_gen_ui_advanced_router, prefix="/open-gen-ui-advanced")
 app.include_router(subagents_router, prefix="/subagents")
+app.include_router(gen_ui_tool_based_router, prefix="/gen-ui-tool-based")
 
 
 # Health check endpoint
