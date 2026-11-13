@@ -218,7 +218,7 @@ All three interactive routes below need the runtime in **Intelligence mode** —
 *Also try:* **Set id, no replay** — same id, but the welcome screen instead of history. That is `explicit: false`.
 *Fail:* Open conversation changes the id but the chat stays empty — there is no server-side store to replay from.
 
-**`/threads-import` — Synchronize Thread History.** 📄 Notes only, and not because of a gap in this repo: the importer supports Google ADK and LangGraph, and there is no LlamaIndex source. The page records the CLI flow as published.
+**`/threads-import` — Synchronize Thread History.** 📄 Notes only, and not because of a gap in this repo: the importer supports Google ADK, LangGraph, Mastra and AWS Strands, and there is no LlamaIndex source. The page records the CLI flow as published.
 
 ### Custom Look and Feel
 
@@ -399,8 +399,8 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Threads Drawer](https://docs.copilotkit.ai/llamaindex/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ✅ Working | Needs Intelligence mode; renders a locked view without a key. |
 | [Headless Threads](https://docs.copilotkit.ai/llamaindex/headless-threads) | `/headless-threads` | ✅ Working | Needs Intelligence mode. Implements rename, which the drawer omits. |
 | [Thread & History Lifecycle](https://docs.copilotkit.ai/llamaindex/threads-lifecycle) | `/threads-lifecycle` | ✅ Working | Switch/start always live; replay needs a server-side store. |
-| [Synchronize Thread History](https://docs.copilotkit.ai/llamaindex/threads-import) | `/threads-import` | 📄 Reference | **Not implementable** — the importer supports ADK and LangGraph only. No LlamaIndex source exists. |
-| [Slots](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ⚠️ Partial | Not in the doc sidebar. Custom-component sample needs a cast. The new `groupMessages` example is reference-only: needs `@copilotkit/react-core` 1.79+, repo pins 1.75.1. |
+| [Synchronize Thread History](https://docs.copilotkit.ai/llamaindex/threads-import) | `/threads-import` | 📄 Reference | **Not implementable** — the importer supports ADK, LangGraph, Mastra and AWS Strands. No LlamaIndex source exists. |
+| [Slots](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ✅ Working | Not in the doc sidebar. Custom-component sample needs a cast. |
 | [Headless UI](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/headless-ui) | `/custom-look-and-feel/headless-ui` | ✅ Working | Not in the doc sidebar. |
 | [Programmatic Control](https://docs.copilotkit.ai/llamaindex/programmatic-control) | `/programmatic-control` | ✅ Working | Bare `useAgent()` replaced with an explicit `agentId`. |
 | [Inspector](https://docs.copilotkit.ai/llamaindex/inspector) | `/inspector` | ✅ Working | Enabled via `showDevConsole="auto"`, not `enableInspector`. |
@@ -461,7 +461,7 @@ In a prop-controlled chat — which is the shape of the docs' own headless `App.
 
 [Synchronize Thread History](https://docs.copilotkit.ai/llamaindex/threads-import).
 
-The page is served under `/llamaindex/`, but its supported-sources table lists only Google ADK and LangGraph, each linking to a framework-specific guide. Nothing on the page imports LlamaIndex conversations, so `/threads-import` in this harness is a notes route rather than a working one — not a gap in this repo. The final step of that flow ("keep future conversations synced") *is* implemented, by the Threads Drawer and Headless Threads routes.
+The page is served under `/llamaindex/`, but its supported-sources table lists Google ADK, LangGraph, Mastra and AWS Strands (Mastra and Strands added in November 2026), each linking to a framework-specific guide. Nothing on the page imports LlamaIndex conversations, so `/threads-import` in this harness is a notes route rather than a working one — not a gap in this repo. The final step of that flow ("keep future conversations synced") *is* implemented, by the Threads Drawer and Headless Threads routes.
 
 ### The Rich Threads group is absent from the sidebar's own framework pages
 

@@ -144,7 +144,7 @@ export const NAV: NavGroup[] = [
           "The CLI import path for existing conversations — and why no LlamaIndex importer exists.",
         status: "reference",
         statusNote:
-          "Not implementable here: the importer supports Google ADK and LangGraph only.",
+          "Not implementable here: the importer supports Google ADK, LangGraph, Mastra and AWS Strands, not LlamaIndex.",
       },
     ],
   },
