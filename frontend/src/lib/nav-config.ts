@@ -276,6 +276,26 @@ export const NAV: NavGroup[] = [
           "Built from the page's demo Code tab, verbatim. Not yet checked in a browser. The demo's runtime sets injectA2UITool: true where the page's prose says false. The Book button is inert by design.",
       },
       {
+        path: "/generative-ui/json-render",
+        title: "Declarative · JSON Render",
+        docPath: "/llamaindex/generative-ui/json-render",
+        summary:
+          "An agent-emitted { root, elements } JSON spec rendered through a json-render component registry in the assistant-message slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The rendered page says 'Not supported on LlamaIndex' and publishes no LlamaIndex agent, prompt or runtime route; the .md export's frontend files import unpublished modules and uninstalled @json-render packages.",
+      },
+      {
+        path: "/generative-ui/hashbrown",
+        title: "Declarative · Hashbrown",
+        docPath: "/llamaindex/generative-ui/hashbrown",
+        summary:
+          "A streamed { ui: [...] } envelope rendered progressively through a Hashbrown UI kit in the assistant-message slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The rendered page says 'Not supported on LlamaIndex' and publishes no LlamaIndex agent, prompt or runtime route; the .md export's frontend files import unpublished modules and uninstalled @hashbrownai packages.",
+      },
+      {
         path: "/generative-ui/open-generative-ui",
         hasDemo: true,
         title: "Open Generative UI",
