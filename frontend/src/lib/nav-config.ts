@@ -375,7 +375,9 @@ export const NAV: NavGroup[] = [
           "Migrating from the a2ui renderer (A2UI v0.9) to components and surfaces (A2UI 1.0), with the mapping and support matrix.",
         status: "broken",
         statusNote:
-          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: the After catalog; Airport/Arrow borrowed from aws-strands-ts.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: the After catalog; Airport/Arrow borrowed from aws-strands-ts. The 1.0-with-the-a2ui-renderer snippets are shown as text only.",
+      },
+      {
         path: "/generative-ui/mcp-apps",
         hasDemo: true,
         title: "Open-ended · MCP Apps",
