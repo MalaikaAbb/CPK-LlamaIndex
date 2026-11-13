@@ -12,6 +12,9 @@ only page-specific part is its system prompt.
   open_gen_ui_agent.py           →  /generative-ui/open-generative-ui (minimal)
   open_gen_ui_advanced_agent.py  →  /generative-ui/open-generative-ui (advanced)
   subagents_agent.py             →  /multi-agent/subagents
+  gen_ui_tool_based_agent.py     →  /generative-ui/tool-based (its unpublished
+                                    `agents._openai_models` import swapped for
+                                    the page's own `llama_index.llms.openai`)
 
 The docs never show the server that mounts these routers. `main.py` mounts
 each at the prefix its runtime route's `HttpAgent` URL points at.

@@ -288,6 +288,12 @@ The next three routes are built from each page's **demo Code tab** — the full 
 *Fail:* a prose description and no iframe — the tool never reached the model.
 *Partial because:* both agents' unpublished `make_request_aware_router` import is swapped for the stock router, and both published prompts loop without a harness remedy (see Known issues).
 
+**`/generative-ui/tool-based` → demo — Controlled · Components as Tools ⚠️.** The page's demo Code tab: `useComponent` registers `render_bar_chart` and `render_pie_chart` (Recharts components with Zod schemas), and a no-tools LlamaIndex router at `/gen-ui-tool-based` is told to call them. The demo mounts its own `<CopilotKit agent="gen-ui-tool-based">` against the main runtime.
+*Try:* `Show me a bar chart of quarterly revenue: Q1 120, Q2 150, Q3 90, Q4 180`
+*Pass:* a chart card with the title, description and four bars renders inline in the chat.
+*Fail:* a prose answer and no card (tool not called), or a card reading "No data available" (the adapter flattened `data` to a string — see Known issues).
+*Partial because:* not yet checked in a browser; the agent's unpublished `agents._openai_models` import is swapped for the page's own `llama_index.llms.openai` import, and the unpublished `./suggestions` hook is commented out.
+
 ### Human-in-the-loop
 
 **`/human-in-the-loop/index` → demo — HITL Overview ⚠️.** The page's `hitl-in-chat` demo, verbatim: `useHumanInTheLoop` registers `book_call`, which renders a time picker and holds the run until you choose.
@@ -378,6 +384,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Inspector](https://docs.copilotkit.ai/llamaindex/inspector) | `/inspector` | ✅ Working | Enabled via `showDevConsole="auto"`, not `enableInspector`. |
 | [Display-only](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/display-only) | `/generative-ui/your-components/display-only` | ✅ Working | Not in the doc sidebar. |
 | [Interactive](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/interactive) | `/generative-ui/your-components/interactive` | ✅ Working | Not in the doc sidebar. Generic supplied explicitly. |
+| [Components as Tools](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-based) | `/generative-ui/tool-based` | ⚠️ Partial | From the demo Code tab. Not yet checked in a browser. Unpublished `agents._openai_models` import → page's `llama_index.llms.openai`; `./suggestions` commented out; model `gpt-6-luna` as published. |
 | [Tool Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ✅ Working | Tool name and render props both drift from the samples. |
 | [State Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ⚠️ Partial | State streams; the doc's in-chat `render` prop does not exist. |
 | [A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui) | `/generative-ui/a2ui` | 📄 Reference | Overview, no demo. Snippets verbatim and type-checked; `myAgent` and `children` undefined on the page (suppressed). |
@@ -585,6 +592,9 @@ Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` direct
 ### A2UI overview: snippets reference names the page never defines
 
 [A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui). The runtime snippet registers `agents: { default: myAgent }` without defining `myAgent`, and the theme snippet is a bare `<CopilotKit a2ui={{ theme }}>{children}</CopilotKit>` expression with `children` undefined. Both are kept byte-for-byte in `frontend/src/app/generative-ui/a2ui/_doc/` with a `@ts-expect-error` on each undefined name. The page has no LlamaIndex code: it says any A2UI the agent returns renders automatically, but doesn't show a LlamaIndex agent that returns A2UI.
+### Components as Tools: unpublished imports and two prompts
+
+[Components as Tools](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-based). The prose prints only fragments of a `chart_agent.py` (the `OpenAI(model="gpt-6-luna")` line and a prompt naming `render_bar_chart`) and never builds the router. The demo Code tab has a complete `gen_ui_tool_based_agent.py`, but it imports `OpenAI` from `agents._openai_models`, which no page publishes, and its prompt also covers `render_pie_chart` and a `generate_haiku` tool nothing registers. The demo `page.tsx` imports `useSuggestions` from `./suggestions`, also unpublished. This repo runs the Code-tab files, with the model import taken from the page's own prose sample and the suggestions import/call commented out; both are marked `DOC GAP` in place. Because the LlamaIndex adapter flattens frontend-tool schemas to strings (entry above), the charts' `data` array may reach the component as a string, which renders the "No data available" state.
 
 ### MCP Apps — skipped
 
@@ -681,7 +691,8 @@ llamaindex/
 │   │   ├── a2ui_dynamic.py        /a2ui-dynamic — plain router, prompt only (replaces the demo's)
 │   │   ├── a2ui_fixed.py          /a2ui-fixed — display_flight + a2ui_schemas/*.json
 │   │   ├── open_gen_ui_agent.py   /open-gen-ui (and _advanced_agent.py → /open-gen-ui-advanced)
-│   │   └── subagents_agent.py     /subagents — supervisor + three FunctionAgents
+│   │   ├── subagents_agent.py     /subagents — supervisor + three FunctionAgents
+│   │   └── gen_ui_tool_based_agent.py  /gen-ui-tool-based — no-tools router for useComponent charts
 │   ├── llm.py                     the shared OpenAI client and the model-id override
 │   └── pyproject.toml             llama-index, llama-index-protocols-ag-ui, fastapi, uvicorn
 └── frontend/
@@ -692,7 +703,7 @@ llamaindex/
         │   ├── page.tsx                   Introduction + health probe
         │   ├── status/page.tsx            the status table
         │   ├── api/copilotkit/[[...slug]]/route.ts
-        │   │                              the Copilot Runtime — eight agent
+        │   │                              the Copilot Runtime — nine agent
         │   │                              bindings + optional Intelligence
         │   ├── api/copilotkit-declarative-gen-ui/route.ts   ┐ single-route runtimes
         │   ├── api/copilotkit-a2ui-fixed-schema/route.ts    │ copied from the demo
@@ -746,6 +757,7 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 - [Headless UI](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/headless-ui) *(off-sidebar)*
 
 **Generative UI**
+- [Components as Tools](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-based) *(sidebar: Controlled)*
 - [Tool Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-rendering)
 - [State Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/state-rendering)
 - [Your Components — Display-only](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/display-only) *(off-sidebar)*
