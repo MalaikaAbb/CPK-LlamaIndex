@@ -87,7 +87,7 @@ cp .env.example backend/.env
 | Variable | Required | What it does |
 | --- | --- | --- |
 | `OPENAI_API_KEY` | **yes** | The key every agent uses. `main.py` exits at startup if it is unset. |
-| `OPENAI_CHAT_MODEL_ID` | no | Overrides the model. Defaults to `gpt-4o-mini`. Set it to `gpt-5.4` to reproduce the doc's literal call — see [Known issues](#9-known-issues--doc-vs-implementation-discrepancies). |
+| `OPENAI_CHAT_MODEL_ID` | no | Overrides the model. Defaults to `gpt-4o-mini`. Set it to `gpt-6-luna` to reproduce the doc's literal call — see [Known issues](#9-known-issues--doc-vs-implementation-discrepancies). |
 | `AGENT_PORT` | no | Uvicorn port. Defaults to `8000`. Change this and `LLAMAINDEX_AGENT_URL` together. |
 
 Frontend variables go in `frontend/.env.local` (Next.js does not read `backend/.env`):
@@ -201,9 +201,9 @@ A caveat the panel states and the docs are explicit about: `mode "intelligence"`
 
 All three interactive routes below need the runtime in **Intelligence mode** — see the CopilotKit Intelligence section above. Verified against a live Intelligence-mode runtime: `/api/copilotkit/threads?agentId=my_agent` returns real rows with LLM-generated names, scoped to the `endUserId` the provider sends.
 
-**`/prebuilt-components/copilot-threads-drawer` → demo — Threads Drawer.** `<CopilotThreadsDrawer>` beside `<CopilotChat>`, both inside one shared `<CopilotChatConfigurationProvider>` — which is the whole integration. No active-thread state, no selection handler, no props between them.
-*Try:* say `Hello`, press **New Conversation** in the drawer, say `Hello` again, then click the first row.
-*Pass:* two rows, each with a generated name. Clicking a row replays that conversation into the chat; New Conversation clears to the welcome screen.
+**`/prebuilt-components/copilot-threads-drawer` → demo — Threads Drawer.** `<CopilotThreadsDrawer>` beside `<CopilotChat>`, both inside one shared `<CopilotChatConfigurationProvider>` — which is the whole integration. No active-thread state, no selection handler, no props between them. A header **New conversation** button (the page's own-button sample, `useCopilotChatConfiguration().startNewThread()`) sits above the chat.
+*Try:* say `Hello`, press **New Conversation** in the drawer, say `Hello` again, press the header's **New conversation** button, say `Hello` once more, then click the first row.
+*Pass:* three rows, each with a generated name. Clicking a row replays that conversation into the chat; both new-conversation controls clear to the welcome screen with no row selected.
 *Fail:* the drawer shows a locked view instead of a list — that is the no-key state, not a bug.
 
 **`/headless-threads` → demo — Headless Threads.** The same data through `useThreads`, drawn by hand, with the `threadId` passed to the chat as ordinary React state.
@@ -267,6 +267,9 @@ All three interactive routes below need the runtime in **Intelligence mode** —
 
 The next three routes are built from each page's **demo Code tab** — the full llamaindex source the docs site shows under the interactive demo — copied byte-for-byte. Each mounts its own `<CopilotKit>` against its own single-route runtime, exactly as the demo does. The backend halves live in `backend/demos/`.
 
+**`/generative-ui/a2ui` — Declarative · A2UI 📄.** The A2UI overview page: no demo. Shows the page's runtime snippet (`a2ui: {}` on `CopilotRuntime`) and theme snippet (`a2ui={{ theme }}` on `<CopilotKit>`) byte-for-byte from `_doc/`, type-checked but never served.
+*Pass:* the page renders both snippets and the gap callout. The setup itself is exercised by the two routes below.
+
 **`/generative-ui/a2ui/dynamic-schema` → demo — A2UI · Dynamic Schema ⚠️.** A plain LlamaIndex router (prompt only, no backend tools) calls the runtime-injected `render_a2ui` tool to design a surface from the page's catalog; the A2UI middleware mounts the streamed call. The demo Code tab's planner agent was replaced with this, by request.
 *Try:* `Show me my sales dashboard for this quarter.`
 *Pass:* one short sentence, then a surface of metric tiles / a table / a chart under it, laid out differently per prompt.
@@ -279,11 +282,28 @@ The next three routes are built from each page's **demo Code tab** — the full 
 *Fail:* blank codes/airline/price means the binder did not resolve `{ "path": … }` bindings (it only understands zod 3 schemas — see Known issues); React error #31 means a bound prop reached a renderer as a raw object.
 *Partial because:* not yet checked in a browser.
 
+**`/generative-ui/mcp-apps` → demo — Open-ended · MCP Apps ⚠️.** The page's runtime with `mcpApps.servers` (HTTP, `localhost:3108/mcp`, `serverId: "my-server"`), its provider and its sidebar page; the `BuiltInAgent` is swapped for a prompt-only LlamaIndex router, and the route has its own `/api/copilotkit-mcp-apps` runtime.
+*Try:* start an MCP Apps example server from `modelcontextprotocol/ext-apps` on port 3108, then ask `What tools do you have?` and ask for something one of them draws.
+*Pass:* the agent lists the server's tools, and a UI tool call renders an interactive iframe in the sidebar.
+*Fail:* no MCP tools listed (server not reachable at `:3108/mcp`), or the call runs and no iframe appears.
+*Partial because:* not yet checked in a browser; needs an external server; the page asks for runtime 1.76+ and the repo pins 1.75.1.
+**`/generative-ui/json-render` — Declarative · JSON Render ❌.** Reference only, no demo. The rendered LlamaIndex page says the feature is not supported on LlamaIndex and publishes no agent, prompt or runtime route; the route shows the page's example agent output and the Markdown export's four frontend files as text.
+*Pass:* the page renders the warning callout and the code blocks. There is nothing to run.
+
+**`/generative-ui/hashbrown` — Declarative · Hashbrown ❌.** Reference only, no demo, for the same reason: "Not supported on LlamaIndex" on the rendered page, no agent or runtime route. Shows the example assistant message and the Markdown export's three frontend files as text.
+*Pass:* the page renders the warning callout and the code blocks. There is nothing to run.
+
 **`/generative-ui/open-generative-ui` → demo — Open Generative UI ⚠️.** The runtime's `openGenerativeUI` flag injects `generateSandboxedUi`; the model writes HTML/CSS/JS into a sandboxed iframe. A minimal/advanced switcher flips between the page's two demos.
 *Try:* minimal — `Quicksort visualization`; advanced — `Calculator (calls evaluateExpression)`.
 *Pass:* minimal — placeholder lines, then one animated, labelled SVG visual in an iframe, and the run ends. Advanced — one interactive widget at full height; using it logs `[open-gen-ui/advanced] evaluateExpression …` in the browser console and shows the host's result.
 *Fail:* a prose description and no iframe — the tool never reached the model.
 *Partial because:* both agents' unpublished `make_request_aware_router` import is swapped for the stock router, and both published prompts loop without a harness remedy (see Known issues).
+
+**`/generative-ui/tool-based` → demo — Controlled · Components as Tools ⚠️.** The page's demo Code tab: `useComponent` registers `render_bar_chart` and `render_pie_chart` (Recharts components with Zod schemas), and a no-tools LlamaIndex router at `/gen-ui-tool-based` is told to call them. The demo mounts its own `<CopilotKit agent="gen-ui-tool-based">` against the main runtime.
+*Try:* `Show me a bar chart of quarterly revenue: Q1 120, Q2 150, Q3 90, Q4 180`
+*Pass:* a chart card with the title, description and four bars renders inline in the chat.
+*Fail:* a prose answer and no card (tool not called), or a card reading "No data available" (the adapter flattened `data` to a string — see Known issues).
+*Partial because:* not yet checked in a browser; the agent's unpublished `agents._openai_models` import is swapped for the page's own `llama_index.llms.openai` import, and the unpublished `./suggestions` hook is commented out.
 
 ### Human-in-the-loop
 
@@ -299,12 +319,23 @@ The next three routes are built from each page's **demo Code tab** — the full 
 *Fail:* no card and a prose answer — name the tool explicitly as above.
 *Broken because:* without `verdict require_approval` in the prompt, the card renders with no buttons (observed). The adapter flattens frontend-tool schemas to strings — see Known issues. The `useInterrupt` half also cannot run (the LlamaIndex adapter never emits interrupts) and is shown as text.
 
+**`/human-in-the-loop/useInterrupt` — Pausing the Agent for Input ❌.** Reference only, no demo. The page marks interrupts unsupported on LlamaIndex, its LlamaIndex frontend snippet is missing, and its backend is a fragment depending on the unpublished `FixedAGUIChatWorkflow`. Shows the backend fragment and the generic `useInterrupt` examples as text.
+*Pass:* the page renders the gap callout and the code. There is nothing to run.
+
+**`/human-in-the-loop/headless` — Headless Interrupts ❌.** Reference only, no demo and no code: the page marks interrupts unsupported on LlamaIndex and prints no snippet for its headless stand-in.
+*Pass:* the page renders the gap callout. There is nothing to run.
+
 ### App Control
 
 **`/frontend-tools` → demo — Frontend Tools.** The doc's `sayHello` tool, executing in the browser.
 *Try:* `Say hello to Damien`
 *Pass:* a browser alert reads "Hello, Damien!"; after you dismiss it the agent confirms.
 *Fail:* a text reply with no alert — you are not on the demo route, so the tool was never registered.
+
+**`/webmcp` → demo — WebMCP ❌.** The page's `OrderSearch` (a `useFrontendTool` with `webmcp: { annotations: { readOnlyHint: true } }`), mounted next to a chat on `my_agent`; the core-only `webmcp.ts` snippet is type-checked but not run.
+*Try:* `Show my shipped orders`; in Chrome 149+ with `chrome://flags/#enable-webmcp-testing`, also open the Model Context Tool Inspector.
+*Pass (as published):* the agent calls `searchOrders` and the call fails with a ReferenceError, because the page never defines `searchOrders`. With WebMCP enabled, the inspector lists `searchOrders` with its status enum.
+*Fail:* the agent never calls the tool, or the inspector doesn't list it with WebMCP enabled.
 
 ### Shared State
 
@@ -363,7 +394,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | Doc page | Route | Status | Notes |
 | --- | --- | --- | --- |
 | [Introduction](https://docs.copilotkit.ai/llamaindex) | `/` | ✅ Working | Reference/landing page with a live health probe. |
-| [Quickstart](https://docs.copilotkit.ai/llamaindex/quickstart?agent=bring-your-own) | `/quickstart` | ✅ Working | Demo runs on the doc's own `providers.tsx` via a route layout. Model id in the sample does not exist — see Known issues. |
+| [Quickstart](https://docs.copilotkit.ai/llamaindex/quickstart?agent=bring-your-own) | `/quickstart` | ⚠️ Partial | Demo runs on the doc's own `providers.tsx` via a route layout. The page's new `OpenAILike(..., reasoning_effort="none")` LLM is not wired; backend still builds `OpenAI(...)`. See Known issues. |
 | [Prebuilt Components](https://docs.copilotkit.ai/llamaindex/prebuilt-components) | `/prebuilt-components` | ✅ Working | Doc page renders from a component, so there is no markdown sample to diff. |
 | [Threads Drawer](https://docs.copilotkit.ai/llamaindex/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ✅ Working | Needs Intelligence mode; renders a locked view without a key. |
 | [Headless Threads](https://docs.copilotkit.ai/llamaindex/headless-threads) | `/headless-threads` | ✅ Working | Needs Intelligence mode. Implements rename, which the drawer omits. |
@@ -375,15 +406,23 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Inspector](https://docs.copilotkit.ai/llamaindex/inspector) | `/inspector` | ✅ Working | Enabled via `showDevConsole="auto"`, not `enableInspector`. |
 | [Display-only](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/display-only) | `/generative-ui/your-components/display-only` | ✅ Working | Not in the doc sidebar. |
 | [Interactive](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/interactive) | `/generative-ui/your-components/interactive` | ✅ Working | Not in the doc sidebar. Generic supplied explicitly. |
+| [Components as Tools](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-based) | `/generative-ui/tool-based` | ⚠️ Partial | From the demo Code tab. Not yet checked in a browser. Unpublished `agents._openai_models` import → page's `llama_index.llms.openai`; `./suggestions` commented out; model `gpt-6-luna` as published. |
 | [Tool Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ✅ Working | Tool name and render props both drift from the samples. |
 | [State Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ⚠️ Partial | State streams; the doc's in-chat `render` prop does not exist. |
+| [A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui) | `/generative-ui/a2ui` | 📄 Reference | Overview, no demo. Snippets verbatim and type-checked; `myAgent` and `children` undefined on the page (suppressed). |
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo runtime sets `injectA2UITool: true`; prose says no `a2ui` block is needed. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo sets `injectA2UITool: true` where prose says `false`. Book button inert by design. |
+| [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) | `/generative-ui/mcp-apps` | ⚠️ Partial | Not yet checked in a browser. `BuiltInAgent` → LlamaIndex router (page's prompt); own runtime path; needs your own MCP server on :3108; page asks for runtime 1.76+, repo pins 1.75.1. |
+| [JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render) | `/generative-ui/json-render` | ❌ Broken | Reference only. Page says "Not supported on LlamaIndex"; no LlamaIndex agent/prompt/runtime route published. |
+| [Hashbrown](https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown) | `/generative-ui/hashbrown` | ❌ Broken | Reference only. Page says "Not supported on LlamaIndex"; no LlamaIndex agent/prompt/runtime route published. |
 | [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) | — | 🚧 Not started | Skipped by request. The page's sample is a `BuiltInAgent`, not LlamaIndex. |
 | [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ⚠️ Partial | From the demo Code tabs. Not yet checked in a browser. Unpublished `make_request_aware_router` swapped for the stock router. |
 | [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index) | `/human-in-the-loop/index` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Unpublished `/hitl-in-chat` router → Quickstart router. |
 | [Governed Action Approval UI](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/governed-actions) | `/human-in-the-loop/governed-actions` | ❌ Broken | Observed: card renders without Approve/Reject unless the prompt names the verdict — the adapter flattens frontend-tool params to strings. `useInterrupt` and `executeSideEffect` are reference text. |
+| [Pausing the Agent for Input](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/useInterrupt) | `/human-in-the-loop/useInterrupt` | ❌ Broken | Reference only. Page says interrupts aren't supported on LlamaIndex; frontend snippet missing; backend fragment needs unpublished `FixedAGUIChatWorkflow`. |
+| [Headless Interrupts](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/headless) | `/human-in-the-loop/headless` | ❌ Broken | Reference only. Page says interrupts aren't supported on LlamaIndex and prints no code (snippet region missing). |
 | [Frontend Tools](https://docs.copilotkit.ai/llamaindex/frontend-tools) | `/frontend-tools` | ✅ Working | |
+| [WebMCP](https://docs.copilotkit.ai/llamaindex/webmcp) | `/webmcp` | ❌ Broken | Page code verbatim; `searchOrders` is never defined, so the handler throws. WebMCP half needs Chrome 149+ and isn't checked. |
 | [Reading agent state](https://docs.copilotkit.ai/llamaindex/shared-state/in-app-agent-read) | `/shared-state/in-app-agent-read` | ✅ Working | Not in the doc sidebar. `initialState` on `useAgent` does not exist. |
 | [Writing agent state](https://docs.copilotkit.ai/llamaindex/shared-state/in-app-agent-write) | `/shared-state/in-app-agent-write` | ✅ Working | Not in the doc sidebar. |
 | [Workflow Execution](https://docs.copilotkit.ai/llamaindex/shared-state/workflow-execution) | `/shared-state/workflow-execution` | ✅ Working | Not in the doc sidebar. |
@@ -393,7 +432,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [Copilot Runtime](https://docs.copilotkit.ai/llamaindex/copilot-runtime) | `/copilot-runtime` | ✅ Working | `a2ui` / `mcpApps` middleware not configured — no route needs them. |
 | [AG-UI](https://docs.copilotkit.ai/llamaindex/ag-ui) | `/ag-ui` | ✅ Working | |
 
-Pages in the LlamaIndex sidebar that this repo does **not** cover, because they were outside the requested scope: CopilotKit CLI, Build with agents, the whole Rich Threads group, MCP Apps, A2UI, the Intelligence Platform group, and Troubleshooting.
+Pages in the LlamaIndex sidebar that this repo does **not** cover, because they were outside the requested scope: CopilotKit CLI, Build with agents, the whole Rich Threads group, A2UI, the Intelligence Platform group, and Troubleshooting.
 
 ---
 
@@ -465,9 +504,13 @@ The panel therefore keys off `mode`, not off the flags.
 
 Renamed across the docs on 2026-08-26 (see `doc-snapshot/CHANGELOG.md`). The old `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` / `publicLicenseKey` provider prop is not how the runtime is wired to the platform: the key is `INTELLIGENCE_API_KEY`, it is server-side only, and it reaches the runtime through a `CopilotKitIntelligence` client rather than through the provider. This repo dropped the public license key entirely.
 
-### `OpenAI(model="gpt-5.4")` — every Python sample
+### `OpenAI(model="gpt-6-luna")` — every Python sample
 
-Every LlamaIndex doc page opens with this line. `gpt-5.4` is not an id the OpenAI API serves, so a verbatim copy fails on the first request with a model-not-found error. `backend/llm.py` keeps the shape of the call, defaults to `gpt-4o-mini`, and reads `OPENAI_CHAT_MODEL_ID` as the override. Set that variable to `gpt-5.4` to reproduce the published behaviour.
+Every LlamaIndex doc page opens with this line. Until the November 2026 sync it read `gpt-5.4`, which the OpenAI API did not serve, so a verbatim copy failed on the first request with a model-not-found error. The pages now print `gpt-6-luna` (seen on Quickstart, Tool Rendering, State Rendering and the Shared State pages); this harness hasn't confirmed that id is served either. `backend/llm.py` keeps the shape of the call, defaults to `gpt-4o-mini`, and reads `OPENAI_CHAT_MODEL_ID` as the override. Set that variable to `gpt-6-luna` to reproduce the published behaviour.
+
+### Quickstart: `OpenAILike` with `reasoning_effort`, not wired
+
+[Quickstart](https://docs.copilotkit.ai/llamaindex/quickstart?agent=bring-your-own). The `main.py` sample now builds `OpenAILike(model="gpt-6-luna", context_window=1_050_000, is_chat_model=True, is_function_calling_model=True, additional_kwargs={"reasoning_effort": "none"})` and the install line swaps `llama-index-llms-openai` for `llama-index-llms-openai-like`. Every other LlamaIndex page still prints `OpenAI(model=...)`, so the docs no longer agree on how to build the LLM. This repo hasn't followed the Quickstart: its `my_agent` router is shared with Tool Rendering and the stateless routes, `reasoning_effort` would likely be rejected by the harness's default non-reasoning `gpt-4o-mini`, and `llama-index-llms-openai-like` isn't installed. `/quickstart` shows the new block verbatim as reference and is marked Partial.
 
 ### `useAgent` has no `initialState` and no `render`
 
@@ -489,6 +532,10 @@ Every LlamaIndex doc page opens with this line. `gpt-5.4` is not an id the OpenA
 ### `useHumanInTheLoop` does not infer its arg type
 
 [Interactive](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/interactive). Unlike `useRenderTool`, this hook does not derive its render-prop type from `parameters`; it defaults to `Record<string, unknown>`, which makes `args.command` unusable in JSX. The demo supplies the generic explicitly: `useHumanInTheLoop<{ command: string }>({ ... })`.
+
+### Slots: `groupMessages` needs a newer CopilotKit than this repo pins
+
+[Slots](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/slots). The page's "Grouping messages into one row" sample imports `messageGroup`, `messageRow`, `MessageRow` and `MessageGroupWrapperProps` from `@copilotkit/react-core/v2`, and the slot tables add `workSummary` and `toolCallsView.group`. None of these exist in 1.75.1 (the lockfile's version); they appear in 1.79. The page doesn't state a minimum version. `/custom-look-and-feel/slots` shows the sample verbatim as text and doesn't run it.
 
 ### The custom `messageView` slot needs a cast
 
@@ -578,16 +625,34 @@ The HITL demo's `route.ts` sends `hitl-in-chat` to a dedicated `/hitl-in-chat` r
 
 Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` directly so `OPENAI_CHAT_MODEL_ID` does not reach these agents. The copied runtime routes read `AGENT_URL`, not this repo's `LLAMAINDEX_AGENT_URL`. Both default to `http://localhost:8000`.
 
+
+### Interrupts: unsupported on LlamaIndex, and the stand-in is half-published
+
+[Pausing the Agent for Input](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/useInterrupt). The rendered page shows "Not supported on LlamaIndex" for interrupts and describes a stand-in: a `useFrontendTool` whose handler returns a Promise that the time picker resolves. The frontend code for that stand-in is missing from the page (an unresolved snippet region for `llamaindex::gen-ui-interrupt`), and there is no Code tab. The backend it prints (`src/agents/interrupt_agent.py`) is a fragment with no imports that builds a `FixedAGUIChatWorkflow`, a class no page publishes, and passes `workflow_factory=` to `get_ag_ui_workflow_router`. The route is reference-only and Broken; nothing was written in for the missing halves. [Headless Interrupts](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/headless) is the same story with even less: no code at all for LlamaIndex (its `headless-promise-primitives` region is missing too), so that route is a callout only.
+### WebMCP: `searchOrders` is never defined
+
+[WebMCP](https://docs.copilotkit.ai/llamaindex/webmcp). Both the React `OrderSearch` snippet and the core-only `webmcp.ts` snippet call `await searchOrders(status)` without defining or importing it. `/webmcp` keeps both verbatim with a `@ts-expect-error` on that line; the handler throws a ReferenceError on every call, so the route is Broken. The `webmcp.ts` snippet also imports `@copilotkit/core`, which the page's install steps don't list (this repo gets it transitively from `@copilotkit/react-core`). The WebMCP side needs Chrome 149+ with an origin trial or the testing flag and was not checked.
+### MCP Apps: a BuiltInAgent runtime, no MCP server, and a version floor
+### A2UI overview: snippets reference names the page never defines
+
+[A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui). The runtime snippet registers `agents: { default: myAgent }` without defining `myAgent`, and the theme snippet is a bare `<CopilotKit a2ui={{ theme }}>{children}</CopilotKit>` expression with `children` undefined. Both are kept byte-for-byte in `frontend/src/app/generative-ui/a2ui/_doc/` with a `@ts-expect-error` on each undefined name. The page has no LlamaIndex code: it says any A2UI the agent returns renders automatically, but doesn't show a LlamaIndex agent that returns A2UI.
+### JSON Render and Hashbrown: listed in the LlamaIndex sidebar, marked unsupported on the page
+
+[JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render), [Hashbrown](https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown). Both pages sit under Generative UI › Declarative in the LlamaIndex sidebar, but the rendered pages show "Not supported on LlamaIndex" and an empty demo slot ("hasn't been tagged in any LlamaIndex cell yet"). The only code they render is an example of the JSON the agent should send. Their Markdown exports add frontend files (JSON Render: `chat.tsx`, `json-render-renderer.tsx`, `catalog.ts`, `registry.tsx`; Hashbrown: `page.tsx`, `chat.tsx`, `hashbrown-renderer.tsx`), which import unpublished `./suggestions`, `./types`, `./metric-card` and `./charts/*`, and need `@json-render/*` + a `zod4` alias or `@hashbrownai/*` (`0.5.0-beta.4` per the page; the `prompt` and `useUiKit({ examples })` API the renderer uses was removed in Hashbrown 0.8). No LlamaIndex agent, system prompt or runtime route is published for either. Both routes are reference-only and Broken; nothing was borrowed from other harnesses.
+### Components as Tools: unpublished imports and two prompts
+
+[Components as Tools](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-based). The prose prints only fragments of a `chart_agent.py` (the `OpenAI(model="gpt-6-luna")` line and a prompt naming `render_bar_chart`) and never builds the router. The demo Code tab has a complete `gen_ui_tool_based_agent.py`, but it imports `OpenAI` from `agents._openai_models`, which no page publishes, and its prompt also covers `render_pie_chart` and a `generate_haiku` tool nothing registers. The demo `page.tsx` imports `useSuggestions` from `./suggestions`, also unpublished. This repo runs the Code-tab files, with the model import taken from the page's own prose sample and the suggestions import/call commented out; both are marked `DOC GAP` in place. Because the LlamaIndex adapter flattens frontend-tool schemas to strings (entry above), the charts' `data` array may reach the component as a string, which renders the "No data available" state.
+
 ### MCP Apps — skipped
 
-[MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps). Not implemented, by request. For whoever picks it up: the page's sample is a `BuiltInAgent` (`openai/gpt-5.4`) plus an MCP server you run yourself on `localhost:3108`, with no LlamaIndex code. The docs bundle has a separate LlamaIndex MCP demo (Excalidraw), which this page does not link and which also imports the unpublished `_request_tools`.
+[MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps). The page prints no LlamaIndex code: its runtime builds a CopilotKit `BuiltInAgent` (`openai/gpt-6-luna`, "You are a helpful assistant."). This harness keeps the runtime snippet's CopilotKit parts verbatim (`mcpApps.servers`, `InMemoryAgentRunner`, the GET/POST handler) and swaps the agent for a `LlamaIndexAgent` pointing at `create_mcp_apps_router()` in `backend/agents.py` (the page's prompt, no tools, `build_llm()`). The route runs on its own `/api/copilotkit-mcp-apps` path so the MCP middleware doesn't wrap every agent. The page names no MCP server of its own, only the `modelcontextprotocol/ext-apps` examples; you run one on `localhost:3108`. The page also asks for `@copilotkit/runtime` 1.76.0 or later, and this repo pins 1.75.1 (whose typings do include `mcpApps`). The MCP tools reach the LlamaIndex model as frontend tools, so the string-flattening entry above applies to their arguments. The docs bundle also has a separate LlamaIndex MCP demo (Excalidraw) that this page does not embed; it imports the unpublished `_request_tools` and is not used here.
 
 ## Troubleshooting
 
 The LlamaIndex Troubleshooting doc pages were outside the requested scope, so this section records what actually goes wrong in this repo.
 
 **`ModuleNotFoundError` or an unexpected model error at backend startup.**
-`main.py` exits immediately with a message if `OPENAI_API_KEY` is missing. If it starts but every chat errors, `OPENAI_CHAT_MODEL_ID` probably names a model your key cannot reach — including the docs' own `gpt-5.4`.
+`main.py` exits immediately with a message if `OPENAI_API_KEY` is missing. If it starts but every chat errors, `OPENAI_CHAT_MODEL_ID` probably names a model your key cannot reach — including the docs' own `gpt-6-luna`.
 
 **`PydanticUserError: 'addSearch' is not fully defined; you should define 'Context'`.**
 Adding `from __future__ import annotations` to `backend/agents.py` breaks every tool that takes `ctx: Context`. With postponed annotations the parameter type stays a string that Pydantic cannot resolve when it builds the tool schema, and the failure surfaces on the first model call rather than at import. The doc samples have no such import, and neither does this repo — do not add one to that file.
@@ -623,7 +688,7 @@ The key was read but rejected. `mode` reflects which constructor branch ran, not
 The `agentId` on that page is not in the runtime's `agents` map, or its router is not included in `main.py`. This repo registers no `default` agent on purpose, so a missing id fails loudly instead of quietly answering from somewhere else.
 
 **The Inspector never appears.**
-It is force-disabled in production builds — run `npm run dev`. Do not mount `<CopilotKitInspector />` by hand either: it forwards `core ?? null` and reports "CopilotKit core not attached". `showDevConsole="auto"` on the provider is what mounts it correctly.
+It is force-disabled in production builds — run `npm run dev`. Do not mount `<CopilotKitInspector />` by hand either: it forwards `core ?? null` and reports "CopilotKit core not attached". `showDevConsole="auto"` on the provider is what mounts it correctly. If you (or anyone on this machine) chose **Always hide Inspector** in its settings, it stays hidden on `localhost` with no expiry: run the console snippet shown on `/inspector` (it clears the `cpk_inspector_dismissed_until` cookie and the `cpk:inspector:dismissed_until` localStorage key), then reload.
 
 **A search sits on ❌ forever.**
 `runSearches` was never called. The system prompt insists on it after every `addSearch`; a weaker model sometimes skips it. Ask the agent to run the searches.
@@ -673,7 +738,8 @@ llamaindex/
 │   │   ├── a2ui_dynamic.py        /a2ui-dynamic — plain router, prompt only (replaces the demo's)
 │   │   ├── a2ui_fixed.py          /a2ui-fixed — display_flight + a2ui_schemas/*.json
 │   │   ├── open_gen_ui_agent.py   /open-gen-ui (and _advanced_agent.py → /open-gen-ui-advanced)
-│   │   └── subagents_agent.py     /subagents — supervisor + three FunctionAgents
+│   │   ├── subagents_agent.py     /subagents — supervisor + three FunctionAgents
+│   │   └── gen_ui_tool_based_agent.py  /gen-ui-tool-based — no-tools router for useComponent charts
 │   ├── llm.py                     the shared OpenAI client and the model-id override
 │   └── pyproject.toml             llama-index, llama-index-protocols-ag-ui, fastapi, uvicorn
 └── frontend/
@@ -684,7 +750,7 @@ llamaindex/
         │   ├── page.tsx                   Introduction + health probe
         │   ├── status/page.tsx            the status table
         │   ├── api/copilotkit/[[...slug]]/route.ts
-        │   │                              the Copilot Runtime — eight agent
+        │   │                              the Copilot Runtime — nine agent
         │   │                              bindings + optional Intelligence
         │   ├── api/copilotkit-declarative-gen-ui/route.ts   ┐ single-route runtimes
         │   ├── api/copilotkit-a2ui-fixed-schema/route.ts    │ copied from the demo
@@ -738,22 +804,29 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 - [Headless UI](https://docs.copilotkit.ai/llamaindex/custom-look-and-feel/headless-ui) *(off-sidebar)*
 
 **Generative UI**
+- [Components as Tools](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-based) *(sidebar: Controlled)*
 - [Tool Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/tool-rendering)
 - [State Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/state-rendering)
 - [Your Components — Display-only](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/display-only) *(off-sidebar)*
 - [Your Components — Interactive](https://docs.copilotkit.ai/llamaindex/generative-ui/your-components/interactive) *(off-sidebar)*
 
+- [A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui) *(sidebar: Declarative)*
 - [A2UI — Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) *(sidebar: Declarative)*
 - [A2UI — Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) *(sidebar: Declarative)*
+- [JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render) *(sidebar: Declarative)* — reference only
+- [Hashbrown](https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown) *(sidebar: Declarative)* — reference only
 - [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) *(sidebar: Open-ended)*
-- [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) — not implemented
+- [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) *(sidebar: Open-ended)*
 
 **Human-in-the-loop**
 - [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index)
 - [Governed Action Approval UI](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/governed-actions)
+- [Pausing the Agent for Input](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/useInterrupt) — reference only
+- [Headless Interrupts](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/headless) — reference only
 
 **App Control**
 - [Frontend Tools](https://docs.copilotkit.ai/llamaindex/frontend-tools)
+- [WebMCP](https://docs.copilotkit.ai/llamaindex/webmcp) *(sidebar: Interactivity)*
 
 **Shared State** *(the whole group is off-sidebar)*
 - [Reading agent state](https://docs.copilotkit.ai/llamaindex/shared-state/in-app-agent-read)

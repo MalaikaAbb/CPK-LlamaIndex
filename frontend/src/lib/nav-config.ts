@@ -80,7 +80,9 @@ export const NAV: NavGroup[] = [
         docPath: "/llamaindex/quickstart?agent=bring-your-own",
         summary:
           "The bring-your-own-agent path: an AG-UI workflow router, a runtime route, and a chat.",
-        status: "working",
+        status: "partial",
+        statusNote:
+          "Chat works. The page's main.py now builds OpenAILike(model=\"gpt-6-luna\", reasoning_effort none) from llama-index-llms-openai-like; the backend still uses OpenAI(...) on gpt-4o-mini and the new snippet is shown as reference only.",
       },
     ],
   },
@@ -156,7 +158,9 @@ export const NAV: NavGroup[] = [
         docPath: "/llamaindex/custom-look-and-feel/slots",
         summary:
           "Replacing chat sub-components at three levels: class strings, prop overrides, and whole components.",
-        status: "working",
+        status: "partial",
+        statusNote:
+          "The three slot levels work. The page's new groupMessages example is shown as reference only: its helpers (messageGroup, messageRow) need @copilotkit/react-core 1.79+, and this repo pins 1.75.1.",
         offNav: true,
       },
       {
@@ -213,6 +217,17 @@ export const NAV: NavGroup[] = [
         offNav: true,
       },
       {
+        path: "/generative-ui/tool-based",
+        hasDemo: true,
+        title: "Controlled · Components as Tools",
+        docPath: "/llamaindex/generative-ui/tool-based",
+        summary:
+          "Bar and pie chart components registered with useComponent, which the agent calls like tools to draw them in the chat.",
+        status: "partial",
+        statusNote:
+          "Built from the page's demo Code tab; not yet checked in a browser. The agent's unpublished agents._openai_models import is swapped for the page's own llama_index.llms.openai import, and the unpublished ./suggestions hook is commented out. Model id gpt-6-luna is the doc's literal. The adapter flattens frontend-tool params to strings, so the charts' data array may arrive as a string.",
+      },
+      {
         path: "/generative-ui/tool-rendering",
         hasDemo: true,
         title: "Tool Rendering",
@@ -231,6 +246,16 @@ export const NAV: NavGroup[] = [
         status: "partial",
         statusNote:
           "The state itself streams. The doc's in-chat variant does not — useAgent has no `render` prop in the shipped v2 API.",
+      },
+      {
+        path: "/generative-ui/a2ui",
+        title: "Declarative · A2UI",
+        docPath: "/llamaindex/generative-ui/a2ui",
+        summary:
+          "The A2UI overview: the runtime's a2ui option that adds the A2UI middleware, and the optional theme prop on <CopilotKit>.",
+        status: "reference",
+        statusNote:
+          "Overview page with no demo. Both snippets are kept byte-for-byte and type-checked (myAgent and children are undefined on the page, suppressed). The setup runs in the Fixed and Dynamic Schema routes.",
       },
       {
         path: "/generative-ui/a2ui/dynamic-schema",
@@ -253,6 +278,35 @@ export const NAV: NavGroup[] = [
         status: "partial",
         statusNote:
           "Built from the page's demo Code tab, verbatim. Not yet checked in a browser. The demo's runtime sets injectA2UITool: true where the page's prose says false. The Book button is inert by design.",
+      },
+      {
+        path: "/generative-ui/mcp-apps",
+        hasDemo: true,
+        title: "Open-ended · MCP Apps",
+        docPath: "/llamaindex/generative-ui/mcp-apps",
+        summary:
+          "An MCP server's UI-bearing tools rendered as sandboxed iframes in the chat, wired through the runtime's mcpApps option.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. Agent: LlamaIndex, not the doc's BuiltInAgent (a stock router with the page's prompt). Own runtime path /api/copilotkit-mcp-apps. Needs an MCP server you run on localhost:3108; the page publishes none. Page asks for runtime 1.76+, repo pins 1.75.1.",
+        path: "/generative-ui/json-render",
+        title: "Declarative · JSON Render",
+        docPath: "/llamaindex/generative-ui/json-render",
+        summary:
+          "An agent-emitted { root, elements } JSON spec rendered through a json-render component registry in the assistant-message slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The rendered page says 'Not supported on LlamaIndex' and publishes no LlamaIndex agent, prompt or runtime route; the .md export's frontend files import unpublished modules and uninstalled @json-render packages.",
+      },
+      {
+        path: "/generative-ui/hashbrown",
+        title: "Declarative · Hashbrown",
+        docPath: "/llamaindex/generative-ui/hashbrown",
+        summary:
+          "A streamed { ui: [...] } envelope rendered progressively through a Hashbrown UI kit in the assistant-message slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The rendered page says 'Not supported on LlamaIndex' and publishes no LlamaIndex agent, prompt or runtime route; the .md export's frontend files import unpublished modules and uninstalled @hashbrownai packages.",
       },
       {
         path: "/generative-ui/open-generative-ui",
@@ -292,6 +346,26 @@ export const NAV: NavGroup[] = [
         statusNote:
           "Observed: the card renders without its Approve/Reject buttons. llama-index-protocols-ag-ui 0.5.0 flattens every frontend-tool parameter to a plain string, so the model never sees the verdict enum and rarely writes exactly require_approval. Naming the verdict in the prompt works around it. The useInterrupt half cannot run (no AG-UI interrupts), and no policy engine, agent or executeSideEffect is published.",
       },
+      {
+        path: "/human-in-the-loop/useInterrupt",
+        title: "Pausing the Agent for Input",
+        docPath: "/llamaindex/human-in-the-loop/useInterrupt",
+        summary:
+          "Pausing a run for user input and resuming with the answer: useInterrupt, or a Promise-holding frontend tool where interrupts don't exist.",
+        status: "broken",
+        statusNote:
+          "Reference only. The page says interrupts are not supported on LlamaIndex; its frontend snippet is missing from the page and its backend is an unimportable fragment (FixedAGUIChatWorkflow unpublished).",
+      },
+      {
+        path: "/human-in-the-loop/headless",
+        title: "Headless Interrupts",
+        docPath: "/llamaindex/human-in-the-loop/headless",
+        summary:
+          "Resolving an agent's pause from a UI outside the chat, without a useInterrupt render slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The page says interrupts are not supported on LlamaIndex and prints no code for it (snippet region missing, no Code tab).",
+      },
     ],
   },
   {
@@ -305,6 +379,17 @@ export const NAV: NavGroup[] = [
         summary:
           "A tool the agent calls that executes in the browser, forwarded automatically over AG-UI.",
         status: "working",
+      },
+      {
+        path: "/webmcp",
+        hasDemo: true,
+        title: "WebMCP",
+        docPath: "/llamaindex/webmcp",
+        summary:
+          "A frontend tool opted into WebMCP, so browser agents can discover and call it through document.modelContext.",
+        status: "broken",
+        statusNote:
+          "Page code verbatim. searchOrders is called but never defined on the page, so the handler throws on every call (CopilotKit agent or browser agent). The WebMCP half needs Chrome 149+ with the WebMCP flag; not checked in a browser.",
       },
     ],
   },

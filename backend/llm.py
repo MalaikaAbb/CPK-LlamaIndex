@@ -3,16 +3,19 @@
 Every Python sample on the LlamaIndex pages opens with the same two lines:
 
     from llama_index.llms.openai import OpenAI
-    llm = OpenAI(model="gpt-5.4")
+    llm = OpenAI(model="gpt-6-luna")
+
+(Until the November 2026 doc sync the pages printed `gpt-5.4`.)
 
 This harness serves five routers, so that line lives here once instead of five
 times. The only change is the model id — see the note below.
 
-`gpt-5.4` is what the docs publish, verbatim, on every page. It is not an id the
-OpenAI API serves, so a literal copy makes every route in this repo fail with a
-model-not-found error. The default here is `gpt-4o-mini` and
+`gpt-6-luna` is what the docs publish, verbatim, on every page. Like the
+`gpt-5.4` it replaced, it is not an id this harness has confirmed the OpenAI API
+serves, so a literal copy risks every route failing with a model-not-found
+error. The default here is `gpt-4o-mini` and
 `OPENAI_CHAT_MODEL_ID` overrides it, so the harness runs out of the box and you
-can still reproduce the doc's exact call by setting that variable to `gpt-5.4`.
+can still reproduce the doc's exact call by setting that variable to `gpt-6-luna`.
 The discrepancy is recorded in the README's known-issues section and on the
 Quickstart route.
 """
@@ -27,7 +30,7 @@ from llama_index.llms.openai import OpenAI
 DEFAULT_MODEL = "gpt-4o-mini"
 
 # What every LlamaIndex doc page prints. Surfaced so the app can show the gap.
-DOCUMENTED_MODEL = "gpt-5.4"
+DOCUMENTED_MODEL = "gpt-6-luna"
 
 
 def build_llm() -> FunctionCallingLLM:
