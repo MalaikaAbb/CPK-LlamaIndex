@@ -307,8 +307,9 @@ All Components and surfaces routes except State and actions have a demo wired to
 **`/generative-ui/components/markdown-mode` → demo — Components · Markdown mode ❌.** Both providers (`transport: "markdown"`, and with `sendContext: false`).
 *Try:* "give me a seat-count slider that shows the monthly price at $29 per seat". *Expected today:* no `a2ui` block — the schema and guide travel as context, which the adapter drops.
 
-**`/generative-ui/components/from-a2ui` → demo — Components · Adopt from A2UI ❌.** The After catalog; `Airport`/`Arrow` borrowed from aws-strands-ts (the page never defines them).
+**`/generative-ui/components/from-a2ui` → demo — Components · Adopt from A2UI ❌.** The After catalog; `Airport`/`Arrow` borrowed from aws-strands-ts (the page never defines them). The page's newer "Use 1.0 with the React a2ui renderer" snippets (`basicCatalogV1`, a custom catalog with `DynamicStringSchemaV1` and `protocolVersion: "1.0"`) are shown as text only.
 *Try:* "show a flight card from SFO (San Francisco) to JFK (New York) with a Book button". *Expected today:* text only.
+
 **`/generative-ui/mcp-apps` → demo — Open-ended · MCP Apps ⚠️.** The page's runtime with `mcpApps.servers` (HTTP, `localhost:3108/mcp`, `serverId: "my-server"`), its provider and its sidebar page; the `BuiltInAgent` is swapped for a prompt-only LlamaIndex router, and the route has its own `/api/copilotkit-mcp-apps` runtime.
 *Try:* start an MCP Apps example server from `modelcontextprotocol/ext-apps` on port 3108, then ask `What tools do you have?` and ask for something one of them draws.
 *Pass:* the agent lists the server's tools, and a UI tool call renders an interactive iframe in the sidebar.
@@ -447,7 +448,7 @@ All Components and surfaces routes except State and actions have a demo wired to
 | [Theming](https://docs.copilotkit.ai/llamaindex/generative-ui/components/theming) | `/generative-ui/components/theming` | ❌ Broken | Demo wired: provider theme, CSS, dark-mode script; expect no UI (adapter). |
 | [Transports](https://docs.copilotkit.ai/llamaindex/generative-ui/components/transports) | `/generative-ui/components/transports` | ❌ Broken | Demo wired on `generativeUI: true` runtime; expect no UI (adapter). No `shop` agent published. |
 | [Markdown mode](https://docs.copilotkit.ai/llamaindex/generative-ui/components/markdown-mode) | `/generative-ui/components/markdown-mode` | ❌ Broken | Demo wired: both providers; expect no UI (adapter drops the context carrying schema + guide). |
-| [Adopt from A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/components/from-a2ui) | `/generative-ui/components/from-a2ui` | ❌ Broken | Demo wired: After catalog, `Airport`/`Arrow` borrowed from aws-strands-ts; expect no UI (adapter). |
+| [Adopt from A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/components/from-a2ui) | `/generative-ui/components/from-a2ui` | ❌ Broken | Demo wired: After catalog, `Airport`/`Arrow` borrowed from aws-strands-ts; expect no UI (adapter). 1.0-with-the-a2ui-renderer snippets text only. |
 | [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) | `/generative-ui/mcp-apps` | ⚠️ Partial | Not yet checked in a browser. `BuiltInAgent` → LlamaIndex router (page's prompt); own runtime path; needs your own MCP server on :3108; page asks for runtime 1.76+, repo pins 1.75.1. |
 | [JSON Render](https://docs.copilotkit.ai/llamaindex/generative-ui/json-render) | `/generative-ui/json-render` | ❌ Broken | Reference only. Page says "Not supported on LlamaIndex"; no LlamaIndex agent/prompt/runtime route published. |
 | [Hashbrown](https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown) | `/generative-ui/hashbrown` | ❌ Broken | Reference only. Page says "Not supported on LlamaIndex"; no LlamaIndex agent/prompt/runtime route published. |
@@ -670,6 +671,8 @@ It cannot render anything, for two reasons in `llama-index-protocols-ag-ui` (che
 - The workflow never reads `input_data.context`. The runtime puts the `render_ui` guide there, and markdown mode puts the component schema and the fence guide there, so the model never learns the format.
 
 The section says "Your agent must use the tools and the context entries of the run" and names `CopilotKitMiddleware` for LangGraph only; nothing is shown for LlamaIndex. Not filled in either: Surfaces' `FeaturedProducts` (`Product`, `products`) and per-item target (`product`); Catalogs' `cartUI`; Standard catalog's `ProductCard`/`productSchema`; all of State and actions; Transports' `shop` agent; Markdown mode's own-prompt Python fragment. Borrowed (UI only): `Airport`, `Arrow` from aws-strands-ts. Nothing here has been run in a browser.
+
+Adopt from A2UI now also shows how to stay on the `a2ui` provider option with A2UI 1.0 (`basicCatalogV1`; `createCatalog(..., { protocolVersion: "1.0" })` with `DynamicStringSchemaV1`). The installed `@copilotkit/a2ui-renderer` 1.87.1 exports both names, but the page says the agent integration must also emit native 1.0 `a2ui_operations` through the `a2ui-surface` activity, and it shows no LlamaIndex code that does (this repo's A2UI agents write v0.9 `render_a2ui` calls). So both snippets are kept as text in `from-a2ui/doc-snippets.ts`, not mounted.
 
 ### Interrupts: unsupported on LlamaIndex, and the stand-in is half-published
 
