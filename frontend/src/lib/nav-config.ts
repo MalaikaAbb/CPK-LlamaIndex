@@ -213,6 +213,17 @@ export const NAV: NavGroup[] = [
         offNav: true,
       },
       {
+        path: "/generative-ui/tool-based",
+        hasDemo: true,
+        title: "Controlled · Components as Tools",
+        docPath: "/llamaindex/generative-ui/tool-based",
+        summary:
+          "Bar and pie chart components registered with useComponent, which the agent calls like tools to draw them in the chat.",
+        status: "partial",
+        statusNote:
+          "Built from the page's demo Code tab; not yet checked in a browser. The agent's unpublished agents._openai_models import is swapped for the page's own llama_index.llms.openai import, and the unpublished ./suggestions hook is commented out. Model id gpt-6-luna is the doc's literal. The adapter flattens frontend-tool params to strings, so the charts' data array may arrive as a string.",
+      },
+      {
         path: "/generative-ui/tool-rendering",
         hasDemo: true,
         title: "Tool Rendering",
@@ -231,6 +242,16 @@ export const NAV: NavGroup[] = [
         status: "partial",
         statusNote:
           "The state itself streams. The doc's in-chat variant does not — useAgent has no `render` prop in the shipped v2 API.",
+      },
+      {
+        path: "/generative-ui/a2ui",
+        title: "Declarative · A2UI",
+        docPath: "/llamaindex/generative-ui/a2ui",
+        summary:
+          "The A2UI overview: the runtime's a2ui option that adds the A2UI middleware, and the optional theme prop on <CopilotKit>.",
+        status: "reference",
+        statusNote:
+          "Overview page with no demo. Both snippets are kept byte-for-byte and type-checked (myAgent and children are undefined on the page, suppressed). The setup runs in the Fixed and Dynamic Schema routes.",
       },
       {
         path: "/generative-ui/a2ui/dynamic-schema",
@@ -253,6 +274,35 @@ export const NAV: NavGroup[] = [
         status: "partial",
         statusNote:
           "Built from the page's demo Code tab, verbatim. Not yet checked in a browser. The demo's runtime sets injectA2UITool: true where the page's prose says false. The Book button is inert by design.",
+      },
+      {
+        path: "/generative-ui/mcp-apps",
+        hasDemo: true,
+        title: "Open-ended · MCP Apps",
+        docPath: "/llamaindex/generative-ui/mcp-apps",
+        summary:
+          "An MCP server's UI-bearing tools rendered as sandboxed iframes in the chat, wired through the runtime's mcpApps option.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. Agent: LlamaIndex, not the doc's BuiltInAgent (a stock router with the page's prompt). Own runtime path /api/copilotkit-mcp-apps. Needs an MCP server you run on localhost:3108; the page publishes none. Page asks for runtime 1.76+, repo pins 1.75.1.",
+        path: "/generative-ui/json-render",
+        title: "Declarative · JSON Render",
+        docPath: "/llamaindex/generative-ui/json-render",
+        summary:
+          "An agent-emitted { root, elements } JSON spec rendered through a json-render component registry in the assistant-message slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The rendered page says 'Not supported on LlamaIndex' and publishes no LlamaIndex agent, prompt or runtime route; the .md export's frontend files import unpublished modules and uninstalled @json-render packages.",
+      },
+      {
+        path: "/generative-ui/hashbrown",
+        title: "Declarative · Hashbrown",
+        docPath: "/llamaindex/generative-ui/hashbrown",
+        summary:
+          "A streamed { ui: [...] } envelope rendered progressively through a Hashbrown UI kit in the assistant-message slot.",
+        status: "broken",
+        statusNote:
+          "Reference only. The rendered page says 'Not supported on LlamaIndex' and publishes no LlamaIndex agent, prompt or runtime route; the .md export's frontend files import unpublished modules and uninstalled @hashbrownai packages.",
       },
       {
         path: "/generative-ui/open-generative-ui",
