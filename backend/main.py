@@ -44,6 +44,7 @@ load_dotenv(_BACKEND_ENV)
 load_dotenv(_ROOT_ENV, override=False)
 
 from agents import (  # noqa: E402 - must follow load_dotenv
+    create_components_router,
     create_main_router,
     create_qa_router,
     create_sample_router,
@@ -78,6 +79,9 @@ app.include_router(create_sample_router(), prefix="/sample_agent")
 app.include_router(create_search_router(), prefix="/search_agent")
 app.include_router(create_qa_router(), prefix="/qa_agent")
 app.include_router(create_task_router(), prefix="/task_agent")
+# Components and surfaces (all nine pages share it): the section's BuiltInAgent
+# as a LlamaIndex router, see agents.create_components_router.
+app.include_router(create_components_router(), prefix="/components")
 
 # Routers copied from the docs' demo "Code" tabs (see demos/__init__.py).
 app.include_router(a2ui_dynamic_router, prefix="/a2ui-dynamic")

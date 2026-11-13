@@ -8,6 +8,7 @@ export default function Page() {
       path="/generative-ui/components/standard-catalog"
       summary="The 69 ready-made components, and how to add, drop or replace entries."
       snippets={SNIPPETS}
+      live
     />
   );
 }

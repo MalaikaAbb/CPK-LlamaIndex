@@ -346,3 +346,31 @@ def create_task_router() -> APIRouter:
             "observed_steps": [],
         },
     )
+
+
+# --------------------------------------------------------------------------
+# Components and surfaces
+# docs.copilotkit.ai/llamaindex/generative-ui/components ("Add the runtime and
+# an agent")
+# --------------------------------------------------------------------------
+
+
+def create_components_router() -> APIRouter:
+    """The section's agent, as a LlamaIndex router (framework-own-agents swap).
+
+    The page prints a TanStack `BuiltInAgent` on `openaiText("gpt-6-luna")`.
+    This harness runs LlamaIndex agents only, so it is the stock AG-UI workflow
+    router with the snippet's system prompt verbatim and no tools of its own
+    (the snippet defines none). `render_ui` is added per run by the runtime
+    when the provider sends a catalog; the router forwards the run's tools
+    (`input_data.tools`) to the model. It does not forward the run's context
+    entries, so the `render_ui` guide and markdown mode's schema never reach
+    the model (README §9).
+    """
+    return get_ag_ui_workflow_router(
+        llm=build_llm(),
+        frontend_tools=[],
+        backend_tools=[],
+        # The page's prompt, verbatim.
+        system_prompt="You are a helpful assistant. When a visual answer helps, render it with generative UI.",
+    )

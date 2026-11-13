@@ -8,6 +8,7 @@ export default function Page() {
       path="/generative-ui/components/catalogs"
       summary="Declaring the components the agent may use, with typed props, schema libraries, combined catalogs and an A2UI export."
       snippets={SNIPPETS}
+      live
     />
   );
 }

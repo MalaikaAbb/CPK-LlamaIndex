@@ -6,8 +6,8 @@ A navigable, working test harness for the CopilotKit ↔ LlamaIndex integration 
 | --- | --- |
 | **Doc sync date** | Machine-maintained — `doc-snapshot/manifest.json` → `syncedAt`, rewritten on every sync |
 | **Docs tracked** | <https://docs.copilotkit.ai/llamaindex> |
-| **CopilotKit** | `@copilotkit/react-core` ^1.75.1 (v2 surface) · `@copilotkit/runtime` ^1.75.1 · `@copilotkit/a2ui-renderer` ^1.75.1 |
-| **AG-UI** | `@ag-ui/llamaindex` ^0.2.0 · `@ag-ui/client` 0.0.59 · `llama-index-protocols-ag-ui` 0.5.0 (installed) |
+| **CopilotKit** | `@copilotkit/react-core` ^1.87.0 (v2 surface; lockfile 1.87.1) · `@copilotkit/runtime` ^1.87.0 · `@copilotkit/a2ui-renderer` ^1.87.0 — upgraded 2026-11-13 from ^1.75.1 for Components and surfaces |
+| **AG-UI** | `@ag-ui/llamaindex` ^0.3.0 (was ^0.2.0) · `@ag-ui/client`/`@ag-ui/core` 1.0.2, pinned and overridden to the exact version CopilotKit 1.87.1 depends on (was 0.0.59) · `llama-index-protocols-ag-ui` 0.5.0 (installed; 0.6.0 is out and behaves the same for these pages) |
 | **zod** | ^3.25.76 — pinned to 3.x for the A2UI renderer; see Known issues |
 | **Runtime** | v2 multi-route — `createCopilotRuntimeHandler` at `app/api/copilotkit/[[...slug]]/route.ts`, 4 verbs. Verified: `/info` 200 with 5 agents, `mode` flips `sse` → `intelligence` with a key. |
 | **Build** | `tsc --noEmit` ❌ 7 errors, all in `shared-state/predictive-state-updates/demo-chat/page.tsx` (doc's `useAgent({ render })`, no suppression in place) — every other file type-checks · backend imports and mounts all ten routers ✅ · `next build` not re-run since the A2UI / OGUI / HITL / Sub-Agents routes were added |
@@ -279,32 +279,33 @@ The next three routes are built from each page's **demo Code tab** — the full 
 *Fail:* blank codes/airline/price means the binder did not resolve `{ "path": … }` bindings (it only understands zod 3 schemas — see Known issues); React error #31 means a bound prop reached a renderer as a raw object.
 *Partial because:* not yet checked in a browser.
 
-**`/generative-ui/components` — Components · Components and surfaces ❌.** Reference only, no demo. Overview and setup: a catalog on the provider lets the agent render real components in the chat or in page areas. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+All Components and surfaces routes except State and actions have a demo wired to the backend: the page's provider config on `/api/copilotkit-genui` (Transports: `/api/copilotkit-genui-transports`, its `generativeUI: true` runtime), with the `/components` LlamaIndex router (`backend/agents.py: create_components_router`) standing in for the section's TanStack `BuiltInAgent` (page prompt, no tools). They are ❌ because the LlamaIndex AG-UI adapter cannot carry generative UI (see "Components and surfaces" under Known issues): expect text answers and no UI. None has been checked in a browser.
 
-**`/generative-ui/components/surfaces` — Components · Surfaces ❌.** Reference only, no demo. Where generated UI renders: the chat, or named page targets the agent can fill, limit, scroll to, or repeat per item. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+**`/generative-ui/components` → demo — Components · Components and surfaces ❌.** The page's `standardUI` provider and a chat.
+*Try:* "Compare the Starter, Team, and Enterprise plans in a table". *As published (expected today):* a text answer, or a `render_ui` call that renders nothing. *If the adapter is fixed:* a live table in the chat.
 
-**`/generative-ui/components/catalogs` — Components · Catalogs ❌.** Reference only, no demo. Declaring the components the agent may use, with typed props, schema libraries, combined catalogs and an A2UI export. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+**`/generative-ui/components/surfaces` → demo — Components · Surfaces ❌.** Error-boundary provider over `shopUI` with the `featured` (ProductGrid/ProductCard only) and `sidebar-notes` (`autoScroll={false}`) targets. `FeaturedProducts` and the per-item target are not mounted (undefined `products`, `Product`, `product`).
+*Try:* "show three running shoes in the featured area". *Expected today:* nothing in the featured box.
 
-**`/generative-ui/components/standard-catalog` — Components · Standard catalog ❌.** Reference only, no demo. The 69 ready-made components, and how to add, drop or replace entries. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+**`/generative-ui/components/catalogs` → demo — Components · Catalogs ❌.** `shopUI`. Combine/export (undefined `cartUI`) and the schema-library / positional-order fragments are shown, not run.
+*Try:* "show me three running shoes as product cards". *Expected today:* text only.
 
-**`/generative-ui/components/state-and-actions` — Components · State and actions ❌.** Reference only, no demo. Binding live app state into generated UI, running your functions on click, sending clicks to the agent, and keeping user input. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+**`/generative-ui/components/standard-catalog` → demo — Components · Standard catalog ❌.** `standardUI` as is, `omit(["Map", "Video", "HtmlView"])`, `overrides: { Card: MyCard }`. Extend is not mounted (undefined `ProductCard`, `productSchema`).
+*Try:* "put a short summary of our three plans in a card". *Expected today:* text only.
 
-**`/generative-ui/components/theming` — Components · Theming ❌.** Reference only, no demo. Colors, fonts and dark mode for the standard components through CSS variables and a theme map. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+**`/generative-ui/components/state-and-actions` — Components · State and actions ❌.** Reference only, no demo and no backend: every sample needs a `Cart`/`cart` or `ProductCard` the page never defines, or is a fragment.
 
-**`/generative-ui/components/transports` — Components · Transports ❌.** Reference only, no demo. Choosing between the render_ui tool and UI written inside the agent's markdown reply, per agent. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+**`/generative-ui/components/theming` → demo — Components · Theming ❌.** The provider theme, the page's `.a2ui-surface` CSS and its dark-mode script. Per-mode/map fragments and the theme file are shown only.
+*Try:* "show a card with a primary button, a slider, and a bar chart of three months". *Expected today:* text only, so there is nothing for the theme to style.
 
-**`/generative-ui/components/markdown-mode` — Components · Markdown mode ❌.** Reference only, no demo. The agent writes UI in a2ui code blocks inside its reply, with no tool call; includes the forwarded-props envelope for building your own prompt. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+**`/generative-ui/components/transports` → demo — Components · Transports ❌.** Tool, markdown, and `agentIds: ["shop"]` chatting as `default`, on the page's `generativeUI: true` runtime. No `shop` agent is published.
+*Try:* "compare the Starter, Team, and Enterprise plans in a table" in each. *Expected today:* text in all three; the `agentIds` variant is the only one that *should* be text.
 
-**`/generative-ui/components/from-a2ui` — Components · Adopt from A2UI ❌.** Reference only, no demo. Migrating from the a2ui renderer (A2UI v0.9) to components and surfaces (A2UI 1.0), with the mapping and support matrix. Shows the page's React and untabbed code blocks as text.
-*Pass:* the page renders the version-gap callout and the code. There is nothing to run until CopilotKit is bumped to 1.85+.
+**`/generative-ui/components/markdown-mode` → demo — Components · Markdown mode ❌.** Both providers (`transport: "markdown"`, and with `sendContext: false`).
+*Try:* "give me a seat-count slider that shows the monthly price at $29 per seat". *Expected today:* no `a2ui` block — the schema and guide travel as context, which the adapter drops.
+
+**`/generative-ui/components/from-a2ui` → demo — Components · Adopt from A2UI ❌.** The After catalog; `Airport`/`Arrow` borrowed from aws-strands-ts (the page never defines them).
+*Try:* "show a flight card from SFO (San Francisco) to JFK (New York) with a Book button". *Expected today:* text only.
 
 **`/generative-ui/open-generative-ui` → demo — Open Generative UI ⚠️.** The runtime's `openGenerativeUI` flag injects `generateSandboxedUi`; the model writes HTML/CSS/JS into a sandboxed iframe. A minimal/advanced switcher flips between the page's two demos.
 *Try:* minimal — `Quicksort visualization`; advanced — `Calculator (calls evaluateExpression)`.
@@ -406,15 +407,15 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | [State Rendering](https://docs.copilotkit.ai/llamaindex/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ⚠️ Partial | State streams; the doc's in-chat `render` prop does not exist. |
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo runtime sets `injectA2UITool: true`; prose says no `a2ui` block is needed. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Demo sets `injectA2UITool: true` where prose says `false`. Book button inert by design. |
-| [Components and surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components) | `/generative-ui/components` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
-| [Surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components/surfaces) | `/generative-ui/components/surfaces` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
-| [Catalogs](https://docs.copilotkit.ai/llamaindex/generative-ui/components/catalogs) | `/generative-ui/components/catalogs` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
-| [Standard catalog](https://docs.copilotkit.ai/llamaindex/generative-ui/components/standard-catalog) | `/generative-ui/components/standard-catalog` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
-| [State and actions](https://docs.copilotkit.ai/llamaindex/generative-ui/components/state-and-actions) | `/generative-ui/components/state-and-actions` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
-| [Theming](https://docs.copilotkit.ai/llamaindex/generative-ui/components/theming) | `/generative-ui/components/theming` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
-| [Transports](https://docs.copilotkit.ai/llamaindex/generative-ui/components/transports) | `/generative-ui/components/transports` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
-| [Markdown mode](https://docs.copilotkit.ai/llamaindex/generative-ui/components/markdown-mode) | `/generative-ui/components/markdown-mode` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
-| [Adopt from A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/components/from-a2ui) | `/generative-ui/components/from-a2ui` | ❌ Broken | Reference only. Needs `@copilotkit/react-core` 1.85+; repo pins 1.75.1. |
+| [Components and surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components) | `/generative-ui/components` | ❌ Broken | Demo wired to `/components` LlamaIndex router; expect no UI (adapter flattens `render_ui.operations` to a string, drops context). |
+| [Surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components/surfaces) | `/generative-ui/components/surfaces` | ❌ Broken | Demo wired: error-boundary provider, `featured`/`sidebar-notes` targets; expect no UI (adapter). `FeaturedProducts`, per-item target not mounted (undefined pieces). |
+| [Catalogs](https://docs.copilotkit.ai/llamaindex/generative-ui/components/catalogs) | `/generative-ui/components/catalogs` | ❌ Broken | Demo wired: `shopUI`; expect no UI (adapter). Combine/export need undefined `cartUI`. |
+| [Standard catalog](https://docs.copilotkit.ai/llamaindex/generative-ui/components/standard-catalog) | `/generative-ui/components/standard-catalog` | ❌ Broken | Demo wired: as is, `omit`, `overrides`; expect no UI (adapter). Extend needs undefined `ProductCard`/`productSchema`. |
+| [State and actions](https://docs.copilotkit.ai/llamaindex/generative-ui/components/state-and-actions) | `/generative-ui/components/state-and-actions` | ❌ Broken | Reference only, no backend: needs undefined `Cart`/`cart`/`ProductCard`, or fragments. |
+| [Theming](https://docs.copilotkit.ai/llamaindex/generative-ui/components/theming) | `/generative-ui/components/theming` | ❌ Broken | Demo wired: provider theme, CSS, dark-mode script; expect no UI (adapter). |
+| [Transports](https://docs.copilotkit.ai/llamaindex/generative-ui/components/transports) | `/generative-ui/components/transports` | ❌ Broken | Demo wired on `generativeUI: true` runtime; expect no UI (adapter). No `shop` agent published. |
+| [Markdown mode](https://docs.copilotkit.ai/llamaindex/generative-ui/components/markdown-mode) | `/generative-ui/components/markdown-mode` | ❌ Broken | Demo wired: both providers; expect no UI (adapter drops the context carrying schema + guide). |
+| [Adopt from A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/components/from-a2ui) | `/generative-ui/components/from-a2ui` | ❌ Broken | Demo wired: After catalog, `Airport`/`Arrow` borrowed from aws-strands-ts; expect no UI (adapter). |
 | [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) | — | 🚧 Not started | Skipped by request. The page's sample is a `BuiltInAgent`, not LlamaIndex. |
 | [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ⚠️ Partial | From the demo Code tabs. Not yet checked in a browser. Unpublished `make_request_aware_router` swapped for the stock router. |
 | [HITL Overview](https://docs.copilotkit.ai/llamaindex/human-in-the-loop/index) | `/human-in-the-loop/index` | ⚠️ Partial | From the demo Code tab, verbatim. Not yet checked in a browser. Unpublished `/hitl-in-chat` router → Quickstart router. |
@@ -614,9 +615,15 @@ The HITL demo's `route.ts` sends `hitl-in-chat` to a dedicated `/hitl-in-chat` r
 
 Everything under `backend/demos/` constructs `OpenAI(model="gpt-5-mini")` directly so `OPENAI_CHAT_MODEL_ID` does not reach these agents. The copied runtime routes read `AGENT_URL`, not this repo's `LLAMAINDEX_AGENT_URL`. Both default to `http://localhost:8000`.
 
-### Components and surfaces: needs CopilotKit 1.85, and no LlamaIndex agent is shown
+### Components and surfaces: the LlamaIndex AG-UI adapter cannot carry generative UI
 
-[Components and surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components) and its sub-pages (Surfaces, Catalogs, Standard catalog, State and actions, Theming, Transports, Markdown mode, Adopt from A2UI). The whole section, marked experimental on the page, uses `@copilotkit/react-core/v2/generative-ui` (`standardUI`, catalogs, `<GenerativeUISurface>`) and the provider's `generativeUI` prop. Those first ship in CopilotKit 1.85; this repo's lockfile pins 1.75.1, so the routes show the page code as text (React and untabbed blocks; Angular tabs left out) and are marked Broken. The pages state no minimum version. The only agent printed is a CopilotKit `BuiltInAgent` TanStack factory; this harness would swap it for a LlamaIndex router, but the section requires the agent to pass the run's `render_ui` tool and context entries to the model, and `llama-index-protocols-ag-ui` drops `context` and flattens frontend-tool parameters to strings (entries above). No LlamaIndex agent is shown anywhere in the section.
+[Components and surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components) and its sub-pages need `@copilotkit/react-core/v2/generative-ui` (absent in 1.75.1). The frontend is now on CopilotKit ^1.87.0 (lockfile 1.87.1), `@ag-ui/client`/`@ag-ui/core` 1.0.2 (pinned and overridden to the exact version 1.87.1 depends on) and `@ag-ui/llamaindex` ^0.3.0 (0.2.0 does not accept `@ag-ui` 1.x). The only agent the section prints is a CopilotKit `BuiltInAgent` TanStack factory; here it is the `/components` LlamaIndex router (`backend/agents.py: create_components_router`: the page's prompt, no tools), served to `/api/copilotkit-genui` and `/api/copilotkit-genui-transports` (`generativeUI: true`).
+
+It cannot render anything, for two reasons in `llama-index-protocols-ag-ui` (checked in 0.5.0, installed, and 0.6.0, latest — identical here), not patched:
+- `render_ui`'s schema is `{ target: string, operations: array of objects }`. `_ag_ui_tool_to_llama_index` gives every injected-tool parameter the type `str` (entry above), so the model sends `operations` as a string. The runtime's `RenderUIArgsScanner` only collects operations from a JSON array, so it finds none and nothing renders.
+- The workflow never reads `input_data.context`. The runtime puts the `render_ui` guide there, and markdown mode puts the component schema and the fence guide there, so the model never learns the format.
+
+The section says "Your agent must use the tools and the context entries of the run" and names `CopilotKitMiddleware` for LangGraph only; nothing is shown for LlamaIndex. Not filled in either: Surfaces' `FeaturedProducts` (`Product`, `products`) and per-item target (`product`); Catalogs' `cartUI`; Standard catalog's `ProductCard`/`productSchema`; all of State and actions; Transports' `shop` agent; Markdown mode's own-prompt Python fragment. Borrowed (UI only): `Airport`, `Arrow` from aws-strands-ts. Nothing here has been run in a browser.
 
 ### MCP Apps — skipped
 
@@ -785,15 +792,15 @@ Every doc page this repo tests against, grouped as the LlamaIndex sidebar groups
 
 - [A2UI — Dynamic Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema) *(sidebar: Declarative)*
 - [A2UI — Fixed Schema](https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema) *(sidebar: Declarative)*
-- [Components — Components and surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components) *(sidebar: Declarative › Components and surfaces)* — reference only
-- [Components — Surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components/surfaces) *(sidebar: Declarative › Components and surfaces)* — reference only
-- [Components — Catalogs](https://docs.copilotkit.ai/llamaindex/generative-ui/components/catalogs) *(sidebar: Declarative › Components and surfaces)* — reference only
-- [Components — Standard catalog](https://docs.copilotkit.ai/llamaindex/generative-ui/components/standard-catalog) *(sidebar: Declarative › Components and surfaces)* — reference only
+- [Components — Components and surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components) *(sidebar: Declarative › Components and surfaces)* — demo wired, broken (adapter)
+- [Components — Surfaces](https://docs.copilotkit.ai/llamaindex/generative-ui/components/surfaces) *(sidebar: Declarative › Components and surfaces)* — demo wired, broken (adapter)
+- [Components — Catalogs](https://docs.copilotkit.ai/llamaindex/generative-ui/components/catalogs) *(sidebar: Declarative › Components and surfaces)* — demo wired, broken (adapter)
+- [Components — Standard catalog](https://docs.copilotkit.ai/llamaindex/generative-ui/components/standard-catalog) *(sidebar: Declarative › Components and surfaces)* — demo wired, broken (adapter)
 - [Components — State and actions](https://docs.copilotkit.ai/llamaindex/generative-ui/components/state-and-actions) *(sidebar: Declarative › Components and surfaces)* — reference only
-- [Components — Theming](https://docs.copilotkit.ai/llamaindex/generative-ui/components/theming) *(sidebar: Declarative › Components and surfaces)* — reference only
-- [Components — Transports](https://docs.copilotkit.ai/llamaindex/generative-ui/components/transports) *(sidebar: Declarative › Components and surfaces)* — reference only
-- [Components — Markdown mode](https://docs.copilotkit.ai/llamaindex/generative-ui/components/markdown-mode) *(sidebar: Declarative › Components and surfaces)* — reference only
-- [Components — Adopt from A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/components/from-a2ui) *(sidebar: Declarative › Components and surfaces)* — reference only
+- [Components — Theming](https://docs.copilotkit.ai/llamaindex/generative-ui/components/theming) *(sidebar: Declarative › Components and surfaces)* — demo wired, broken (adapter)
+- [Components — Transports](https://docs.copilotkit.ai/llamaindex/generative-ui/components/transports) *(sidebar: Declarative › Components and surfaces)* — demo wired, broken (adapter)
+- [Components — Markdown mode](https://docs.copilotkit.ai/llamaindex/generative-ui/components/markdown-mode) *(sidebar: Declarative › Components and surfaces)* — demo wired, broken (adapter)
+- [Components — Adopt from A2UI](https://docs.copilotkit.ai/llamaindex/generative-ui/components/from-a2ui) *(sidebar: Declarative › Components and surfaces)* — demo wired, broken (adapter)
 - [Open Generative UI](https://docs.copilotkit.ai/llamaindex/generative-ui/open-generative-ui) *(sidebar: Open-ended)*
 - [MCP Apps](https://docs.copilotkit.ai/llamaindex/generative-ui/mcp-apps) — not implemented
 

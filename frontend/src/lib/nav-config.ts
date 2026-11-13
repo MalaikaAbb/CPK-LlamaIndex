@@ -256,43 +256,47 @@ export const NAV: NavGroup[] = [
       },
       {
         path: "/generative-ui/components",
+        hasDemo: true,
         title: "Components · Components and surfaces",
         docPath: "/llamaindex/generative-ui/components",
         summary:
           "Overview and setup: a catalog on the provider lets the agent render real components in the chat or in page areas.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text. The page's setup runs a CopilotKit BuiltInAgent (TanStack factory) as the agent, which this harness would swap for a LlamaIndex router; the provider config is the CopilotKit part.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: the page's standardUI provider.",
       },
       {
         path: "/generative-ui/components/surfaces",
+        hasDemo: true,
         title: "Components · Surfaces",
         docPath: "/llamaindex/generative-ui/components/surfaces",
         summary:
           "Where generated UI renders: the chat, or named page targets the agent can fill, limit, scroll to, or repeat per item.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: error-boundary provider, 'featured' (limited) and 'sidebar-notes' targets. Not mounted: FeaturedProducts and the per-item target (undefined products/Product/product).",
       },
       {
         path: "/generative-ui/components/catalogs",
+        hasDemo: true,
         title: "Components · Catalogs",
         docPath: "/llamaindex/generative-ui/components/catalogs",
         summary:
           "Declaring the components the agent may use, with typed props, schema libraries, combined catalogs and an A2UI export.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: shopUI. Not mounted: Combine/export (undefined cartUI); schema-library and positional-order fragments.",
       },
       {
         path: "/generative-ui/components/standard-catalog",
+        hasDemo: true,
         title: "Components · Standard catalog",
         docPath: "/llamaindex/generative-ui/components/standard-catalog",
         summary:
           "The 69 ready-made components, and how to add, drop or replace entries.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: as is, omit, overrides. Not mounted: extend (undefined ProductCard, productSchema).",
       },
       {
         path: "/generative-ui/components/state-and-actions",
@@ -302,47 +306,51 @@ export const NAV: NavGroup[] = [
           "Binding live app state into generated UI, running your functions on click, sending clicks to the agent, and keeping user input.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+          "Reference only, no backend. Every sample needs pieces the page never defines (Cart type and cart instance, ProductCard) or is a fragment (events, writable, function declarations), so nothing is mounted.",
       },
       {
         path: "/generative-ui/components/theming",
+        hasDemo: true,
         title: "Components · Theming",
         docPath: "/llamaindex/generative-ui/components/theming",
         summary:
           "Colors, fonts and dark mode for the standard components through CSS variables and a theme map.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: provider theme, CSS variables, dark-mode script. Shown only: per-mode/map fragments, theme file.",
       },
       {
         path: "/generative-ui/components/transports",
+        hasDemo: true,
         title: "Components · Transports",
         docPath: "/llamaindex/generative-ui/components/transports",
         summary:
           "Choosing between the render_ui tool and UI written inside the agent's markdown reply, per agent.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text. Both transports need the agent to pass the run's tools and context entries to its model; the page names CopilotKitMiddleware for LangGraph and says nothing for LlamaIndex.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted on a generativeUI: true runtime: tool, markdown, agentIds as default. No shop agent is published.",
       },
       {
         path: "/generative-ui/components/markdown-mode",
+        hasDemo: true,
         title: "Components · Markdown mode",
         docPath: "/llamaindex/generative-ui/components/markdown-mode",
         summary:
           "The agent writes UI in a2ui code blocks inside its reply, with no tool call; includes the forwarded-props envelope for building your own prompt.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text. The page's backend example reads forwarded props in a generic Python snippet; no LlamaIndex router is shown.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: both providers; markdown mode depends entirely on the dropped context.",
       },
       {
         path: "/generative-ui/components/from-a2ui",
+        hasDemo: true,
         title: "Components · Adopt from A2UI",
         docPath: "/llamaindex/generative-ui/components/from-a2ui",
         summary:
           "Migrating from the a2ui renderer (A2UI v0.9) to components and surfaces (A2UI 1.0), with the mapping and support matrix.",
         status: "broken",
         statusNote:
-          "Reference only. Needs @copilotkit/react-core 1.85+ (the /v2/generative-ui entry and the provider's generativeUI prop); this repo pins 1.75.1. Snippets shown as text.",
+          "Wired to the /components LlamaIndex router (standing in for the section's BuiltInAgent; page prompt, no tools) on CopilotKit 1.87. Expected: no UI — llama-index-protocols-ag-ui turns render_ui's operations array into a string and drops the run's context (guide/schema). Not browser-checked. Mounted: the After catalog; Airport/Arrow borrowed from aws-strands-ts.",
       },
       {
         path: "/generative-ui/open-generative-ui",

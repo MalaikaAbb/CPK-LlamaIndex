@@ -8,6 +8,7 @@ export default function Page() {
       path="/generative-ui/components/surfaces"
       summary="Where generated UI renders: the chat, or named page targets the agent can fill, limit, scroll to, or repeat per item."
       snippets={SNIPPETS}
+      live
     />
   );
 }

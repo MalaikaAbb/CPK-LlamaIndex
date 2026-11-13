@@ -8,6 +8,7 @@ export default function Page() {
       path="/generative-ui/components/theming"
       summary="Colors, fonts and dark mode for the standard components through CSS variables and a theme map."
       snippets={SNIPPETS}
+      live
     />
   );
 }
