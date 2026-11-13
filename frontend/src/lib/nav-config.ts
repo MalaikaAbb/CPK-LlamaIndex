@@ -156,7 +156,9 @@ export const NAV: NavGroup[] = [
         docPath: "/llamaindex/custom-look-and-feel/slots",
         summary:
           "Replacing chat sub-components at three levels: class strings, prop overrides, and whole components.",
-        status: "working",
+        status: "partial",
+        statusNote:
+          "The three slot levels work. The page's new groupMessages example is shown as reference only: its helpers (messageGroup, messageRow) need @copilotkit/react-core 1.79+, and this repo pins 1.75.1.",
         offNav: true,
       },
       {
