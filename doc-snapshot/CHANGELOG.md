@@ -8,6 +8,149 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-11-13
+
+### 11:10 UTC — 18 pages, highest severity high
+
+**High — A2UI · Dynamic Schema**
+
+`/llamaindex/generative-ui/a2ui/dynamic-schema` · route `/generative-ui/a2ui/dynamic-schema` · under “Implement the React renderers” · in a `typescript` block
+
+4 code lines changed.
+
+````diff
+- ? "text-emerald-600"
++ ? "text-emerald-600 dark:text-emerald-400"
+- ? "text-rose-600"
++ ? "text-rose-600 dark:text-rose-400"
+````
+
+**High — A2UI · Fixed Schema**
+
+`/llamaindex/generative-ui/a2ui/fixed-schema` · route `/generative-ui/a2ui/fixed-schema` · under “Implement the React renderers” · in a `typescript` block
+
+16 code lines changed.
+
+````diff
+- <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
++ <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500 dark:text-muted-foreground">
+- <h3 className="text-base font-semibold leading-none tracking-tight text-neutral-900">
++ <h3 className="text-base font-semibold leading-none tracking-tight text-neutral-900 dark:text-foreground">
+- <span className="font-mono text-2xl font-semibold tracking-wider text-neutral-900">
++ <span className="font-mono text-2xl font-semibold tracking-wider text-neutral-900 dark:text-foreground">
+- <Separator className="flex-1 bg-neutral-200" />
++ <Separator className="flex-1 bg-neutral-200 dark:bg-border" />
+````
+
+**High — Sub-Agents**
+
+`/llamaindex/multi-agent/subagents` · route `/multi-agent/subagents` · under “Rendering a live delegation log” · in a `typescript` block
+
+30 code lines changed.
+
+````diff
+- className="w-full h-full flex flex-col bg-white rounded-2xl shadow-sm border border-[#DBDBE5] overflow-hidden"
++ className="w-full h-full flex flex-col bg-white rounded-2xl shadow-sm border border-[#DBDBE5] overflow-hidden dark:bg-card dark:border-border"
+- <div className="flex items-center justify-between px-6 py-3 border-b border-[#E9E9EF] bg-[#FAFAFC]">
++ <div className="flex items-center justify-between px-6 py-3 border-b border-[#E9E9EF] bg-[#FAFAFC] dark:border-border dark:bg-muted">
+- <span className="text-lg font-semibold text-[#010507]">
++ <span className="text-lg font-semibold text-[#010507] dark:text-foreground">
+- className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-[#BEC2FF] bg-[#BEC2FF1A] text-[#010507] text-[10px] font-semibold uppercase tracking-[0.12em]"
++ className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-[#BEC2FF] bg-[#BEC2FF1A] text-[#010507] text-[10px] font-semibold uppercase tracking-[0.12em] dark:text-foreground"
+````
+
+**Info — Declarative · A2UI**
+
+`/llamaindex/generative-ui/a2ui` · route `/generative-ui/a2ui`
+
+Now tracked for the first time.
+
+**Info — Components · Components and surfaces**
+
+`/llamaindex/generative-ui/components` · route `/generative-ui/components`
+
+Now tracked for the first time.
+
+**Info — Components · Catalogs**
+
+`/llamaindex/generative-ui/components/catalogs` · route `/generative-ui/components/catalogs`
+
+Now tracked for the first time.
+
+**Info — Components · Markdown mode**
+
+`/llamaindex/generative-ui/components/markdown-mode` · route `/generative-ui/components/markdown-mode`
+
+Now tracked for the first time.
+
+**Info — Components · Standard catalog**
+
+`/llamaindex/generative-ui/components/standard-catalog` · route `/generative-ui/components/standard-catalog`
+
+Now tracked for the first time.
+
+**Info — Components · State and actions**
+
+`/llamaindex/generative-ui/components/state-and-actions` · route `/generative-ui/components/state-and-actions`
+
+Now tracked for the first time.
+
+**Info — Components · Surfaces**
+
+`/llamaindex/generative-ui/components/surfaces` · route `/generative-ui/components/surfaces`
+
+Now tracked for the first time.
+
+**Info — Components · Theming**
+
+`/llamaindex/generative-ui/components/theming` · route `/generative-ui/components/theming`
+
+Now tracked for the first time.
+
+**Info — Components · Transports**
+
+`/llamaindex/generative-ui/components/transports` · route `/generative-ui/components/transports`
+
+Now tracked for the first time.
+
+**Info — Declarative · Hashbrown**
+
+`/llamaindex/generative-ui/hashbrown` · route `/generative-ui/hashbrown`
+
+Now tracked for the first time.
+
+**Info — Declarative · JSON Render**
+
+`/llamaindex/generative-ui/json-render` · route `/generative-ui/json-render`
+
+Now tracked for the first time.
+
+**Info — Controlled · Components as Tools**
+
+`/llamaindex/generative-ui/tool-based` · route `/generative-ui/tool-based`
+
+Now tracked for the first time.
+
+**Info — Headless Interrupts**
+
+`/llamaindex/human-in-the-loop/headless` · route `/human-in-the-loop/headless`
+
+Now tracked for the first time.
+
+**Info — Pausing the Agent for Input**
+
+`/llamaindex/human-in-the-loop/useInterrupt` · route `/human-in-the-loop/useInterrupt`
+
+Now tracked for the first time.
+
+**Info — WebMCP**
+
+`/llamaindex/webmcp` · route `/webmcp`
+
+Now tracked for the first time.
+
+---
+
 ## 2026-11-11
 
 ### 14:10 UTC — 21 pages, highest severity high
@@ -258,6 +401,8 @@ Now tracked for the first time.
 
 ---
 
+---
+
 ## 2026-09-30
 
 ### 12:49 UTC — 13 pages, highest severity high
@@ -470,54 +615,6 @@ Now tracked for the first time.
 - title="Fully Headless UI"
 + title="Headless UI"
 ````
-
----
-
----
-
-## 2026-08-31
-
-### 12:05 UTC — 5 pages, highest severity low
-
-**Low — Quickstart**
-
-`/llamaindex/quickstart` · route `/quickstart` · under “Quickstart”
-
-7 prose lines changed.
-
-````diff
-- <OpsPlatformCTA
-- variant="card"
-- title="Ship LlamaIndex to production"
-- body="Add persistent threads and the inspector with CopilotKit Intelligence."
-- ctaLabel="Create a free account"
-+ <IntelligenceOnboardingPrompt
-+ feature="learning"
-````
-
-**Info — Headless Threads**
-
-`/llamaindex/headless-threads` · route `/headless-threads`
-
-Now tracked for the first time.
-
-**Info — Threads Drawer**
-
-`/llamaindex/prebuilt-components/copilot-threads-drawer` · route `/prebuilt-components/copilot-threads-drawer`
-
-Now tracked for the first time.
-
-**Info — Synchronize Thread History**
-
-`/llamaindex/threads-import` · route `/threads-import`
-
-Now tracked for the first time.
-
-**Info — Thread & History Lifecycle**
-
-`/llamaindex/threads-lifecycle` · route `/threads-lifecycle`
-
-Now tracked for the first time.
 
 ---
 
