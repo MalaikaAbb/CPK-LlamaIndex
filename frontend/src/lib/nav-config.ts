@@ -213,6 +213,17 @@ export const NAV: NavGroup[] = [
         offNav: true,
       },
       {
+        path: "/generative-ui/tool-based",
+        hasDemo: true,
+        title: "Controlled · Components as Tools",
+        docPath: "/llamaindex/generative-ui/tool-based",
+        summary:
+          "Bar and pie chart components registered with useComponent, which the agent calls like tools to draw them in the chat.",
+        status: "partial",
+        statusNote:
+          "Built from the page's demo Code tab; not yet checked in a browser. The agent's unpublished agents._openai_models import is swapped for the page's own llama_index.llms.openai import, and the unpublished ./suggestions hook is commented out. Model id gpt-6-luna is the doc's literal. The adapter flattens frontend-tool params to strings, so the charts' data array may arrive as a string.",
+      },
+      {
         path: "/generative-ui/tool-rendering",
         hasDemo: true,
         title: "Tool Rendering",
