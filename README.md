@@ -394,7 +394,7 @@ The next three routes are built from each page's **demo Code tab** — the full 
 | Doc page | Route | Status | Notes |
 | --- | --- | --- | --- |
 | [Introduction](https://docs.copilotkit.ai/llamaindex) | `/` | ✅ Working | Reference/landing page with a live health probe. |
-| [Quickstart](https://docs.copilotkit.ai/llamaindex/quickstart?agent=bring-your-own) | `/quickstart` | ✅ Working | Demo runs on the doc's own `providers.tsx` via a route layout. Model id in the sample does not exist — see Known issues. |
+| [Quickstart](https://docs.copilotkit.ai/llamaindex/quickstart?agent=bring-your-own) | `/quickstart` | ⚠️ Partial | Demo runs on the doc's own `providers.tsx` via a route layout. The page's new `OpenAILike(..., reasoning_effort="none")` LLM is not wired; backend still builds `OpenAI(...)`. See Known issues. |
 | [Prebuilt Components](https://docs.copilotkit.ai/llamaindex/prebuilt-components) | `/prebuilt-components` | ✅ Working | Doc page renders from a component, so there is no markdown sample to diff. |
 | [Threads Drawer](https://docs.copilotkit.ai/llamaindex/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ✅ Working | Needs Intelligence mode; renders a locked view without a key. |
 | [Headless Threads](https://docs.copilotkit.ai/llamaindex/headless-threads) | `/headless-threads` | ✅ Working | Needs Intelligence mode. Implements rename, which the drawer omits. |
@@ -507,6 +507,10 @@ Renamed across the docs on 2026-08-26 (see `doc-snapshot/CHANGELOG.md`). The old
 ### `OpenAI(model="gpt-6-luna")` — every Python sample
 
 Every LlamaIndex doc page opens with this line. Until the November 2026 sync it read `gpt-5.4`, which the OpenAI API did not serve, so a verbatim copy failed on the first request with a model-not-found error. The pages now print `gpt-6-luna` (seen on Quickstart, Tool Rendering, State Rendering and the Shared State pages); this harness hasn't confirmed that id is served either. `backend/llm.py` keeps the shape of the call, defaults to `gpt-4o-mini`, and reads `OPENAI_CHAT_MODEL_ID` as the override. Set that variable to `gpt-6-luna` to reproduce the published behaviour.
+
+### Quickstart: `OpenAILike` with `reasoning_effort`, not wired
+
+[Quickstart](https://docs.copilotkit.ai/llamaindex/quickstart?agent=bring-your-own). The `main.py` sample now builds `OpenAILike(model="gpt-6-luna", context_window=1_050_000, is_chat_model=True, is_function_calling_model=True, additional_kwargs={"reasoning_effort": "none"})` and the install line swaps `llama-index-llms-openai` for `llama-index-llms-openai-like`. Every other LlamaIndex page still prints `OpenAI(model=...)`, so the docs no longer agree on how to build the LLM. This repo hasn't followed the Quickstart: its `my_agent` router is shared with Tool Rendering and the stateless routes, `reasoning_effort` would likely be rejected by the harness's default non-reasoning `gpt-4o-mini`, and `llama-index-llms-openai-like` isn't installed. `/quickstart` shows the new block verbatim as reference and is marked Partial.
 
 ### `useAgent` has no `initialState` and no `render`
 

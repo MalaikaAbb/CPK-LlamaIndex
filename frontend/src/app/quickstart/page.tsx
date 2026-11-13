@@ -1,6 +1,21 @@
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode, SourceCodeGroup } from "@/components/source-code";
-import { Callout, Panel, TryIt } from "@/components/ui";
+import { Callout, CodeBlock, Panel, TryIt } from "@/components/ui";
+
+// Verbatim from the Quickstart's main.py (Nov 2026): the LLM block and the
+// install line that changed. Shown as text; backend/llm.py does not build it.
+const DOC_LLM_SNIPPET = `from llama_index.llms.openai_like import OpenAILike
+
+# Initialize the LLM
+llm = OpenAILike(
+    model="gpt-6-luna",
+    context_window=1_050_000,
+    is_chat_model=True,
+    is_function_calling_model=True,
+    additional_kwargs={"reasoning_effort": "none"},
+)`;
+
+const DOC_INSTALL_SNIPPET = `uv add llama-index llama-index-llms-openai-like llama-index-protocols-ag-ui fastapi uvicorn`;
 
 export default function Page() {
   return (
@@ -130,6 +145,40 @@ export default function Page() {
           ]}
         />
       </Panel>
+
+      <Callout tone="warn" title="The Quickstart's LLM changed, and this harness hasn't followed">
+        <p>
+          The page now builds the model with <code>OpenAILike</code> from the
+          separate <code>llama-index-llms-openai-like</code> package, declares
+          it a chat + function-calling model with a 1,050,000-token window,
+          and sends <code>reasoning_effort: &quot;none&quot;</code> on every
+          request. This repo still builds plain <code>OpenAI(...)</code> in{" "}
+          <code>backend/llm.py</code> on <code>gpt-4o-mini</code>:
+        </p>
+        <ul className="mt-2 space-y-1.5">
+          <li>
+            · The same router also serves Tool Rendering and every stateless
+            route, and those pages still print <code>OpenAI(model=...)</code>.
+          </li>
+          <li>
+            · <code>reasoning_effort</code> is a reasoning-model parameter;
+            the harness default <code>gpt-4o-mini</code> is not a reasoning
+            model, so passing it unchanged would likely make every run fail
+            with a 400.
+          </li>
+          <li>
+            · <code>llama-index-llms-openai-like</code> is not in{" "}
+            <code>backend/pyproject.toml</code>.
+          </li>
+        </ul>
+        <p className="mt-2">
+          The published code is below, verbatim. See README Known issues.
+        </p>
+        <div className="mt-3 space-y-3">
+          <CodeBlock filename="main.py (LLM block)" language="python" code={DOC_LLM_SNIPPET} />
+          <CodeBlock filename="Install" language="bash" code={DOC_INSTALL_SNIPPET} />
+        </div>
+      </Callout>
 
       <Panel
         title="Step 1: the license key"

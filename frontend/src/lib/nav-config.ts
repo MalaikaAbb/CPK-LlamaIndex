@@ -80,7 +80,9 @@ export const NAV: NavGroup[] = [
         docPath: "/llamaindex/quickstart?agent=bring-your-own",
         summary:
           "The bring-your-own-agent path: an AG-UI workflow router, a runtime route, and a chat.",
-        status: "working",
+        status: "partial",
+        statusNote:
+          "Chat works. The page's main.py now builds OpenAILike(model=\"gpt-6-luna\", reasoning_effort none) from llama-index-llms-openai-like; the backend still uses OpenAI(...) on gpt-4o-mini and the new snippet is shown as reference only.",
       },
     ],
   },
