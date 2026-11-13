@@ -7,6 +7,16 @@ import type { DocSnippet } from "../_shared/reference-page";
 
 export const SNIPPETS: DocSnippet[] = [
   {
+    "filename": "1.0 with the a2ui renderer: basic catalog (React)",
+    "language": "tsx",
+    "code": "import { basicCatalogV1 } from \"@copilotkit/a2ui-renderer\";\n\n<CopilotKit runtimeUrl=\"/api/copilotkit\" a2ui={{ catalog: basicCatalogV1 }}>\n  {/* Your app */}\n</CopilotKit>"
+  },
+  {
+    "filename": "1.0 with the a2ui renderer: custom catalog (React)",
+    "language": "tsx",
+    "code": "import { z } from \"zod\";\nimport {\n  createCatalog,\n  DynamicStringSchemaV1,\n} from \"@copilotkit/a2ui-renderer\";\n\nconst myCatalog = createCatalog(\n  { Greeting: { props: z.object({ name: DynamicStringSchemaV1 }) } },\n  { Greeting: ({ props }) => <p>Hello {props.name}</p> },\n  {\n    catalogId: \"acme/greetings@1\",\n    protocolVersion: \"1.0\",\n    includeBasicCatalog: true,\n  },\n);"
+  },
+  {
     "filename": "Before (React)",
     "language": "tsx",
     "code": "<CopilotKit runtimeUrl=\"/api/copilotkit\" a2ui={{ catalog: myCatalog }}>"
