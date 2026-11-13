@@ -46,7 +46,7 @@ as this guide uses it as a starting point.
     from llama_index.protocols.ag_ui.router import get_ag_ui_workflow_router
 
     # Initialize the LLM
-    llm = OpenAI(model="gpt-5.4")
+    llm = OpenAI(model="gpt-6-luna")
 
     # Create the AG-UI workflow router
     agentic_chat_router = get_ag_ui_workflow_router(

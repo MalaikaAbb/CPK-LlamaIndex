@@ -4,12 +4,31 @@ import {
   CopilotChat,
   CopilotChatConfigurationProvider,
   CopilotThreadsDrawer,
+  useCopilotChatConfiguration,
 } from "@copilotkit/react-core/v2";
 
 import { DemoFrame } from "@/components/demo-frame";
 
 /** The runtime id this demo binds to. Also shown in the demo header. */
 const AGENT_ID = "my_agent";
+
+/**
+ * Verbatim from the page's "Add your own New conversation button" sample. It
+ * calls the same configuration `startNewThread()` the drawer's own row calls,
+ * so it only works inside the shared `CopilotChatConfigurationProvider`.
+ */
+function NewConversationButton() {
+  const configuration = useCopilotChatConfiguration();
+
+  return (
+    <button
+      type="button"
+      onClick={() => configuration?.startNewThread()}
+    >
+      New conversation
+    </button>
+  );
+}
 
 /**
  * The doc's whole integration: a drawer and a chat inside one shared
@@ -23,6 +42,9 @@ const AGENT_ID = "my_agent";
  *
  * `CopilotKitProvider` is not repeated here; the app already mounts one at the
  * root. The doc nests them because its sample is a whole page.
+ *
+ * The header button is the page's own-button sample: a second way to start a
+ * fresh thread, outside the drawer.
  *
  * One departure, and it is presentational only. The doc's wrapper is
  * `<div style={{ display: "flex", height: "100dvh" }}>` with the two components
@@ -41,9 +63,14 @@ export default function Page() {
       <CopilotChatConfigurationProvider agentId={AGENT_ID}>
         <div style={{ display: "flex", height: "100%" }}>
           <CopilotThreadsDrawer />
-          <div style={{ flex: 1, minWidth: 0 }}>
+          {/* The doc's <main> + <header> layout from the button sample; only
+              minWidth: 0 is added, for the reason given above. */}
+          <main style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+            <header>
+              <NewConversationButton />
+            </header>
             <CopilotChat />
-          </div>
+          </main>
         </div>
       </CopilotChatConfigurationProvider>
     </DemoFrame>

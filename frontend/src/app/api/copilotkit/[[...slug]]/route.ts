@@ -52,6 +52,12 @@ const agents = {
   // Sub-Agents: the supervisor from the page's demo code, mounted by
   // `backend/main.py` at the `/subagents` prefix its own route.ts names.
   subagents: new LlamaIndexAgent({ url: `${AGENT_URL}/subagents/run` }),
+
+  // Components as Tools: the page's demo-code router, mounted by
+  // `backend/main.py` at `/gen-ui-tool-based` (the subpath its route.ts names).
+  "gen-ui-tool-based": new LlamaIndexAgent({
+    url: `${AGENT_URL}/gen-ui-tool-based/run`,
+  }),
 };
 
 /**

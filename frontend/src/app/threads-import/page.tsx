@@ -5,7 +5,10 @@ const DRY_RUN_SNIPPET = `# ADK
 npx copilotkit@latest import --source adk --dry-run
 
 # LangGraph
-npx copilotkit@latest import --source langgraph --dry-run`;
+npx copilotkit@latest import --source langgraph --user-source metadata.user_id --dry-run
+
+# Mastra
+npx copilotkit@latest import --source mastra --dry-run`;
 
 const DEST_SNIPPET = `export INTELLIGENCE_API_URL="https://..."
 export INTELLIGENCE_API_KEY="cpk_..."`;
@@ -22,12 +25,12 @@ const IMPORTED: string[] = [
   "tool calls and tool results",
   "reasoning traces when the source exposes them",
   "media that can be resolved during extraction",
+  "saved agent state, where the source supports it",
   "original timestamps",
   "import provenance and per-conversation import outcomes",
 ];
 
 const NOT_IMPORTED: string[] = [
-  "agent state snapshots",
   "framework transport noise",
   "LangSmith traces",
   "unsupported source stores",
@@ -41,11 +44,16 @@ export default function Page() {
       <Callout tone="warn" title="There is no LlamaIndex importer — this route is notes only">
         <p>
           Every other route in this harness runs. This one cannot, and the reason
-          is on the doc page itself: &ldquo;Built-in import currently supports
-          Google ADK and LangGraph, with more sources coming soon.&rdquo; The
-          supported-sources table lists exactly those two, each linking to a
-          framework-specific guide (<code>/google-adk/threads-import</code>,{" "}
-          <code>/langgraph-python/threads-import</code>). Neither applies here.
+          is on the doc page itself: its supported-sources table now lists
+          Google ADK, LangGraph, Mastra and AWS Strands (Python and
+          TypeScript), each linking to a framework-specific guide
+          (<code>/google-adk/threads-import</code>,{" "}
+          <code>/langgraph-python/threads-import</code>,{" "}
+          <code>/mastra/threads-import</code>,{" "}
+          <code>/strands/threads-import</code>,{" "}
+          <code>/strands-typescript/threads-import</code>). LlamaIndex is not
+          among them, and the dry-run tabs have no LlamaIndex source (only
+          ADK, LangGraph and Mastra commands are printed).
         </p>
         <p className="mt-2">
           So there is nothing to demo, and nothing was invented to fill the gap.
@@ -103,10 +111,12 @@ export default function Page() {
               1. Confirm the target project
             </p>
             <p className="mt-1">
-              The importer targets the project selected when the app was created.
-              To send threads elsewhere, select it first — the command rewrites
-              the project for the current directory and writes its
-              project-scoped key to the generated <code>.env</code>.
+              The destination is chosen by the Intelligence project&apos;s
+              app-api URL and project-scoped runtime key, exported in step 4.
+              For an app created with the CLI, a cloud-hosted project can be
+              picked with the command below, which rewrites the project for the
+              current directory and writes its key to the generated{" "}
+              <code>.env</code>.
             </p>
             <div className="mt-2">
               <CodeBlock filename="Terminal" language="bash" code={PROJECT_SNIPPET} />
@@ -133,8 +143,10 @@ export default function Page() {
             </p>
             <p className="mt-1">
               Each source agent key maps to the <code>agentId</code> your live
-              runtime uses. Keeping the labels aligned is what stops imported
-              history and future traffic from splitting across two ids.
+              runtime uses; import and later runs must use the same id. The
+              imported conversation&apos;s user id must also equal what your
+              runtime&apos;s <code>identifyUser</code> returns, or the owner
+              won&apos;t see it.
             </p>
             <div className="mt-2">
               <CodeBlock
@@ -171,11 +183,12 @@ export default function Page() {
               5. Import, then verify
             </p>
             <p className="mt-1">
-              Re-running the same import is safe — already-imported
-              conversations are skipped, and <code>--replace</code> is the opt-in
-              for refreshing them. Verification is manual: open the Threads
-              Drawer, select an imported conversation, and confirm its history
-              appears in the chat.
+              Already-imported threads are skipped by default;{" "}
+              <code>--replace</code> refreshes them but leaves running or
+              continued threads alone. Verification is manual: sign in as the
+              user the conversation was imported for, open it from the Threads
+              Drawer, check the history appears, then send a message and check
+              the native framework carries on the same conversation.
             </p>
           </li>
         </ol>

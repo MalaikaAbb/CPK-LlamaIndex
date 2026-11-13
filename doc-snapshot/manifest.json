@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/llamaindex",
-  "syncedAt": "2026-09-30T12:49:36.414Z",
+  "syncedAt": "2026-11-11T14:10:10.577Z",
   "pages": {
     "/llamaindex": {
       "file": "llamaindex.md",
@@ -14,31 +14,31 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
     },
     "/llamaindex/ag-ui": {
       "file": "llamaindex__ag-ui.md",
-      "sha256": "cff8476774b5a6895307a20e3c856751cf29a3ac47ac74043278a3d1b4c6fbda",
-      "bytes": 3919,
-      "lines": 123,
+      "sha256": "b4a81f4b8fef821d35a9c38ce81a4de385263f926e1155b2f0a5f1b346508b20",
+      "bytes": 4092,
+      "lines": 126,
       "routes": [
         "/ag-ui"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
     },
     "/llamaindex/copilot-runtime": {
       "file": "llamaindex__copilot-runtime.md",
-      "sha256": "feee3e96aba725bda0d031e7de7133408b5c9b3602ad5b9a138e6b45f2d5ccb0",
-      "bytes": 10276,
-      "lines": 263,
+      "sha256": "72196cd0410756602c1d8d07a4a68179992768e4bdd4bad6c8dbcc27ea36763d",
+      "bytes": 11786,
+      "lines": 284,
       "routes": [
         "/copilot-runtime"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
     },
     "/llamaindex/custom-look-and-feel/headless-ui": {
       "file": "llamaindex__custom-look-and-feel__headless-ui.md",
@@ -50,19 +50,19 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
     },
     "/llamaindex/custom-look-and-feel/slots": {
       "file": "llamaindex__custom-look-and-feel__slots.md",
-      "sha256": "e82b54f4968bced6b8bd02b32a4f722fdbd12f0e1fc2108ac669a20189a0e915",
-      "bytes": 12311,
-      "lines": 342,
+      "sha256": "f3064dcaa5d51aec4ee880c460c3119c4ab5fd977928c17853363e3dfe83d1eb",
+      "bytes": 16223,
+      "lines": 424,
       "routes": [
         "/custom-look-and-feel/slots"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
     },
     "/llamaindex/frontend-tools": {
       "file": "llamaindex__frontend-tools.md",
@@ -74,31 +74,67 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
+    },
+    "/llamaindex/generative-ui/a2ui/dynamic-schema": {
+      "file": "llamaindex__generative-ui__a2ui__dynamic-schema.md",
+      "sha256": "bd0c4ac1912e43b758d0163a575c1b7bd721f019d49451fdbe852238cb953aaa",
+      "bytes": 19696,
+      "lines": 574,
+      "routes": [
+        "/generative-ui/a2ui/dynamic-schema"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
+    },
+    "/llamaindex/generative-ui/a2ui/fixed-schema": {
+      "file": "llamaindex__generative-ui__a2ui__fixed-schema.md",
+      "sha256": "1500124a8ead89ebafa4d95506dd94b51f60f4168eaf49dff882d62c42117429",
+      "bytes": 27626,
+      "lines": 760,
+      "routes": [
+        "/generative-ui/a2ui/fixed-schema"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
+    },
+    "/llamaindex/generative-ui/open-generative-ui": {
+      "file": "llamaindex__generative-ui__open-generative-ui.md",
+      "sha256": "ea5bcec6aa280434c3518a69c4e0b4373c331407feb7565f1e013fdea42971a3",
+      "bytes": 11790,
+      "lines": 298,
+      "routes": [
+        "/generative-ui/open-generative-ui"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/generative-ui/state-rendering": {
       "file": "llamaindex__generative-ui__state-rendering.md",
-      "sha256": "c686a557201ca7c89eee5c5fabc31dbbb9a721a1245da5d47bce493d372b0259",
-      "bytes": 8190,
+      "sha256": "4aa553f48896bb45b8631cb5c62b857d5e82d66d508310c0eaf315c981c052cc",
+      "bytes": 8193,
       "lines": 259,
       "routes": [
         "/generative-ui/state-rendering"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
     },
     "/llamaindex/generative-ui/tool-rendering": {
       "file": "llamaindex__generative-ui__tool-rendering.md",
-      "sha256": "6d9c948d384512b6c99f6eef541c945d33412cc31dfa22e9e352c2c02b4a9675",
-      "bytes": 5374,
+      "sha256": "386c8a08080ddc54a78962489a72d07a39057c0e31dd2c13df78d32d6fdd828c",
+      "bytes": 5377,
       "lines": 174,
       "routes": [
         "/generative-ui/tool-rendering"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
     },
     "/llamaindex/generative-ui/your-components/display-only": {
       "file": "llamaindex__generative-ui__your-components__display-only.md",
@@ -110,7 +146,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:11 GMT"
     },
     "/llamaindex/generative-ui/your-components/interactive": {
       "file": "llamaindex__generative-ui__your-components__interactive.md",
@@ -122,7 +158,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/headless-threads": {
       "file": "llamaindex__headless-threads.md",
@@ -134,19 +170,43 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
+    },
+    "/llamaindex/human-in-the-loop/governed-actions": {
+      "file": "llamaindex__human-in-the-loop__governed-actions.md",
+      "sha256": "c3ffbf2aa5a8b697765c47f5668c9ac1f3608ae778728bb504b77c18a995214b",
+      "bytes": 7168,
+      "lines": 256,
+      "routes": [
+        "/human-in-the-loop/governed-actions"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
+    },
+    "/llamaindex/human-in-the-loop/index": {
+      "file": "llamaindex__human-in-the-loop__index.md",
+      "sha256": "84a87e5b555c006ad65263840d939394d3e15b975ef5cea7e0414d7acb2c7b55",
+      "bytes": 6587,
+      "lines": 196,
+      "routes": [
+        "/human-in-the-loop/index"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/inspector": {
       "file": "llamaindex__inspector.md",
-      "sha256": "ea841b1bbf76d2819e5730e5f52976fc1fa04bc02d16555c7d7aff4ab6791336",
-      "bytes": 9838,
-      "lines": 190,
+      "sha256": "101620498b40f5cf81b824c041a0e2f02303756399cce0fe6ea9c31ca92fe93c",
+      "bytes": 10356,
+      "lines": 200,
       "routes": [
         "/inspector"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/multi-agent-flows": {
       "file": "llamaindex__multi-agent-flows.md",
@@ -158,7 +218,19 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
+    },
+    "/llamaindex/multi-agent/subagents": {
+      "file": "llamaindex__multi-agent__subagents.md",
+      "sha256": "ebea4714ea69b0b0f4a90d06f32ebdac8ce9d94955498de3c17c2f27bb02e2a3",
+      "bytes": 17531,
+      "lines": 507,
+      "routes": [
+        "/multi-agent/subagents"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/prebuilt-components": {
       "file": "llamaindex__prebuilt-components.md",
@@ -170,121 +242,122 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/prebuilt-components/copilot-threads-drawer": {
       "file": "llamaindex__prebuilt-components__copilot-threads-drawer.md",
-      "sha256": "ec6e624f89ff3765942562502fe5ce894d473068270098e860518f1ca7b2c0b9",
-      "bytes": 9096,
-      "lines": 210,
+      "sha256": "9f8d55bf257bf242c44ff0177fb2cd635f625fc375071031e0d2d7fb4715aa14",
+      "bytes": 13648,
+      "lines": 336,
       "routes": [
         "/prebuilt-components/copilot-threads-drawer"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/programmatic-control": {
       "file": "llamaindex__programmatic-control.md",
-      "sha256": "0c343c3537da7abc83f1b8818e544f3d33d51b0039eba3d444c004a6aac65db4",
-      "bytes": 13309,
+      "sha256": "4775c0b2f1ea7551c293b03dd33cd98c8a12f9048a60c293a5f39ee380f07cfe",
+      "bytes": 13553,
       "lines": 474,
       "routes": [
         "/programmatic-control"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/quickstart": {
       "file": "llamaindex__quickstart.md",
-      "sha256": "17bf412c03df37bdc3dc8ea40c9798bd1447445928d16f0c2902b9d289094179",
-      "bytes": 17994,
-      "lines": 502,
+      "sha256": "d7ee674b2346956e037532a129eed5bdd74d2907c93dd14e4075c972939f2906",
+      "bytes": 18268,
+      "lines": 508,
       "routes": [
         "/quickstart"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/shared-state/in-app-agent-read": {
       "file": "llamaindex__shared-state__in-app-agent-read.md",
-      "sha256": "ed7597457ca3212e6e26f72b3326daa776a3fb03a586a624dc5265f1b9156db8",
-      "bytes": 5542,
+      "sha256": "6093a74616e24261ad8b8bc30220f6b23524d9f0c09586cd2f552a6c72dfeafd",
+      "bytes": 5545,
       "lines": 174,
       "routes": [
         "/shared-state/in-app-agent-read"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:37 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/shared-state/in-app-agent-write": {
       "file": "llamaindex__shared-state__in-app-agent-write.md",
-      "sha256": "122de6a898ac6c4453be4bef88872fbc603601b394e87f68ba33928aebf0388f",
-      "bytes": 6082,
+      "sha256": "7e2f52d297c2b9283e0af982274943b72b98a3b4340caf276c758313f14307ef",
+      "bytes": 6085,
       "lines": 190,
       "routes": [
         "/shared-state/in-app-agent-write"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:38 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/shared-state/predictive-state-updates": {
       "file": "llamaindex__shared-state__predictive-state-updates.md",
-      "sha256": "e0b876db2977695967ca8f3663c995ddd7b67709c80655a67cdf5c7e6a6a4a36",
-      "bytes": 11747,
+      "sha256": "8baf84cf2bf70dcc300e5d1176d3b66d015edb35ffae3fa8c77d6d1bfc7c2431",
+      "bytes": 11750,
       "lines": 291,
       "routes": [
         "/shared-state/predictive-state-updates"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:38 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:12 GMT"
     },
     "/llamaindex/shared-state/workflow-execution": {
       "file": "llamaindex__shared-state__workflow-execution.md",
-      "sha256": "cfb160292792c52e2dfb0474be5b9a7991f536603554c130af887283733a5c3b",
-      "bytes": 8949,
+      "sha256": "36f3778bbf23bf06e9e192fe913ce6e177c9548c771d5b99cf9dc438d5592dfa",
+      "bytes": 8952,
       "lines": 256,
       "routes": [
         "/shared-state/workflow-execution"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:38 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:13 GMT"
     },
     "/llamaindex/threads-import": {
       "file": "llamaindex__threads-import.md",
-      "sha256": "f25ccbfdb4226c27c57c3344f3edbf5b49f830471004fc5d1f69c28f1c2e1e7e",
-      "bytes": 7620,
-      "lines": 144,
+      "sha256": "b673465ba5ee04112b4c034a38fbeca6f425bb1ff45443048c3c409654702304",
+      "bytes": 8950,
+      "lines": 161,
       "routes": [
         "/threads-import"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:38 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:13 GMT"
     },
     "/llamaindex/threads-lifecycle": {
       "file": "llamaindex__threads-lifecycle.md",
-      "sha256": "6ebeb3b5e58484c6114f58df8f1e58a475b6ed607ff5c683a9177b8bde5a14ea",
-      "bytes": 15804,
-      "lines": 259,
+      "sha256": "77122cc3d2fc3b8d4cd7dabcfaaff68156ae62d139fa19b3263ed8d528f3863c",
+      "bytes": 16107,
+      "lines": 263,
       "routes": [
         "/threads-lifecycle"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 30 Sep 2026 12:49:38 GMT"
+      "date": "Wed, 11 Nov 2026 14:10:13 GMT"
     }
   },
   "sitemap": {
-    "fetchedAt": "2026-09-30T12:49:36.414Z",
-    "urlsUnderRoot": 154,
+    "fetchedAt": "2026-11-11T14:10:10.577Z",
+    "urlsUnderRoot": 175,
     "knownUnmapped": [
+      "https://docs.copilotkit.ai/llamaindex/AG-UI-Streams",
       "https://docs.copilotkit.ai/llamaindex/agent-config",
       "https://docs.copilotkit.ai/llamaindex/agent-spec",
       "https://docs.copilotkit.ai/llamaindex/agent-spec/human-in-the-loop",
@@ -301,6 +374,7 @@
       "https://docs.copilotkit.ai/llamaindex/backend/ag-ui",
       "https://docs.copilotkit.ai/llamaindex/backend/agent-runner",
       "https://docs.copilotkit.ai/llamaindex/backend/copilot-runtime",
+      "https://docs.copilotkit.ai/llamaindex/backend/custom-ag-ui-agent",
       "https://docs.copilotkit.ai/llamaindex/backend/custom-agent",
       "https://docs.copilotkit.ai/llamaindex/backend/message-history",
       "https://docs.copilotkit.ai/llamaindex/backend/runtime-endpoints",
@@ -308,6 +382,7 @@
       "https://docs.copilotkit.ai/llamaindex/build-with-agents",
       "https://docs.copilotkit.ai/llamaindex/built-in-agent",
       "https://docs.copilotkit.ai/llamaindex/cli",
+      "https://docs.copilotkit.ai/llamaindex/community-frameworks",
       "https://docs.copilotkit.ai/llamaindex/concepts/architecture",
       "https://docs.copilotkit.ai/llamaindex/concepts/generative-ui-overview",
       "https://docs.copilotkit.ai/llamaindex/concepts/oss-vs-enterprise",
@@ -317,6 +392,7 @@
       "https://docs.copilotkit.ai/llamaindex/contributing/docs-contributions",
       "https://docs.copilotkit.ai/llamaindex/cookbook",
       "https://docs.copilotkit.ai/llamaindex/cookbook/angular-adk-agentic-app",
+      "https://docs.copilotkit.ai/llamaindex/cookbook/antigravity-repo-doctor",
       "https://docs.copilotkit.ai/llamaindex/cookbook/arcade",
       "https://docs.copilotkit.ai/llamaindex/cookbook/claude-managed-agents",
       "https://docs.copilotkit.ai/llamaindex/cookbook/daytona",
@@ -337,6 +413,15 @@
       "https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui",
       "https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/dynamic-schema",
       "https://docs.copilotkit.ai/llamaindex/generative-ui/a2ui/fixed-schema",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components/catalogs",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components/from-a2ui",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components/markdown-mode",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components/standard-catalog",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components/state-and-actions",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components/surfaces",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components/theming",
+      "https://docs.copilotkit.ai/llamaindex/generative-ui/components/transports",
       "https://docs.copilotkit.ai/llamaindex/generative-ui/display",
       "https://docs.copilotkit.ai/llamaindex/generative-ui/frontend-cards",
       "https://docs.copilotkit.ai/llamaindex/generative-ui/hashbrown",
@@ -354,6 +439,9 @@
       "https://docs.copilotkit.ai/llamaindex/human-in-the-loop/headless",
       "https://docs.copilotkit.ai/llamaindex/human-in-the-loop/useInterrupt",
       "https://docs.copilotkit.ai/llamaindex/intelligence/analytics",
+      "https://docs.copilotkit.ai/llamaindex/intelligence/bring-your-own-thread-system",
+      "https://docs.copilotkit.ai/llamaindex/intelligence/capture-interactions",
+      "https://docs.copilotkit.ai/llamaindex/intelligence/captured-data",
       "https://docs.copilotkit.ai/llamaindex/intelligence/channels",
       "https://docs.copilotkit.ai/llamaindex/intelligence/headless-ui",
       "https://docs.copilotkit.ai/llamaindex/intelligence/intelligence-platform",
@@ -365,11 +453,17 @@
       "https://docs.copilotkit.ai/llamaindex/intelligence/quickstart",
       "https://docs.copilotkit.ai/llamaindex/intelligence/self-hosting",
       "https://docs.copilotkit.ai/llamaindex/intelligence/self-hosting-ecs",
+      "https://docs.copilotkit.ai/llamaindex/intelligence/self-hosting-local",
       "https://docs.copilotkit.ai/llamaindex/intelligence/self-hosting-observability",
+      "https://docs.copilotkit.ai/llamaindex/intelligence/standalone-collector",
       "https://docs.copilotkit.ai/llamaindex/intelligence/threads-explained",
+      "https://docs.copilotkit.ai/llamaindex/intelligence/trajectories",
+      "https://docs.copilotkit.ai/llamaindex/intelligence/trajectories-quickstart",
+      "https://docs.copilotkit.ai/llamaindex/intelligence/trajectories-reference",
       "https://docs.copilotkit.ai/llamaindex/learning",
       "https://docs.copilotkit.ai/llamaindex/migrate/1.10.X",
       "https://docs.copilotkit.ai/llamaindex/migrate/1.8.2",
+      "https://docs.copilotkit.ai/llamaindex/migrate/ag-ui-1.0",
       "https://docs.copilotkit.ai/llamaindex/migrate/v2",
       "https://docs.copilotkit.ai/llamaindex/multi-agent/subagents",
       "https://docs.copilotkit.ai/llamaindex/multimodal-attachments",

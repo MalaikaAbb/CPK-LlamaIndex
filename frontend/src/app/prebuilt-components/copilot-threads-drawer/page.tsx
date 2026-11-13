@@ -6,8 +6,39 @@ const SLOT_SNIPPET = `<CopilotThreadsDrawer>
   <span slot="header">My conversations</span>
 </CopilotThreadsDrawer>`;
 
+// Verbatim from the page: the controlled-thread variant of the own-button
+// sample. Shown as text; the demo uses the uncontrolled shape.
+const CONTROLLED_SNIPPET = `function ControlledChat() {
+  const [threadId, setThreadId] = useState(() => crypto.randomUUID());
+  const startNew = () => setThreadId(crypto.randomUUID());
+
+  return (
+    <CopilotChatConfigurationProvider threadId={threadId}>
+      <CopilotThreadsDrawer
+        onThreadSelect={(id) => setThreadId(id)}
+        onNewThread={startNew}
+      />
+      <button type="button" onClick={startNew}>
+        New conversation
+      </button>
+      <CopilotChat />
+    </CopilotChatConfigurationProvider>
+  );
+}`;
+
+// Verbatim from the page: hides the drawer's own new-conversation controls.
+const HIDE_NEW_SNIPPET = `copilotkit-threads-drawer::part(new-thread-button),
+copilotkit-threads-drawer::part(launcher-new-thread) {
+  display: none;
+}`;
+
+const AGENT_SNIPPET = `<CopilotThreadsDrawer agentId="research_agent" />`;
+
 const PROPS: [string, string][] = [
-  ["agentId", "Agent whose threads to list. Defaults to the chat configuration's agent."],
+  [
+    "agentId",
+    'Agent whose threads to list. Falls back to the chat configuration\'s agent, then the provider\'s agentId, then "default".',
+  ],
   [
     "label",
     'Accessible name for the drawer region and thread listbox. Defaults to "Threads".',
@@ -45,8 +76,8 @@ export default function Page() {
         </p>
         <div className="mt-4">
           <TryIt
-            prompts={["Say hello", "then click New Conversation and say hello again"]}
-            expect="Two rows in the drawer. Clicking the first replays its messages into the chat; clicking New Conversation clears back to the welcome screen."
+            prompts={["Say hello", "then click New Conversation and say hello again", "then click the header's New conversation button and say hello"]}
+            expect="Three rows in the drawer. Clicking the first replays its messages into the chat; both the drawer's New Conversation row and the header button clear back to the welcome screen with no row selected."
             fail="The drawer shows an Upgrade button instead of a list. That is the no-license-token state, not a threads failure — see the callout below, and check /headless-threads to confirm threads themselves work."
           />
         </div>
@@ -101,6 +132,44 @@ export default function Page() {
 
       <Panel title="Source">
         <SourceCode file="frontend/src/app/prebuilt-components/copilot-threads-drawer/demo-chat/page.tsx" />
+      </Panel>
+
+      <Panel
+        title="Your own “New conversation” button"
+        description="The demo's header button. It runs the same startNewThread() as the drawer's own row."
+      >
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          The button reads <code>useCopilotChatConfiguration()</code>, so it has
+          to sit inside the same configuration provider as the drawer and the
+          chat; outside one the hook returns <code>null</code> and the click is
+          a no-op. A brand-new thread gets no drawer row until it has run once.
+          If you pass <code>threadId</code> to the provider yourself, the
+          provider&apos;s setters stop working (they warn instead), and the
+          button and the drawer&apos;s callbacks must update your own state:
+        </p>
+        <div className="mt-4 space-y-4">
+          <CodeBlock filename="Controlled variant (not run here)" language="tsx" code={CONTROLLED_SNIPPET} />
+          <CodeBlock filename="Hide the drawer's own new-conversation controls" language="css" code={HIDE_NEW_SNIPPET} />
+        </div>
+      </Panel>
+
+      <Panel
+        title="Which agent's threads it lists"
+        description="One agent per drawer."
+      >
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          The drawer resolves its agent from its own <code>agentId</code> prop,
+          then the nearest configuration provider, then{" "}
+          <code>CopilotKitProvider</code>, then <code>&quot;default&quot;</code>.
+          This demo sets <code>agentId=&quot;my_agent&quot;</code> on the shared
+          configuration provider, so the drawer and the chat move together.
+          This runtime registers no <code>default</code> agent, so a bare drawer
+          with nothing set would list nothing. To point the drawer at another
+          agent alone:
+        </p>
+        <div className="mt-4">
+          <CodeBlock filename="Another agent's threads" language="tsx" code={AGENT_SNIPPET} />
+        </div>
       </Panel>
 
       <Panel
